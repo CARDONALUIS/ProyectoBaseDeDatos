@@ -37,6 +37,7 @@ namespace PruebaProyecto
         private void AbrirToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Hola");
+            MessageBox.Show("Comprobando cambios");
             string nomArchivo;
             
             OpenFileDialog abrir = new OpenFileDialog();
