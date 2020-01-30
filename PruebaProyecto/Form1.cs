@@ -29,13 +29,14 @@ namespace PruebaProyecto
             InitializeComponent();  
             dic = new Diccionario();
 
+
         }
         
 
         
         private void AbrirToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
+            MessageBox.Show("Hola");
             string nomArchivo;
             
             OpenFileDialog abrir = new OpenFileDialog();
