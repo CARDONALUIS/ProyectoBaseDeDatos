@@ -10,9 +10,9 @@ namespace PruebaProyecto
     [Serializable]
     public class Diccionario
     {
-        public long cab = 0;
-        public int tamEntidad = 72;
-        public int tamAtrib = 73;
+        public long cab = -1;
+        public int tamEntidad = 67;
+        public int tamAtrib = 68;
         public int vaActEnt = 8;
         public int vaActAtr = 0;
         public List<Entidad> listEntidad;
@@ -43,7 +43,7 @@ namespace PruebaProyecto
             
             int r = 0;
             //Variables de entidad
-            int idEnti;
+            Byte[] idEnti;
             char[] nombreEnti;
             int dirEnt;
             int dirAtri;
@@ -51,7 +51,7 @@ namespace PruebaProyecto
             int dirSigEnt;
             string noEn = "";
             //Variables de atributos
-            int idAtriL;
+            Byte[] idAtriL;
             char[] nombreAtriL;
             char[] tipoDL;
             int longiL;
@@ -78,15 +78,16 @@ namespace PruebaProyecto
             r = 0;
             while (bandSigEnt)
             {
+
                 archivo.Seek(dire, SeekOrigin.Begin);
-                idEnti = br.ReadInt32();
+                idEnti = br.ReadBytes(5);
                 r = 0;
                 dire += 5;
                 archivo.Seek(dire, SeekOrigin.Begin);
                 //BinaryReader br = new BinaryReader(archivo);
-                nombreEnti = br.ReadChars(35);
+                nombreEnti = br.ReadChars(30);
                 r = 0;
-                dire += 35;
+                dire += 30;
                 archivo.Seek(dire, SeekOrigin.Begin);
                 dirEnt = br.ReadInt32();
                 r = 0;
@@ -117,11 +118,11 @@ namespace PruebaProyecto
                 {
                     r = 0;
                     archivo.Seek(dire, SeekOrigin.Begin);
-                    idAtriL = br.ReadInt32();
+                    idAtriL = br.ReadBytes(5);
                     dire += 5;
                     archivo.Seek(dire, SeekOrigin.Begin);
-                    nombreAtriL = br.ReadChars(35);
-                    dire += 35;
+                    nombreAtriL = br.ReadChars(30);
+                    dire += 30;
                     r = 0;
                     archivo.Seek(dire, SeekOrigin.Begin);
                     tipoDL = br.ReadChars(1);
@@ -179,9 +180,39 @@ namespace PruebaProyecto
             r = 0;
             this.archivo.Close();
         }
-        
-        
 
+
+        public String getHexadecimal(int numero)
+        {
+            if (numero.ToString() != getValor(numero))
+            {
+                return getValor(numero);
+            }
+            String digito = getValor(numero % 16);
+            if (numero >= 16)
+            {
+                int resto = numero / 16;
+                string restoString = getHexadecimal(resto);
+                Console.WriteLine(restoString);
+
+                return restoString + digito;
+            }
+            return numero.ToString();
+        }
+
+        public String getValor(int numero)
+        {
+            switch (numero)
+            {
+                case 10: return "A";
+                case 11: return "B";
+                case 12: return "C";
+                case 13: return "D";
+                case 14: return "E";
+                case 15: return "F";
+            }
+            return numero.ToString();
+        }
 
     }
 }

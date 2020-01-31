@@ -80,15 +80,18 @@ namespace PruebaProyecto
 
                r = 0;
             ent.varSigAtri = ent.varSigAtri + dic.tamAtrib;
+            //ent.dirAtri = dirAtri;
+            byte[] buffer = new byte[5];
+            new Random().NextBytes(buffer);
 
-            ent.dirAtri = dirAtri;
-                Atributo atributo = new Atributo(85, nomAtri, comboBoxAtrTipo.SelectedItem.ToString().ElementAt(0), Int32.Parse(textBoxAtriLong.Text), /*(int)ent.dirAtri*/(int)dirAtri, Int32.Parse(comboBoxAtrTip_Ind.SelectedIndex.ToString()), -1,(int) dirAtri+dic.tamAtrib);
+            Atributo atributo = new Atributo(buffer, nomAtri, comboBoxAtrTipo.SelectedItem.ToString().ElementAt(0), Int32.Parse(textBoxAtriLong.Text), /*(int)ent.dirAtri*/(int)dirAtri, Int32.Parse(comboBoxAtrTip_Ind.SelectedIndex.ToString()), -1,(int) dirAtri+dic.tamAtrib);
                 ent.listAtrib.Add(atributo);
                 atriActual = atributo;
             //}
             actualizaUltima(ent);
             actualizaGridAtri(ent);
 
+            r = 0;
             //atributo = ent.listAtrib.Find(x => x.nombre == nomAtri);
 
             escribeAtrib(atributo, ent);
@@ -102,8 +105,10 @@ namespace PruebaProyecto
             {
                 if (ent.listAtrib.Count == 1)
                 {
-                    bw.Seek((int)ent.dirEnti + 48, SeekOrigin.Begin);
-                    bw.Write(ent.dirAtri);
+                    bw.Seek((int)ent.dirEnti + 43, SeekOrigin.Begin);
+                    bw.Write(atr.dirAtri);
+                    ent.dirAtri = atr.dirAtri;
+                    
                     r = 0;
                 }
 
@@ -116,9 +121,17 @@ namespace PruebaProyecto
                 bw.Seek((int)atr.dirAtri, SeekOrigin.Begin);
 
                 bw.Write(atr.id_atri);
-                bw.Write("");
+                //bw.Write("");
 
                 bw.Write(atr.nombre);
+                r = 0;
+                while (contBytChar < (29 - atr.nombre.Length))
+                {
+                    bw.Write('-');
+                    contBytChar++;
+                }
+
+               /*
                 if ((atr.nombre.Length) % 2 == 0)
                     while (contBytChar < (35 - atr.nombre.Length) / 2)
                     {
@@ -133,13 +146,13 @@ namespace PruebaProyecto
                         contBytChar++;
                     }
                     bw.Write("");
-                }
+                }*/
 
                 contBytChar = 0;
                 r = 0;
 
 
-
+                
                 bw.Write(atr.tipo);
                 bw.Write(atr.longitud);
                 r = 0;
@@ -148,15 +161,14 @@ namespace PruebaProyecto
                 bw.Write(atr.dirIndi);
                 bw.Write(atr.dirSigAtri);
 
-                /*for (int i = 0; i < ent.listAtrib.Count(); i++)
-                {
-
-                }*/
+                r = 0;
                 if (ent.listAtrib.Count != 1)
                 {
+                    r = 0;
                     int index = ent.listAtrib.FindIndex(x => x.nombre == atr.nombre);
-                    bw.Seek((int)ent.listAtrib.ElementAt(index - 1).dirAtri + 65, SeekOrigin.Begin);
+                    bw.Seek((int)ent.listAtrib.ElementAt(index - 1).dirAtri + 60, SeekOrigin.Begin);
                     bw.Write(atr.dirAtri);
+                    r = 0;
                 }
 
             } 
@@ -172,7 +184,7 @@ namespace PruebaProyecto
             {
                 GridAtributos.Rows.Add();
                 r = 0;
-                GridAtributos.Rows[i].Cells[0].Value = ent.listAtrib.ElementAt(i).id_atri;
+                GridAtributos.Rows[i].Cells[0].Value = BitConverter.ToString(ent.listAtrib.ElementAt(i).id_atri);
                 r = 0;
                 GridAtributos.Rows[i].Cells[1].Value = ent.listAtrib.ElementAt(i).nombre;
                 GridAtributos.Rows[i].Cells[2].Value = ent.listAtrib.ElementAt(i).tipo;
@@ -266,7 +278,7 @@ namespace PruebaProyecto
             {
                 GridAtributos.Rows.Add();
                 r = 0;
-                GridAtributos.Rows[i].Cells[0].Value = ent.listAtrib.ElementAt(i).id_atri;
+                GridAtributos.Rows[i].Cells[0].Value = BitConverter.ToString(ent.listAtrib.ElementAt(i).id_atri);
                 r = 0;
                 GridAtributos.Rows[i].Cells[1].Value = ent.listAtrib.ElementAt(i).nombre;
                 GridAtributos.Rows[i].Cells[2].Value = ent.listAtrib.ElementAt(i).tipo;
@@ -335,7 +347,7 @@ namespace PruebaProyecto
             {
                 if (inAM - 1 != -1 && inAM + 1 < ent.listAtrib.Count())
                 {
-                    bw.Seek((int)ent.listAtrib.ElementAt(inAM - 1).dirAtri+65, SeekOrigin.Begin);
+                    bw.Seek((int)ent.listAtrib.ElementAt(inAM - 1).dirAtri+60, SeekOrigin.Begin);
                     bw.Write(ent.listAtrib.ElementAt(inAM + 1).dirAtri);
                     r = 0;
                 }
@@ -345,7 +357,7 @@ namespace PruebaProyecto
                     {
                         //int indEnt = dic.listEntidad.FindIndex(x => x.nombre == ent.nombre);
                         //if(dic.ele)
-                        bw.Seek((int)ent.listAtrib.ElementAt(inAM - 1).dirAtri + 65, SeekOrigin.Begin);
+                        bw.Seek((int)ent.listAtrib.ElementAt(inAM - 1).dirAtri + 60, SeekOrigin.Begin);
                         bw.Write(-1);
                         r = 0;
                         //bw.Seek((int)ent.listAtrib.ElementAt(inAM - 1).dirAtri, SeekOrigin.Begin);
@@ -353,7 +365,7 @@ namespace PruebaProyecto
                     }
                     else
                     {
-                        bw.Seek((int)ent.dirEnti+ 48, SeekOrigin.Begin);
+                        bw.Seek((int)ent.dirEnti+ 43, SeekOrigin.Begin);
                         bw.Write(ent.listAtrib.ElementAt(1).dirAtri);
                         r = 0;
                     }

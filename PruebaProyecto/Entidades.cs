@@ -107,17 +107,24 @@ namespace PruebaProyecto
                     
                     dic.archivo.Close();
 
-                    //dic.archivo.Close();
+            //dic.archivo.Close();
 
-                    /*if ((int)dic.listEntidad.ElementAt(dic.listEntidad.Count - 1).listAtrib.Count != 0)
-                    dirEntiNueva = (int)dic.listEntidad.ElementAt(dic.listEntidad.Count - 1).listAtrib.ElementAt(dic.listEntidad.ElementAt(dic.listEntidad.Count - 1).listAtrib.Count - 1).dirAtri + dic.tamAtrib;
-                    else
-                        dirEntiNueva = (
-                            int)dic.listEntidad.ElementAt(dic.listEntidad.Count - 1).dirEnti + dic.tamEntidad;
-                            */
-                    r = 0;
-                    
-                    Entidad ent = new Entidad(45, nomEnti,(int)dirEntiNueva, -1, -1, -1);
+            /*if ((int)dic.listEntidad.ElementAt(dic.listEntidad.Count - 1).listAtrib.Count != 0)
+            dirEntiNueva = (int)dic.listEntidad.ElementAt(dic.listEntidad.Count - 1).listAtrib.ElementAt(dic.listEntidad.ElementAt(dic.listEntidad.Count - 1).listAtrib.Count - 1).dirAtri + dic.tamAtrib;
+            else
+                dirEntiNueva = (
+                    int)dic.listEntidad.ElementAt(dic.listEntidad.Count - 1).dirEnti + dic.tamEntidad;
+                        */
+            //string iden = "";
+
+            byte[] buffer = new byte[5];
+            new Random().NextBytes(buffer);
+
+            //iden = BitConverter.ToString(buffer);
+
+            //r = 0;
+
+            Entidad ent = new Entidad(buffer, nomEnti,(int)dirEntiNueva, -1, -1, -1);
 
                     dic.listEntidad.Add(ent);
 
@@ -154,7 +161,7 @@ namespace PruebaProyecto
             GridEntidades.Rows.Add();
             for (int i = 0; i < dic.listEntidad.Count; i++)
             {
-                GridEntidades.Rows[i].Cells[0].Value = dic.listEntidad.ElementAt(i).id_enti;
+                GridEntidades.Rows[i].Cells[0].Value = BitConverter.ToString(dic.listEntidad.ElementAt(i).id_enti);
                 GridEntidades.Rows[i].Cells[1].Value = dic.listEntidad.ElementAt(i).nombre;
                 GridEntidades.Rows[i].Cells[2].Value = dic.listEntidad.ElementAt(i).dirEnti;
                 GridEntidades.Rows[i].Cells[3].Value = dic.listEntidad.ElementAt(i).dirAtri;
@@ -204,46 +211,46 @@ namespace PruebaProyecto
 
             using(BinaryWriter bw = new BinaryWriter(File.Open(dic.nomArchivo, FileMode.Open)))
             {
+                
+                r = 0;
             bw.Seek((int)ent.dirEnti, SeekOrigin.Begin);
             bw.Write(ent.id_enti);
-            bw.Write("");
+                //bw.Write("");
+                r = 0;
+               
             bw.Write(ent.nombre);
             r = 0;
-
-            if ((ent.nombre.Length) % 2 == 0)
-                while (contBytChar < (35 - ent.nombre.Length) / 2)
+                while (contBytChar < (29 - ent.nombre.Length))
                 {
-                    bw.Write("-");
+                    bw.Write('-');
                     contBytChar++;
                 }
-            else
-            {
-                while (contBytChar < (34 - (ent.nombre.Length)) / 2)
-                {
-                    bw.Write("-");
-                    contBytChar++;
-                }
-                bw.Write("");
-            }
-            contBytChar = 0;
-            bw.Write(ent.dirEnti);
-            bw.Write(ent.dirAtri);
-            bw.Write(ent.dirDat);
-            bw.Write(ent.dirSigEnti);
 
-                if(dic.listEntidad.Count() != 1)
-                {
-                    int index = dic.listEntidad.FindIndex(x => x.nombre == ent.nombre);
-                    bw.Seek((int)dic.listEntidad.ElementAt(index - 1).dirEnti + 64, SeekOrigin.Begin);
-                    bw.Write(ent.dirEnti);
+                contBytChar = 0;
 
-                }
+                bw.Write(ent.dirEnti);
+                bw.Write(ent.dirAtri);
+                bw.Write(ent.dirDat);
+                bw.Write(ent.dirSigEnti);
 
+                r = 0;
+
+                    if(dic.listEntidad.Count() != 1)
+                    {
+                        r = 0;
+                        int index = dic.listEntidad.FindIndex(x => x.nombre == ent.nombre);
+                        bw.Seek((int)dic.listEntidad.ElementAt(index - 1).dirEnti + 59, SeekOrigin.Begin);
+                        bw.Write(ent.dirEnti);
+                    r = 0;
+
+                    }
+                    
             }
         }
 
         public void actualizaSigEnti()
         {
+            r = 0;
             List<Entidad> lisAux = dic.listEntidad;
             lisAux = lisAux.OrderBy(o => o.nombre).ToList();
 
@@ -282,7 +289,7 @@ namespace PruebaProyecto
                 {
                     r = 0;
                     
-                    bw.Seek((int)dic.listEntidad.ElementAt(i).dirEnti + 64, SeekOrigin.Begin);
+                    bw.Seek((int)dic.listEntidad.ElementAt(i).dirEnti + 59, SeekOrigin.Begin);
 
                     //bw.Write(lisAux.ElementAt(i+1).dirEnti);
                     bw.Write(dic.listEntidad.ElementAt(i).dirSigEnti);
@@ -326,7 +333,7 @@ namespace PruebaProyecto
             for (int i = 0; i < dic.listEntidad.Count; i++)
             {
                 GridEntidades.Rows.Add();
-                GridEntidades.Rows[i].Cells[0].Value = dic.listEntidad.ElementAt(i).id_enti;
+                GridEntidades.Rows[i].Cells[0].Value = BitConverter.ToString(dic.listEntidad.ElementAt(i).id_enti);
                 GridEntidades.Rows[i].Cells[1].Value = dic.listEntidad.ElementAt(i).nombre;
                 GridEntidades.Rows[i].Cells[2].Value = dic.listEntidad.ElementAt(i).dirEnti;
                 GridEntidades.Rows[i].Cells[3].Value = dic.listEntidad.ElementAt(i).dirAtri;

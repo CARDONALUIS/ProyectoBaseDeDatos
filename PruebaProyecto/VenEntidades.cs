@@ -37,14 +37,14 @@ namespace PruebaProyecto
 
             if (dic.listEntidad.Count == 0)
             {
-                en = new Entidad(2568589, nomEntid, dic.vaActEnt, dic.vaActEnt + dic.tamEntidad, -1, -1);
+                //en = new Entidad(2568589, nomEntid, dic.vaActEnt, dic.vaActEnt + dic.tamEntidad, -1, -1);
             }
             else
             {
-                en = new Entidad(2568589, nomEntid, dic.vaActEnt, dic.vaActEnt + dic.tamEntidad, -1, -1);
+                //en = new Entidad(2568589, nomEntid, dic.vaActEnt, dic.vaActEnt + dic.tamEntidad, -1, -1);
             }
             r = 0;
-            dic.listEntidad.Add(en);
+            //dic.listEntidad.Add(en);
             
 
         }

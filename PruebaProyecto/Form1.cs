@@ -36,8 +36,8 @@ namespace PruebaProyecto
         
         private void AbrirToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Hola");
-            MessageBox.Show("Comprobando cambios");
+            //MessageBox.Show("Hola");
+            //MessageBox.Show("Comprobando cambios");
             string nomArchivo;
             
             OpenFileDialog abrir = new OpenFileDialog();
@@ -159,7 +159,7 @@ namespace PruebaProyecto
             r = 0;
             dic.borraDic();
             //Variables de entidad
-            int idEnti;
+            Byte[] idEnti;
             char[] nombreEnti;
             int dirEnt;
             int dirAtri;
@@ -167,7 +167,7 @@ namespace PruebaProyecto
             int dirSigEnt;
             string noEn = "";
             //Variables de atributos
-            int idAtriL;
+            Byte[] idAtriL;
             char[] nombreAtriL;
             char[] tipoDL;
             int longiL;
@@ -189,21 +189,24 @@ namespace PruebaProyecto
 
             archivo.Seek(0, SeekOrigin.Begin);
             int dire = br.ReadInt32();
+            //byte[] algo = br.ReadBytes(5);
+
+            //string iden = BitConverter.ToString(algo);
             dic.cab = dire;
-            //dire = 8;
+            //int dire = 8;
 
             r = 0;
             while(bandSigEnt)
             {
                 archivo.Seek(dire, SeekOrigin.Begin);
-                idEnti = br.ReadInt32();
+                idEnti = br.ReadBytes(5);
                 r = 0;
                 dire += 5;
                 archivo.Seek(dire, SeekOrigin.Begin);
                 //BinaryReader br = new BinaryReader(archivo);
-                nombreEnti = br.ReadChars(35);
+                nombreEnti = br.ReadChars(30);
                 r = 0;
-                dire += 35;
+                dire += 30;
                 archivo.Seek(dire, SeekOrigin.Begin);
                 dirEnt = br.ReadInt32();
                 r = 0;
@@ -225,69 +228,94 @@ namespace PruebaProyecto
                     if (char.IsLetter(nombreEnti.ElementAt(i)))
                         noEn += nombreEnti.ElementAt(i);
                 }
-                r = 0;
+
+                //byte[] algo = new byte[1];
+
+                /*for (int i = 0; i < 5; i++)
+                {
+                  Buffer[i] = dic.getHexadecimal(15)
+                }*/
+
+                // String ID = Encoding.ASCII.GetBytes(b)
+
+                //string algo = dic.getHexadecimal(15);
+                //buffer = Encoding.ASCII.GetBytes(hola, 0, buffer, 5);
+                //String algo = "12";
+                //int algo2= Convert.ToString(50, 16).ToUpper(); 
+
+                //MessageBox.Show(buffer[0].ToString());
+
                 Entidad ent = new Entidad(idEnti, noEn, dirEnt, dirAtri, dirDat, dirSigEnt);
                 noEn = "";
                 dic.listEntidad.Add(ent);
                 r = 0;
-                while (bandSigAtri)
+                if (dirAtri != -1)
+                    while (bandSigAtri)
+                    {
+                        r = 0;
+                        archivo.Seek(dire, SeekOrigin.Begin);
+                        idAtriL = br.ReadBytes(5);
+                        dire += 5;
+                        archivo.Seek(dire, SeekOrigin.Begin);
+                        nombreAtriL = br.ReadChars(30);
+                        dire += 30;
+                        r = 0;
+                        archivo.Seek(dire, SeekOrigin.Begin);
+                        tipoDL = br.ReadChars(1);
+                        dire += 1;
+                        r = 0;
+                        archivo.Seek(dire, SeekOrigin.Begin);
+                        longiL = br.ReadInt32();
+                        dire += 4;
+                        r = 0;
+                        archivo.Seek(dire, SeekOrigin.Begin);
+                        dirAtrL = br.ReadInt32();
+                        dire += 8;
+                        r = 0;
+                        archivo.Seek(dire, SeekOrigin.Begin);
+                        tipoIndL = br.ReadInt32();
+                        dire += 4;
+                        r = 0;
+                        archivo.Seek(dire, SeekOrigin.Begin);
+                        dirIndL = br.ReadInt32();
+                        dire += 8;
+                        r = 0;
+                        archivo.Seek(dire, SeekOrigin.Begin);
+                        dirSigAtL = br.ReadInt32();
+                        dire = dirSigAtL;
+                        r = 0;
+                        for (int i = 0; i < nombreAtriL.Length; i++)
+                        {
+                            if (char.IsLetter(nombreAtriL.ElementAt(i)) || nombreAtriL.ElementAt(i) == '_')
+                                noAt += nombreAtriL.ElementAt(i);
+                        }
+                        Atributo atr = new Atributo(idAtriL, noAt, tipoDL[0], longiL, dirAtrL, tipoIndL, dirIndL, dirSigAtL);
+                        noAt = "";
+                        ent.listAtrib.Add(atr);
+                        r = 0;
+
+
+                        if (dirSigEnt == -1 && dirSigAtL == -1)
+                        {
+                            bandSigEnt = false;
+                            r = 0;
+                        }
+
+                        if (dirSigAtL == -1)
+                        {
+                            bandSigAtri = false;
+                            r = 0;
+                            dire = dirSigEnt;
+                        }
+                    }
+                else
                 {
-                    r = 0;
-                    archivo.Seek(dire, SeekOrigin.Begin);
-                    idAtriL = br.ReadInt32();
-                    dire += 5;
-                    archivo.Seek(dire, SeekOrigin.Begin);
-                    nombreAtriL = br.ReadChars(35);
-                    dire += 35;
-                    r = 0;
-                    archivo.Seek(dire, SeekOrigin.Begin);
-                    tipoDL = br.ReadChars(1);
-                    dire += 1;
-                    r = 0;
-                    archivo.Seek(dire, SeekOrigin.Begin);
-                    longiL = br.ReadInt32();
-                    dire += 4;
-                    r = 0;
-                    archivo.Seek(dire, SeekOrigin.Begin);
-                    dirAtrL = br.ReadInt32();
-                    dire += 8;
-                    r = 0;
-                    archivo.Seek(dire, SeekOrigin.Begin);
-                    tipoIndL = br.ReadInt32();
-                    dire += 4;
-                    r = 0;
-                    archivo.Seek(dire, SeekOrigin.Begin);
-                    dirIndL = br.ReadInt32();
-                    dire += 8;
-                    r = 0;
-                    archivo.Seek(dire, SeekOrigin.Begin);
-                    dirSigAtL = br.ReadInt32();
-                    dire = dirSigAtL;
-                    r = 0;
-                    for (int i = 0; i < nombreAtriL.Length; i++)
-                    {
-                        if (char.IsLetter(nombreAtriL.ElementAt(i)) || nombreAtriL.ElementAt(i) == '_')
-                            noAt += nombreAtriL.ElementAt(i);
-                    }
-                    Atributo atr = new Atributo(idAtriL, noAt, tipoDL[0], longiL, dirAtrL, tipoIndL, dirIndL, dirSigAtL);
-                    noAt = "";
-                    ent.listAtrib.Add(atr);
-                    r = 0;
 
-
-                    if (dirSigEnt == -1 && dirSigAtL == -1)
-                    {
-                        bandSigEnt = false;
-                        r = 0;
-                    }
-
-                    if (dirSigAtL == -1)
-                    {
-                        bandSigAtri = false;
-                        r = 0;
-                        dire = dirSigEnt;
-                    }
+                    dire = dirSigEnt;
+                    if (dire == -1)
+                        break;
                 }
+
                 bandSigAtri = true;
 
             }
@@ -331,6 +359,8 @@ namespace PruebaProyecto
             vAtri.ShowDialog();   
         }
 
+        
+
         private void NuevoArchivo(object sender, EventArgs e)
         {
                       
@@ -358,6 +388,9 @@ namespace PruebaProyecto
             label1.Text = "";
 
             label1.Text = "Archivo:" + dic.nomArchivo;
+
+            //byte[] buffer = new byte[5];
+            //new Random().NextBytes(buffer);
 
             using (BinaryWriter bw = new BinaryWriter(File.Open(dic.nomArchivo, FileMode.Open)))
             {

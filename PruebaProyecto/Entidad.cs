@@ -10,8 +10,8 @@ namespace PruebaProyecto
     [Serializable]
     public class Entidad
     {
-        private int ID_ENTI;
-        public int id_enti { get { return ID_ENTI; } set { ID_ENTI = value; } }
+        private Byte[] ID_ENTI;
+        public Byte[] id_enti { get { return ID_ENTI; } set { ID_ENTI = value; } }
 
         private string NOMBRE;
         public string nombre { get { return NOMBRE; } set { NOMBRE = value; } }
@@ -34,7 +34,7 @@ namespace PruebaProyecto
         public int varSigAtri;
         public int varSigEnti;
 
-        public Entidad(int _id_enti, String _nomb, int _dirEnt, int _dirAtr, int _dirDat, int _dirSigEnti)
+        public Entidad(Byte[] _id_enti, String _nomb, int _dirEnt, int _dirAtr, int _dirDat, int _dirSigEnti)
         {
             ID_ENTI = _id_enti;
             NOMBRE = _nomb;
