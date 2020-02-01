@@ -345,34 +345,60 @@ namespace PruebaProyecto
             }*/
             using (BinaryWriter bw = new BinaryWriter(File.Open(dic.nomArchivo, FileMode.Open)))
             {
-                if (inAM - 1 != -1 && inAM + 1 < ent.listAtrib.Count())
+               if (ent.listAtrib.Count != 1)
                 {
-                    bw.Seek((int)ent.listAtrib.ElementAt(inAM - 1).dirAtri+60, SeekOrigin.Begin);
-                    bw.Write(ent.listAtrib.ElementAt(inAM + 1).dirAtri);
-                    r = 0;
-                }
-                else
-                {
-                    if (inAM + 1 == ent.listAtrib.Count())
+                    if (inAM - 1 != -1 && inAM + 1 < ent.listAtrib.Count())
                     {
-                        //int indEnt = dic.listEntidad.FindIndex(x => x.nombre == ent.nombre);
-                        //if(dic.ele)
                         bw.Seek((int)ent.listAtrib.ElementAt(inAM - 1).dirAtri + 60, SeekOrigin.Begin);
-                        bw.Write(-1);
+                        bw.Write(ent.listAtrib.ElementAt(inAM + 1).dirAtri);
                         r = 0;
-                        //bw.Seek((int)ent.listAtrib.ElementAt(inAM - 1).dirAtri, SeekOrigin.Begin);
-                        //bw.Write(ent.listAtrib.ElementAt(inAM + 1).dirAtri);
                     }
                     else
                     {
-                        bw.Seek((int)ent.dirEnti+ 43, SeekOrigin.Begin);
-                        bw.Write(ent.listAtrib.ElementAt(1).dirAtri);
-                        r = 0;
+                        if (inAM + 1 == ent.listAtrib.Count())
+                        {
+                            //int indEnt = dic.listEntidad.FindIndex(x => x.nombre == ent.nombre);
+                            //if(dic.ele)
+                            bw.Seek((int)ent.listAtrib.ElementAt(inAM - 1).dirAtri + 60, SeekOrigin.Begin);
+                            bw.Write(-1);
+                            r = 0;
+                            //bw.Seek((int)ent.listAtrib.ElementAt(inAM - 1).dirAtri, SeekOrigin.Begin);
+                            //bw.Write(ent.listAtrib.ElementAt(inAM + 1).dirAtri);
+                        }
+                        else
+                        {
+                            bw.Seek((int)ent.dirEnti + 43, SeekOrigin.Begin);
+                            bw.Write(ent.listAtrib.ElementAt(1).dirAtri);
+                            r = 0;
+                        }
                     }
+                    
+               }
+                //dic.actualizaDiccionario(dic.archivo);
+                
+                else
+                {
+                    r = 0;
+                    bw.Seek((int)ent.dirEnti+43, SeekOrigin.Begin);
+                    bw.Write(-1);
+                    ent.dirAtri = -1;
+                    
+
                 }
+
+                
+
+
             }
-            //dic.actualizaDiccionario(dic.archivo);
-            dic.actualizaDiccionario(dic.archivo);
+
+            if (ent.listAtrib.Count != 1)
+            {
+                r = 0;
+                dic.actualizaDiccionario(dic.archivo);
+            }
+            else
+                ent.listAtrib.Clear();
+
             buttonEliAtri.Visible = false;
             cambiaAtribu.Visible = false;
             comboBoxModAtri.Visible = false;

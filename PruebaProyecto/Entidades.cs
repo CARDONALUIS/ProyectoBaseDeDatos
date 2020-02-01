@@ -407,29 +407,43 @@ namespace PruebaProyecto
             int inEM = comboBoxModEnt.SelectedIndex;
 
 
-            
-            if(dic.cab == dic.listEntidad.ElementAt(inEM).dirEnti)
+            if (dic.listEntidad.Count != 1)
             {
-                dic.cab = dic.listEntidad.ElementAt(inEM + 1).dirEnti;
-            }
-            else
-            {
-                if(dic.listEntidad.ElementAt(inEM).dirSigEnti == -1)
+                if (dic.cab == dic.listEntidad.ElementAt(inEM).dirEnti)
                 {
-                    dic.listEntidad.ElementAt(inEM - 1).dirSigEnti = -1;
+                    dic.cab = dic.listEntidad.ElementAt(inEM + 1).dirEnti;
                 }
                 else
                 {
-                    dic.listEntidad.ElementAt(inEM - 1).dirSigEnti = dic.listEntidad.ElementAt(inEM + 1).dirEnti;
+                    if (dic.listEntidad.ElementAt(inEM).dirSigEnti == -1)
+                    {
+                        dic.listEntidad.ElementAt(inEM - 1).dirSigEnti = -1;
+                    }
+                    else
+                    {
+                        dic.listEntidad.ElementAt(inEM - 1).dirSigEnti = dic.listEntidad.ElementAt(inEM + 1).dirEnti;
+                    }
+                }
+
+                dic.listEntidad.RemoveAt(inEM);
+                r = 0;
+
+
+
+
+
+                actualizaSigEnti();
+            }
+            else
+            {
+                dic.listEntidad.RemoveAt(inEM);
+                dic.cab = -1;
+                using (BinaryWriter bw = new BinaryWriter(File.Open(dic.nomArchivo, FileMode.Open)))
+                {
+                    bw.Seek(0, SeekOrigin.Begin);
+                    bw.Write(-1);
                 }
             }
-
-            dic.listEntidad.RemoveAt(inEM);
-            r = 0;
-
-
-
-            actualizaSigEnti();
 
             comboBoxModEnt.Visible = false;
             buttonCamEnt.Visible = false;
