@@ -180,39 +180,7 @@ namespace PruebaProyecto
             r = 0;
             this.archivo.Close();
         }
-
-
-        public String getHexadecimal(int numero)
-        {
-            if (numero.ToString() != getValor(numero))
-            {
-                return getValor(numero);
-            }
-            String digito = getValor(numero % 16);
-            if (numero >= 16)
-            {
-                int resto = numero / 16;
-                string restoString = getHexadecimal(resto);
-                Console.WriteLine(restoString);
-
-                return restoString + digito;
-            }
-            return numero.ToString();
-        }
-
-        public String getValor(int numero)
-        {
-            switch (numero)
-            {
-                case 10: return "A";
-                case 11: return "B";
-                case 12: return "C";
-                case 13: return "D";
-                case 14: return "E";
-                case 15: return "F";
-            }
-            return numero.ToString();
-        }
+        
 
     }
 }

@@ -53,26 +53,6 @@ namespace PruebaProyecto
 
             nomAtri = textBoxNomAtri.Text;
 
-           
-/*
-           if (ent.listAtrib.Count == 0)
-            {
-                ent.varSigAtri = (int)ent.dirAtri+ dic.tamAtrib;
-                //ent.dirAtri = ent.dirEnti + dic.tamEntidad;
-                int dirAtri;
-
-
-                    dirAtri = (int)dic.listEntidad.ElementAt(dic.listEntidad.Count - 1).dirEnti + dic.tamEntidad;
-                //(int)ent.dirEnti+dic.tamEntidad
-                Atributo atributo = new Atributo(85, nomAtri, comboBoxAtrTipo.SelectedItem.ToString().ElementAt(0), Int32.Parse(textBoxAtriLong.Text), dirAtri, Int32.Parse(comboBoxAtrTip_Ind.SelectedIndex.ToString()), -1, ent.varSigAtri);
-                ent.listAtrib.Add(atributo);
-                atriActual = atributo;
-            }
-            else
-            {*/
-                r = 0;
-            //ent.dirAtri = ent.varSigAtri;
-
             dic.archivo = File.Open(dic.nomArchivo, FileMode.Open, FileAccess.Read);
             long dirAtri = dic.archivo.Length;
 
@@ -80,20 +60,14 @@ namespace PruebaProyecto
 
                r = 0;
             ent.varSigAtri = ent.varSigAtri + dic.tamAtrib;
-            //ent.dirAtri = dirAtri;
             byte[] buffer = new byte[5];
             new Random().NextBytes(buffer);
 
             Atributo atributo = new Atributo(buffer, nomAtri, comboBoxAtrTipo.SelectedItem.ToString().ElementAt(0), Int32.Parse(textBoxAtriLong.Text), /*(int)ent.dirAtri*/(int)dirAtri, Int32.Parse(comboBoxAtrTip_Ind.SelectedIndex.ToString()), -1,(int) dirAtri+dic.tamAtrib);
-                ent.listAtrib.Add(atributo);
-                atriActual = atributo;
-            //}
+            ent.listAtrib.Add(atributo);
+            atriActual = atributo;
             actualizaUltima(ent);
             actualizaGridAtri(ent);
-
-            r = 0;
-            //atributo = ent.listAtrib.Find(x => x.nombre == nomAtri);
-
             escribeAtrib(atributo, ent);
 
             r = 0;
@@ -108,60 +82,26 @@ namespace PruebaProyecto
                     bw.Seek((int)ent.dirEnti + 43, SeekOrigin.Begin);
                     bw.Write(atr.dirAtri);
                     ent.dirAtri = atr.dirAtri;
-                    
                     r = 0;
                 }
-
-
-
-
 
                 int contBytChar = 0;
 
                 bw.Seek((int)atr.dirAtri, SeekOrigin.Begin);
-
                 bw.Write(atr.id_atri);
-                //bw.Write("");
-
                 bw.Write(atr.nombre);
-                r = 0;
                 while (contBytChar < (29 - atr.nombre.Length))
                 {
                     bw.Write('-');
                     contBytChar++;
                 }
-
-               /*
-                if ((atr.nombre.Length) % 2 == 0)
-                    while (contBytChar < (35 - atr.nombre.Length) / 2)
-                    {
-                        bw.Write("-");
-                        contBytChar++;
-                    }
-                else
-                {
-                    while (contBytChar < (34 - atr.nombre.Length) / 2)
-                    {
-                        bw.Write("-");
-                        contBytChar++;
-                    }
-                    bw.Write("");
-                }*/
-
                 contBytChar = 0;
-                r = 0;
-
-
-                
                 bw.Write(atr.tipo);
                 bw.Write(atr.longitud);
-                r = 0;
                 bw.Write(atr.dirAtri);
                 bw.Write(Int32.Parse(atr.tipoIndi.ToString().ElementAt(0).ToString()));
                 bw.Write(atr.dirIndi);
                 bw.Write(atr.dirSigAtri);
-
-                r = 0;
                 if (ent.listAtrib.Count != 1)
                 {
                     r = 0;
@@ -170,7 +110,6 @@ namespace PruebaProyecto
                     bw.Write(atr.dirAtri);
                     r = 0;
                 }
-
             } 
         }
 
@@ -215,14 +154,8 @@ namespace PruebaProyecto
         private void Atributos_FormClosing(object sender, FormClosingEventArgs e)
         {
             GridAtributos.Columns.Clear();
-
             GridAtributos.Rows.Clear();
             inisializaColumnas();
-
-            /*for (int i = ent.listAtrib.Count; i > 0; i--)
-            {
-                GridAtributos.Rows[i].clear
-            }*/
             comboBoxModAtri.Visible = false;
         }
 
@@ -271,9 +204,7 @@ namespace PruebaProyecto
 
             int entSel = comboBoxEntidades.SelectedIndex;
 
-            r = 0;
             ent = dic.listEntidad.ElementAt(entSel);
-
             for (int i = 0; i < ent.listAtrib.Count; i++)
             {
                 GridAtributos.Rows.Add();
@@ -292,9 +223,6 @@ namespace PruebaProyecto
 
         private void ModificarEnti(object sender, EventArgs e)
         {
-            //.Visible = false;
-            //comboBoxEntidades.Visible = false;
-            
             comboBoxModAtri.Visible = true;
             cambiaAtribu.Visible = true;
             buttonEliAtri.Visible = true;
@@ -310,10 +238,6 @@ namespace PruebaProyecto
             comboBoxAtrTipo.Text = "";
             textBoxAtriLong.Text = "";
             comboBoxAtrTip_Ind.Text = "";
-
-
-            r = 0;
-
         }
 
         private void cambiaAtributo(object sender, EventArgs e)
@@ -326,23 +250,12 @@ namespace PruebaProyecto
             atM.tipo = comboBoxAtrTipo.Text.ElementAt(0);
             atM.longitud = Int32.Parse(textBoxAtriLong.Text);
             atM.tipoIndi = Int32.Parse(comboBoxAtrTip_Ind.SelectedIndex.ToString());
-
-
-            r = 0;
-                //atM.nombre = textBoxNomAtri.Text;
-            r = 0;
         }
 
         private void eliminaAtri(object sender, EventArgs e)
         {
             int inAM = comboBoxModAtri.SelectedIndex;
 
-            //Atributo atM = ent.listAtrib.ElementAt(inAM);
-
-            /*for(int i = 0; i < ent.listAtrib.Count;i++)
-            {
-
-            }*/
             using (BinaryWriter bw = new BinaryWriter(File.Open(dic.nomArchivo, FileMode.Open)))
             {
                if (ent.listAtrib.Count != 1)
@@ -357,13 +270,9 @@ namespace PruebaProyecto
                     {
                         if (inAM + 1 == ent.listAtrib.Count())
                         {
-                            //int indEnt = dic.listEntidad.FindIndex(x => x.nombre == ent.nombre);
-                            //if(dic.ele)
                             bw.Seek((int)ent.listAtrib.ElementAt(inAM - 1).dirAtri + 60, SeekOrigin.Begin);
                             bw.Write(-1);
                             r = 0;
-                            //bw.Seek((int)ent.listAtrib.ElementAt(inAM - 1).dirAtri, SeekOrigin.Begin);
-                            //bw.Write(ent.listAtrib.ElementAt(inAM + 1).dirAtri);
                         }
                         else
                         {
@@ -374,17 +283,15 @@ namespace PruebaProyecto
                     }
                     
                }
-                //dic.actualizaDiccionario(dic.archivo);
-                
-                else
-                {
+               else
+               {
                     r = 0;
                     bw.Seek((int)ent.dirEnti+43, SeekOrigin.Begin);
                     bw.Write(-1);
                     ent.dirAtri = -1;
                     
 
-                }
+               }
 
                 
 

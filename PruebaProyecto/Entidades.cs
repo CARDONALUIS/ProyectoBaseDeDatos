@@ -64,95 +64,23 @@ namespace PruebaProyecto
 
             nomEnti = textBoxEntidad.Text;
 
-            
-
-            /*if (dic.listEntidad.Count == 0)
-                {
-                    dic.cab = 8;
-
-                    Entidad ent = new Entidad(45, nomEnti, (int)dic.cab, -1, -1, -1);
-                    dic.listEntidad.Add(ent);
-
-                    labelCab.Text = dic.cab.ToString();
-                    r = 0;
-                    dic.vaActEnt = 80;
-                    //ent.varSigEnti = 80;
-                    //ent.dirSigEnti = -1;
-                    //ent.dirAtri = 80;
-                    //ent.dirDat = -1;
-                    //ent.dirEnti = 
-
-
-                    //ent.escribeArchivoEntid(dic.archivo, dic.nomArchivo);
-
+            dic.archivo = File.Open(dic.nomArchivo, FileMode.Open, FileAccess.Read);
+            long dirEntiNueva = dic.archivo.Length;
                     
-
-                    escribeEntidad(bw, ent);
-                    //bw.Write(dic.cab);
-                    
-                    actualizaGridEnt();
-                    
-                }
-                else
-                {*/
-                    r = 0;
-
-                    //dic.archivo.Close();
-                    //dic.archivo = File.Open(dic.nomArchivo, FileMode.Open, FileAccess.Read);
-
-                    //dic.archivo = File.Open(dic.nomArchivo, FileMode.Open, FileAccess.Read);
-                    //dic.archivo.Close();
-                    dic.archivo = File.Open(dic.nomArchivo, FileMode.Open, FileAccess.Read);
-                    long dirEntiNueva = dic.archivo.Length;
-                    
-                    dic.archivo.Close();
-
-            //dic.archivo.Close();
-
-            /*if ((int)dic.listEntidad.ElementAt(dic.listEntidad.Count - 1).listAtrib.Count != 0)
-            dirEntiNueva = (int)dic.listEntidad.ElementAt(dic.listEntidad.Count - 1).listAtrib.ElementAt(dic.listEntidad.ElementAt(dic.listEntidad.Count - 1).listAtrib.Count - 1).dirAtri + dic.tamAtrib;
-            else
-                dirEntiNueva = (
-                    int)dic.listEntidad.ElementAt(dic.listEntidad.Count - 1).dirEnti + dic.tamEntidad;
-                        */
-            //string iden = "";
+            dic.archivo.Close();
 
             byte[] buffer = new byte[5];
             new Random().NextBytes(buffer);
 
-            //iden = BitConverter.ToString(buffer);
-
-            //r = 0;
 
             Entidad ent = new Entidad(buffer, nomEnti,(int)dirEntiNueva, -1, -1, -1);
 
-                    dic.listEntidad.Add(ent);
-
-                    
-
-                    
-                    
-
-                    //ent = dic.listEntidad.Find(x => x.nombre == nomEnti);
-
-            r = 0;
-
+            dic.listEntidad.Add(ent);
 
             escribeEntidad(ent);
             actualizaSigEnti();
             actualizaGridEnt();
-            r = 0;
 
-                //}
-           
-
-
-            //dic.archivo.Close();
-            //dic.archivo = File.Open(dic.nomArchivo, FileMode.Open, FileAccess.Read);
-            //long algo = dic.archivo.Length;
-
-            
-            //lista = lista.OrderBy(o => o.nombre).ToList();
             r = 0;
         }
 
@@ -211,15 +139,13 @@ namespace PruebaProyecto
 
             using(BinaryWriter bw = new BinaryWriter(File.Open(dic.nomArchivo, FileMode.Open)))
             {
-                
-                r = 0;
-            bw.Seek((int)ent.dirEnti, SeekOrigin.Begin);
-            bw.Write(ent.id_enti);
-                //bw.Write("");
-                r = 0;
+
+                bw.Seek((int)ent.dirEnti, SeekOrigin.Begin);
+                bw.Write(ent.id_enti);
+
                
-            bw.Write(ent.nombre);
-            r = 0;
+                bw.Write(ent.nombre);
+                r = 0;
                 while (contBytChar < (29 - ent.nombre.Length))
                 {
                     bw.Write('-');
@@ -235,15 +161,15 @@ namespace PruebaProyecto
 
                 r = 0;
 
-                    if(dic.listEntidad.Count() != 1)
-                    {
-                        r = 0;
-                        int index = dic.listEntidad.FindIndex(x => x.nombre == ent.nombre);
-                        bw.Seek((int)dic.listEntidad.ElementAt(index - 1).dirEnti + 59, SeekOrigin.Begin);
-                        bw.Write(ent.dirEnti);
+                if(dic.listEntidad.Count() != 1)
+                {
                     r = 0;
+                    int index = dic.listEntidad.FindIndex(x => x.nombre == ent.nombre);
+                    bw.Seek((int)dic.listEntidad.ElementAt(index - 1).dirEnti + 59, SeekOrigin.Begin);
+                    bw.Write(ent.dirEnti);
+                r = 0;
 
-                    }
+                }
                     
             }
         }
@@ -260,17 +186,7 @@ namespace PruebaProyecto
 
                 if (i != lisAux.Count - 1)
                 {
-
-                    r = 0;
                     dic.listEntidad.ElementAt(ind).dirSigEnti = lisAux.ElementAt(i + 1).dirEnti;
-
-
-                    /*using (BinaryWriter bw = new BinaryWriter(File.Open(dic.nomArchivo, FileMode.Open)))
-                    {
-                        r = 0;
-                        bw.Seek((int)dic.listEntidad.ElementAt(ind).dirEnti+64, SeekOrigin.Begin);
-                        bw.Write(lisAux.ElementAt(i + 1).dirEnti);
-                    }*/
                 }
                 else
                 {
@@ -278,9 +194,6 @@ namespace PruebaProyecto
                     r = 0;
                 }
             }
-            r = 0;
-            //dic.listEntidad.ElementAt(dic.listEntidad.Count-1).dirSigEnti = -1; 
-            r = 0;
             dic.cab = (int)lisAux.ElementAt(0).dirEnti;
 
             for (int i = 0; i < dic.listEntidad.Count; i++)
@@ -290,38 +203,12 @@ namespace PruebaProyecto
                     r = 0;
                     
                     bw.Seek((int)dic.listEntidad.ElementAt(i).dirEnti + 59, SeekOrigin.Begin);
-
-                    //bw.Write(lisAux.ElementAt(i+1).dirEnti);
                     bw.Write(dic.listEntidad.ElementAt(i).dirSigEnti);
-
-                    /*if (i != dic.listEntidad.Count - 1)
-                    {
-                        r = 0;
-                        bw.Write(dic.listEntidad.ElementAt(i + 1).dirEnti);
-                    }
-                    else
-                    {
-                        bw.Write(-1);
-                        r = 0;
-                    }*/
-
                     bw.Seek(0, SeekOrigin.Begin);
                     bw.Write(dic.cab);
 
                 }
             }
-
-            r = 0;
-             //dic.cab = (int)lisAux.ElementAt(0).dirEnti;
-
-            /*
-            using (BinaryWriter bw = new BinaryWriter(File.Open(dic.nomArchivo, FileMode.Open)))
-            {
-                //Actualiza la cabezera en el archivo
-                
-                for(int i = 0; i < dic. )
-
-            }*/
         }
 
         private void VerActualesEnti(object sender, EventArgs e)
@@ -365,7 +252,6 @@ namespace PruebaProyecto
         private void ButtonCamEnt_Click(object sender, EventArgs e)
         {
             int inEM = comboBoxModEnt.SelectedIndex;
-
             dic.listEntidad.ElementAt(inEM).nombre = textBoxEntidad.Text;
 
             using (BinaryWriter bw = new BinaryWriter(File.Open(dic.nomArchivo, FileMode.Open)))
@@ -376,24 +262,14 @@ namespace PruebaProyecto
 
                 int contBytChar = 0;
 
-                if ((dic.listEntidad.ElementAt(inEM).nombre.Length) % 2 == 0)
-                    while (contBytChar < (35 - dic.listEntidad.ElementAt(inEM).nombre.Length) / 2)
-                    {
-                        bw.Write("-");
-                        contBytChar++;
-                    }
-                else
+                while (contBytChar < (29 - dic.listEntidad.ElementAt(inEM).nombre.Length))
                 {
-                    while (contBytChar < (34 - (dic.listEntidad.ElementAt(inEM).nombre.Length)) / 2)
-                    {
-                        bw.Write("-");
-                        contBytChar++;
-                    }
-                    bw.Write("");
+                    bw.Write('-');
+                    contBytChar++;
                 }
+
                 contBytChar = 0;
             }
-
 
             comboBoxModEnt.Visible = false;
             buttonCamEnt.Visible = false;
@@ -427,10 +303,6 @@ namespace PruebaProyecto
 
                 dic.listEntidad.RemoveAt(inEM);
                 r = 0;
-
-
-
-
 
                 actualizaSigEnti();
             }
