@@ -20,8 +20,6 @@ namespace PruebaProyecto
         public Atributos(Diccionario dic)
         {
             InitializeComponent();
-     
-
             inisializaColumnas();
             comboBoxModAtri.Visible = false;
             cambiaAtribu.Visible = false;
@@ -45,32 +43,48 @@ namespace PruebaProyecto
             //Obtenemos la entidad actual
             int entSel = comboBoxEntidades.SelectedIndex;
 
-            r = 0;
-            ent = dic.listEntidad.ElementAt(entSel);
-            Atributo atriActual;
+            if (entSel != -1 )
+            {
+                if (comboBoxAtrTipo.SelectedItem != null && textBoxAtriLong.Text != "" && comboBoxAtrTip_Ind.SelectedItem != null)
+                {
+                    ent = dic.listEntidad.ElementAt(entSel);
+                    Atributo atriActual;
 
-            String nomAtri = "";
+                    String nomAtri = "";
+                    int longitud;
 
-            nomAtri = textBoxNomAtri.Text;
+                    nomAtri = textBoxNomAtri.Text;
 
-            dic.archivo = File.Open(dic.nomArchivo, FileMode.Open, FileAccess.Read);
-            long dirAtri = dic.archivo.Length;
+                    dic.archivo = File.Open(dic.nomArchivo, FileMode.Open, FileAccess.Read);
+                    long dirAtri = dic.archivo.Length;
 
-            dic.archivo.Close(); 
+                    dic.archivo.Close();
 
-               r = 0;
-            ent.varSigAtri = ent.varSigAtri + dic.tamAtrib;
-            byte[] buffer = new byte[5];
-            new Random().NextBytes(buffer);
+                    if (comboBoxAtrTipo.SelectedItem.ToString() == "E")
+                        longitud = 4;
+                    else
+                        longitud = Int32.Parse(textBoxAtriLong.Text);
 
-            Atributo atributo = new Atributo(buffer, nomAtri, comboBoxAtrTipo.SelectedItem.ToString().ElementAt(0), Int32.Parse(textBoxAtriLong.Text), /*(int)ent.dirAtri*/(int)dirAtri, Int32.Parse(comboBoxAtrTip_Ind.SelectedIndex.ToString()), -1,(int) dirAtri+dic.tamAtrib);
-            ent.listAtrib.Add(atributo);
-            atriActual = atributo;
-            actualizaUltima(ent);
-            actualizaGridAtri(ent);
-            escribeAtrib(atributo, ent);
+                    r = 0;
+                    ent.varSigAtri = ent.varSigAtri + dic.tamAtrib;
+                    byte[] buffer = new byte[5];
+                    new Random().NextBytes(buffer);
 
-            r = 0;
+                    
+                    Atributo atributo = new Atributo(buffer, nomAtri, comboBoxAtrTipo.SelectedItem.ToString().ElementAt(0), longitud, /*(int)ent.dirAtri*/(int)dirAtri, Int32.Parse(comboBoxAtrTip_Ind.SelectedIndex.ToString()), -1, (int)dirAtri + dic.tamAtrib);
+                    ent.listAtrib.Add(atributo);
+                    atriActual = atributo;
+                    actualizaUltima(ent);
+                    actualizaGridAtri(ent);
+                    escribeAtrib(atributo, ent);
+
+                    r = 0;
+                }
+                else
+                    MessageBox.Show("Rellena todo los campos");
+            }
+            else
+                MessageBox.Show("Selecciona una entidad\nSi no tienes entidades crea una");
         }
 
         public void escribeAtrib(Atributo atr, Entidad ent)
@@ -157,6 +171,9 @@ namespace PruebaProyecto
             GridAtributos.Rows.Clear();
             inisializaColumnas();
             comboBoxModAtri.Visible = false;
+            buttonEliAtri.Visible = false;
+            cambiaAtribu.Visible = false;
+            comboBoxModAtri.Text = "";
         }
 
         public void inisializaColumnas()
@@ -204,111 +221,139 @@ namespace PruebaProyecto
 
             int entSel = comboBoxEntidades.SelectedIndex;
 
-            ent = dic.listEntidad.ElementAt(entSel);
-            for (int i = 0; i < ent.listAtrib.Count; i++)
+            if (entSel != -1)
             {
-                GridAtributos.Rows.Add();
-                r = 0;
-                GridAtributos.Rows[i].Cells[0].Value = BitConverter.ToString(ent.listAtrib.ElementAt(i).id_atri);
-                r = 0;
-                GridAtributos.Rows[i].Cells[1].Value = ent.listAtrib.ElementAt(i).nombre;
-                GridAtributos.Rows[i].Cells[2].Value = ent.listAtrib.ElementAt(i).tipo;
-                GridAtributos.Rows[i].Cells[3].Value = ent.listAtrib.ElementAt(i).longitud;
-                GridAtributos.Rows[i].Cells[4].Value = ent.listAtrib.ElementAt(i).dirAtri;
-                GridAtributos.Rows[i].Cells[5].Value = ent.listAtrib.ElementAt(i).tipoIndi;
-                GridAtributos.Rows[i].Cells[6].Value = ent.listAtrib.ElementAt(i).dirIndi;
-                GridAtributos.Rows[i].Cells[7].Value = ent.listAtrib.ElementAt(i).dirSigAtri;
+                ent = dic.listEntidad.ElementAt(entSel);
+                for (int i = 0; i < ent.listAtrib.Count; i++)
+                {
+                    GridAtributos.Rows.Add();
+                    r = 0;
+                    GridAtributos.Rows[i].Cells[0].Value = BitConverter.ToString(ent.listAtrib.ElementAt(i).id_atri);
+                    r = 0;
+                    GridAtributos.Rows[i].Cells[1].Value = ent.listAtrib.ElementAt(i).nombre;
+                    GridAtributos.Rows[i].Cells[2].Value = ent.listAtrib.ElementAt(i).tipo;
+                    GridAtributos.Rows[i].Cells[3].Value = ent.listAtrib.ElementAt(i).longitud;
+                    GridAtributos.Rows[i].Cells[4].Value = ent.listAtrib.ElementAt(i).dirAtri;
+                    GridAtributos.Rows[i].Cells[5].Value = ent.listAtrib.ElementAt(i).tipoIndi;
+                    GridAtributos.Rows[i].Cells[6].Value = ent.listAtrib.ElementAt(i).dirIndi;
+                    GridAtributos.Rows[i].Cells[7].Value = ent.listAtrib.ElementAt(i).dirSigAtri;
+                }
             }
+            else
+                MessageBox.Show("Selecciona un entidad");
         }
 
         private void ModificarEnti(object sender, EventArgs e)
         {
-            comboBoxModAtri.Visible = true;
-            cambiaAtribu.Visible = true;
-            buttonEliAtri.Visible = true;
-
-            comboBoxModAtri.Items.Clear();
-            
-            for (int i = 0; i < ent.listAtrib.Count; i++)
+            VerActualesAtri(this, null);
+            if (ent != null)
             {
-                comboBoxModAtri.Items.Add(ent.listAtrib.ElementAt(i).nombre);
-            }
+                
+                comboBoxModAtri.Visible = true;
+                cambiaAtribu.Visible = true;
+                buttonEliAtri.Visible = true;
 
-            textBoxNomAtri.Text = "";
-            comboBoxAtrTipo.Text = "";
-            textBoxAtriLong.Text = "";
-            comboBoxAtrTip_Ind.Text = "";
+                comboBoxModAtri.Items.Clear();
+                for (int i = 0; i < ent.listAtrib.Count; i++)
+                {
+                    comboBoxModAtri.Items.Add(ent.listAtrib.ElementAt(i).nombre);
+                }
+
+                textBoxNomAtri.Text = "";
+                comboBoxAtrTipo.Text = "";
+                textBoxAtriLong.Text = "";
+                comboBoxAtrTip_Ind.Text = "";
+            }
+            else
+                MessageBox.Show("Elige una entidad y asegurate de que tenga atributos por modificar, si no crealos");
         }
 
         private void cambiaAtributo(object sender, EventArgs e)
         {
             int inAM = comboBoxModAtri.SelectedIndex;
 
-            Atributo atM = ent.listAtrib.ElementAt(inAM);
+            if (inAM != -1)
+            {
+                Atributo atM = ent.listAtrib.ElementAt(inAM);
 
-            atM.nombre = textBoxNomAtri.Text  ;
-            atM.tipo = comboBoxAtrTipo.Text.ElementAt(0);
-            atM.longitud = Int32.Parse(textBoxAtriLong.Text);
-            atM.tipoIndi = Int32.Parse(comboBoxAtrTip_Ind.SelectedIndex.ToString());
+                atM.nombre = textBoxNomAtri.Text;
+                atM.tipo = comboBoxAtrTipo.Text.ElementAt(0);
+                atM.longitud = Int32.Parse(textBoxAtriLong.Text);
+                atM.tipoIndi = Int32.Parse(comboBoxAtrTip_Ind.SelectedIndex.ToString());
+
+                buttonEliAtri.Visible = false;
+                cambiaAtribu.Visible = false;
+                comboBoxModAtri.Visible = false;
+                comboBoxModAtri.Text = "";
+            }
+            else
+                MessageBox.Show("Selecciona un atributos, si no los hay crealos");
+
+            
+
+
         }
 
         private void eliminaAtri(object sender, EventArgs e)
         {
             int inAM = comboBoxModAtri.SelectedIndex;
 
-            using (BinaryWriter bw = new BinaryWriter(File.Open(dic.nomArchivo, FileMode.Open)))
+
+            if (inAM != -1)
             {
-               if (ent.listAtrib.Count != 1)
+
+                using (BinaryWriter bw = new BinaryWriter(File.Open(dic.nomArchivo, FileMode.Open)))
                 {
-                    if (inAM - 1 != -1 && inAM + 1 < ent.listAtrib.Count())
+                    if (ent.listAtrib.Count != 1)
                     {
-                        bw.Seek((int)ent.listAtrib.ElementAt(inAM - 1).dirAtri + 60, SeekOrigin.Begin);
-                        bw.Write(ent.listAtrib.ElementAt(inAM + 1).dirAtri);
-                        r = 0;
-                    }
-                    else
-                    {
-                        if (inAM + 1 == ent.listAtrib.Count())
+                        if (inAM - 1 != -1 && inAM + 1 < ent.listAtrib.Count())
                         {
                             bw.Seek((int)ent.listAtrib.ElementAt(inAM - 1).dirAtri + 60, SeekOrigin.Begin);
-                            bw.Write(-1);
+                            bw.Write(ent.listAtrib.ElementAt(inAM + 1).dirAtri);
                             r = 0;
                         }
                         else
                         {
-                            bw.Seek((int)ent.dirEnti + 43, SeekOrigin.Begin);
-                            bw.Write(ent.listAtrib.ElementAt(1).dirAtri);
-                            r = 0;
+                            if (inAM + 1 == ent.listAtrib.Count())
+                            {
+                                bw.Seek((int)ent.listAtrib.ElementAt(inAM - 1).dirAtri + 60, SeekOrigin.Begin);
+                                bw.Write(-1);
+                                r = 0;
+                            }
+                            else
+                            {
+                                bw.Seek((int)ent.dirEnti + 43, SeekOrigin.Begin);
+                                bw.Write(ent.listAtrib.ElementAt(1).dirAtri);
+                                r = 0;
+                            }
                         }
+
                     }
-                    
-               }
-               else
-               {
+                    else
+                    {
+                        r = 0;
+                        bw.Seek((int)ent.dirEnti + 43, SeekOrigin.Begin);
+                        bw.Write(-1);
+                        ent.dirAtri = -1;
+
+
+                    }
+                }
+
+                if (ent.listAtrib.Count != 1)
+                {
                     r = 0;
-                    bw.Seek((int)ent.dirEnti+43, SeekOrigin.Begin);
-                    bw.Write(-1);
-                    ent.dirAtri = -1;
-                    
-
-               }
-
-                
-
-
-            }
-
-            if (ent.listAtrib.Count != 1)
-            {
-                r = 0;
-                dic.actualizaDiccionario(dic.archivo);
+                    dic.actualizaDiccionario(dic.archivo);
+                }
+                else
+                    ent.listAtrib.Clear();
             }
             else
-                ent.listAtrib.Clear();
+                MessageBox.Show("Selecciona un atributos, si no los hay crealos");
 
             buttonEliAtri.Visible = false;
             cambiaAtribu.Visible = false;
-            comboBoxModAtri.Visible = false;
+            comboBoxModAtri.Text = "";
             r = 0;
         }
     }

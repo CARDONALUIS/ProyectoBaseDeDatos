@@ -64,24 +64,29 @@ namespace PruebaProyecto
 
             nomEnti = textBoxEntidad.Text;
 
-            dic.archivo = File.Open(dic.nomArchivo, FileMode.Open, FileAccess.Read);
-            long dirEntiNueva = dic.archivo.Length;
-                    
-            dic.archivo.Close();
+            if (File.Exists(dic.nomArchivo))
+            {
+                dic.archivo = File.Open(dic.nomArchivo, FileMode.Open, FileAccess.Read);
+                long dirEntiNueva = dic.archivo.Length;
 
-            byte[] buffer = new byte[5];
-            new Random().NextBytes(buffer);
+                dic.archivo.Close();
+
+                byte[] buffer = new byte[5];
+                new Random().NextBytes(buffer);
 
 
-            Entidad ent = new Entidad(buffer, nomEnti,(int)dirEntiNueva, -1, -1, -1);
+                Entidad ent = new Entidad(buffer, nomEnti, (int)dirEntiNueva, -1, -1, -1);
 
-            dic.listEntidad.Add(ent);
+                dic.listEntidad.Add(ent);
 
-            escribeEntidad(ent);
-            actualizaSigEnti();
-            actualizaGridEnt();
+                escribeEntidad(ent);
+                actualizaSigEnti();
+                actualizaGridEnt();
 
-            r = 0;
+                r = 0;
+            }
+            else
+                MessageBox.Show("Abre o has Nuevo Archivo");
         }
 
         public void actualizaGridEnt()
@@ -252,74 +257,86 @@ namespace PruebaProyecto
         private void ButtonCamEnt_Click(object sender, EventArgs e)
         {
             int inEM = comboBoxModEnt.SelectedIndex;
-            dic.listEntidad.ElementAt(inEM).nombre = textBoxEntidad.Text;
 
-            using (BinaryWriter bw = new BinaryWriter(File.Open(dic.nomArchivo, FileMode.Open)))
+            if (inEM != -1)
             {
-                bw.Seek((int)dic.listEntidad.ElementAt(inEM).dirEnti+5, SeekOrigin.Begin);
+                dic.listEntidad.ElementAt(inEM).nombre = textBoxEntidad.Text;
 
-                bw.Write(dic.listEntidad.ElementAt(inEM).nombre);
-
-                int contBytChar = 0;
-
-                while (contBytChar < (29 - dic.listEntidad.ElementAt(inEM).nombre.Length))
+                using (BinaryWriter bw = new BinaryWriter(File.Open(dic.nomArchivo, FileMode.Open)))
                 {
-                    bw.Write('-');
-                    contBytChar++;
+                    bw.Seek((int)dic.listEntidad.ElementAt(inEM).dirEnti + 5, SeekOrigin.Begin);
+
+                    bw.Write(dic.listEntidad.ElementAt(inEM).nombre);
+
+                    int contBytChar = 0;
+
+                    while (contBytChar < (29 - dic.listEntidad.ElementAt(inEM).nombre.Length))
+                    {
+                        bw.Write('-');
+                        contBytChar++;
+                    }
+
+                    contBytChar = 0;
                 }
 
-                contBytChar = 0;
+                comboBoxModEnt.Visible = false;
+                buttonCamEnt.Visible = false;
+                buttonEliEnti.Visible = false;
+
+                actualizaSigEnti();
             }
-
-            comboBoxModEnt.Visible = false;
-            buttonCamEnt.Visible = false;
-            buttonEliEnti.Visible = false;
-
-            actualizaSigEnti();
+            else
+                MessageBox.Show("Selecciona un entidad");
         }
 
         private void ButtonEliEnti_Click(object sender, EventArgs e)
         {
             int inEM = comboBoxModEnt.SelectedIndex;
 
-
-            if (dic.listEntidad.Count != 1)
+            if (inEM != -1)
             {
-                if (dic.cab == dic.listEntidad.ElementAt(inEM).dirEnti)
+
+
+                if (dic.listEntidad.Count != 1)
                 {
-                    dic.cab = dic.listEntidad.ElementAt(inEM + 1).dirEnti;
-                }
-                else
-                {
-                    if (dic.listEntidad.ElementAt(inEM).dirSigEnti == -1)
+                    if (dic.cab == dic.listEntidad.ElementAt(inEM).dirEnti)
                     {
-                        dic.listEntidad.ElementAt(inEM - 1).dirSigEnti = -1;
+                        dic.cab = dic.listEntidad.ElementAt(inEM + 1).dirEnti;
                     }
                     else
                     {
-                        dic.listEntidad.ElementAt(inEM - 1).dirSigEnti = dic.listEntidad.ElementAt(inEM + 1).dirEnti;
+                        if (dic.listEntidad.ElementAt(inEM).dirSigEnti == -1)
+                        {
+                            dic.listEntidad.ElementAt(inEM - 1).dirSigEnti = -1;
+                        }
+                        else
+                        {
+                            dic.listEntidad.ElementAt(inEM - 1).dirSigEnti = dic.listEntidad.ElementAt(inEM + 1).dirEnti;
+                        }
+                    }
+
+                    dic.listEntidad.RemoveAt(inEM);
+                    r = 0;
+
+                    actualizaSigEnti();
+                }
+                else
+                {
+                    dic.listEntidad.RemoveAt(inEM);
+                    dic.cab = -1;
+                    using (BinaryWriter bw = new BinaryWriter(File.Open(dic.nomArchivo, FileMode.Open)))
+                    {
+                        bw.Seek(0, SeekOrigin.Begin);
+                        bw.Write(-1);
                     }
                 }
 
-                dic.listEntidad.RemoveAt(inEM);
-                r = 0;
-
-                actualizaSigEnti();
+                comboBoxModEnt.Visible = false;
+                buttonCamEnt.Visible = false;
+                buttonEliEnti.Visible = false;
             }
             else
-            {
-                dic.listEntidad.RemoveAt(inEM);
-                dic.cab = -1;
-                using (BinaryWriter bw = new BinaryWriter(File.Open(dic.nomArchivo, FileMode.Open)))
-                {
-                    bw.Seek(0, SeekOrigin.Begin);
-                    bw.Write(-1);
-                }
-            }
-
-            comboBoxModEnt.Visible = false;
-            buttonCamEnt.Visible = false;
-            buttonEliEnti.Visible = false;
+                MessageBox.Show("Elige una entidad");
         }
     }
 }

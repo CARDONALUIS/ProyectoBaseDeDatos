@@ -36,8 +36,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.labelCab = new System.Windows.Forms.Label();
             this.GridEntidades = new System.Windows.Forms.DataGridView();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.buttonModEnti = new System.Windows.Forms.Button();
             this.buttonCamEnt = new System.Windows.Forms.Button();
@@ -117,24 +115,6 @@
             this.GridEntidades.Size = new System.Drawing.Size(776, 288);
             this.GridEntidades.TabIndex = 8;
             // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(40, 413);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 9;
-            this.button2.Text = "Modificar";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(153, 413);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 10;
-            this.button3.Text = "Eliminar";
-            this.button3.UseVisualStyleBackColor = true;
-            // 
             // button4
             // 
             this.button4.Location = new System.Drawing.Point(328, 51);
@@ -187,14 +167,12 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(800, 399);
             this.Controls.Add(this.comboBoxModEnt);
             this.Controls.Add(this.buttonEliEnti);
             this.Controls.Add(this.buttonCamEnt);
             this.Controls.Add(this.buttonModEnti);
             this.Controls.Add(this.button4);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
             this.Controls.Add(this.GridEntidades);
             this.Controls.Add(this.labelCab);
             this.Controls.Add(this.label4);
@@ -221,8 +199,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label labelCab;
         private System.Windows.Forms.DataGridView GridEntidades;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button buttonModEnti;
         private System.Windows.Forms.Button buttonCamEnt;
