@@ -76,105 +76,117 @@ namespace PruebaProyecto
             //dire = 8;
 
             r = 0;
-            while (bandSigEnt)
-            {
+            if (cab != -1)
+                while (bandSigEnt)
+                {
 
-                archivo.Seek(dire, SeekOrigin.Begin);
-                idEnti = br.ReadBytes(5);
-                r = 0;
-                dire += 5;
-                archivo.Seek(dire, SeekOrigin.Begin);
-                //BinaryReader br = new BinaryReader(archivo);
-                nombreEnti = br.ReadChars(30);
-                r = 0;
-                dire += 30;
-                archivo.Seek(dire, SeekOrigin.Begin);
-                dirEnt = br.ReadInt32();
-                r = 0;
-                dire += 8;
-                archivo.Seek(dire, SeekOrigin.Begin);
-                dirAtri = br.ReadInt32();
-                r = 0;
-                dire += 8;
-                archivo.Seek(dire, SeekOrigin.Begin);
-                dirDat = br.ReadInt32();
-                r = 0;
-                dire += 8;
-                archivo.Seek(dire, SeekOrigin.Begin);
-                dirSigEnt = br.ReadInt32();
-                r = 0;
-                dire = dirAtri;
-                for (int i = 0; i < nombreEnti.Length; i++)
-                {
-                    if (char.IsLetter(nombreEnti.ElementAt(i)))
-                        noEn += nombreEnti.ElementAt(i);
-                }
-                r = 0;
-                Entidad ent = new Entidad(idEnti, noEn, dirEnt, dirAtri, dirDat, dirSigEnt);
-                noEn = "";
-                listEntidad.Add(ent);
-                r = 0;
-                while (bandSigAtri)
-                {
-                    r = 0;
                     archivo.Seek(dire, SeekOrigin.Begin);
-                    idAtriL = br.ReadBytes(5);
+                    idEnti = br.ReadBytes(5);
+                    r = 0;
                     dire += 5;
                     archivo.Seek(dire, SeekOrigin.Begin);
-                    nombreAtriL = br.ReadChars(30);
+                    //BinaryReader br = new BinaryReader(archivo);
+                    nombreEnti = br.ReadChars(30);
+                    r = 0;
                     dire += 30;
-                    r = 0;
                     archivo.Seek(dire, SeekOrigin.Begin);
-                    tipoDL = br.ReadChars(1);
-                    dire += 1;
+                    dirEnt = br.ReadInt32();
                     r = 0;
-                    archivo.Seek(dire, SeekOrigin.Begin);
-                    longiL = br.ReadInt32();
-                    dire += 4;
-                    r = 0;
-                    archivo.Seek(dire, SeekOrigin.Begin);
-                    dirAtrL = br.ReadInt32();
                     dire += 8;
-                    r = 0;
                     archivo.Seek(dire, SeekOrigin.Begin);
-                    tipoIndL = br.ReadInt32();
-                    dire += 4;
+                    dirAtri = br.ReadInt32();
                     r = 0;
-                    archivo.Seek(dire, SeekOrigin.Begin);
-                    dirIndL = br.ReadInt32();
                     dire += 8;
-                    r = 0;
                     archivo.Seek(dire, SeekOrigin.Begin);
-                    dirSigAtL = br.ReadInt32();
-                    dire = dirSigAtL;
+                    dirDat = br.ReadInt32();
                     r = 0;
-                    for (int i = 0; i < nombreAtriL.Length; i++)
-                    {
-                        if (char.IsLetter(nombreAtriL.ElementAt(i)) || nombreAtriL.ElementAt(i) == '_')
-                            noAt += nombreAtriL.ElementAt(i);
-                    }
-                    Atributo atr = new Atributo(idAtriL, noAt, tipoDL[0], longiL, dirAtrL, tipoIndL, dirIndL, dirSigAtL);
-                    noAt = "";
-                    ent.listAtrib.Add(atr);
+                    dire += 8;
+                    archivo.Seek(dire, SeekOrigin.Begin);
+                    dirSigEnt = br.ReadInt32();
                     r = 0;
-
-
-                    if (dirSigEnt == -1 && dirSigAtL == -1)
+                    dire = dirAtri;
+                    for (int i = 0; i < nombreEnti.Length; i++)
                     {
-                        bandSigEnt = false;
-                        r = 0;
+                        if (char.IsLetter(nombreEnti.ElementAt(i)))
+                            noEn += nombreEnti.ElementAt(i);
                     }
+                    r = 0;
+                    Entidad ent = new Entidad(idEnti, noEn, dirEnt, dirAtri, dirDat, dirSigEnt);
+                    noEn = "";
+                    listEntidad.Add(ent);
+                    r = 0;
+                    if (dirAtri != -1)
+                        while (bandSigAtri)
+                        {
+                            r = 0;
+                            archivo.Seek(dire, SeekOrigin.Begin);
+                            idAtriL = br.ReadBytes(5);
+                            dire += 5;
+                            archivo.Seek(dire, SeekOrigin.Begin);
+                            nombreAtriL = br.ReadChars(30);
+                            dire += 30;
+                            r = 0;
+                            archivo.Seek(dire, SeekOrigin.Begin);
+                            tipoDL = br.ReadChars(1);
+                            dire += 1;
+                            r = 0;
+                            archivo.Seek(dire, SeekOrigin.Begin);
+                            longiL = br.ReadInt32();
+                            dire += 4;
+                            r = 0;
+                            archivo.Seek(dire, SeekOrigin.Begin);
+                            dirAtrL = br.ReadInt32();
+                            dire += 8;
+                            r = 0;
+                            archivo.Seek(dire, SeekOrigin.Begin);
+                            tipoIndL = br.ReadInt32();
+                            dire += 4;
+                            r = 0;
+                            archivo.Seek(dire, SeekOrigin.Begin);
+                            dirIndL = br.ReadInt32();
+                            dire += 8;
+                            r = 0;
+                            archivo.Seek(dire, SeekOrigin.Begin);
+                            dirSigAtL = br.ReadInt32();
+                            dire = dirSigAtL;
+                            r = 0;
+                            for (int i = 0; i < nombreAtriL.Length; i++)
+                            {
+                                if (char.IsLetter(nombreAtriL.ElementAt(i)) || nombreAtriL.ElementAt(i) == '_')
+                                    noAt += nombreAtriL.ElementAt(i);
+                            }
+                            Atributo atr = new Atributo(idAtriL, noAt, tipoDL[0], longiL, dirAtrL, tipoIndL, dirIndL, dirSigAtL);
+                            noAt = "";
+                            ent.listAtrib.Add(atr);
+                            r = 0;
 
-                    if (dirSigAtL == -1)
+
+                            if (dirSigEnt == -1 && dirSigAtL == -1)
+                            {
+                                bandSigEnt = false;
+                                r = 0;
+                            }
+
+                            if (dirSigAtL == -1)
+                            {
+                                bandSigAtri = false;
+                                r = 0;
+                                dire = dirSigEnt;
+                            }
+                            
+                            
+                    }
+                    else
                     {
-                        bandSigAtri = false;
-                        r = 0;
+
                         dire = dirSigEnt;
+                        if (dire == -1)
+                            break;
                     }
-                }
-                bandSigAtri = true;
+                    bandSigAtri = true;
 
-            }
+                }
+            
             
             bandSigEnt = true;
             r = 0;

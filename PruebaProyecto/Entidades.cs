@@ -184,7 +184,7 @@ namespace PruebaProyecto
             r = 0;
             List<Entidad> lisAux = dic.listEntidad;
             lisAux = lisAux.OrderBy(o => o.nombre).ToList();
-
+            r = 0;
             for (int i = 0; i < lisAux.Count; i++)
             {
                 int ind = dic.listEntidad.FindIndex(x => x.nombre == lisAux.ElementAt(i).nombre);
@@ -200,6 +200,7 @@ namespace PruebaProyecto
                 }
             }
             dic.cab = (int)lisAux.ElementAt(0).dirEnti;
+            dic.listEntidad = lisAux;
 
             for (int i = 0; i < dic.listEntidad.Count; i++)
             {
@@ -246,7 +247,10 @@ namespace PruebaProyecto
 
             comboBoxModEnt.Items.Clear();
 
-            foreach(Entidad a in dic.listEntidad)
+           // List<Entidad> lisAux = new List<Entidad>();
+            //lisAux = dic.listEntidad.OrderBy(o => o.nombre).ToList();
+
+            foreach (Entidad a in dic.listEntidad)
             {
                 comboBoxModEnt.Items.Add(a.nombre);
             }
@@ -284,6 +288,7 @@ namespace PruebaProyecto
                 buttonEliEnti.Visible = false;
 
                 actualizaSigEnti();
+                VerActualesEnti(this, null);
             }
             else
                 MessageBox.Show("Selecciona un entidad");
@@ -292,13 +297,12 @@ namespace PruebaProyecto
         private void ButtonEliEnti_Click(object sender, EventArgs e)
         {
             int inEM = comboBoxModEnt.SelectedIndex;
-
+         
             if (inEM != -1)
             {
-
-
                 if (dic.listEntidad.Count != 1)
                 {
+                    r = 0;
                     if (dic.cab == dic.listEntidad.ElementAt(inEM).dirEnti)
                     {
                         dic.cab = dic.listEntidad.ElementAt(inEM + 1).dirEnti;
@@ -334,9 +338,14 @@ namespace PruebaProyecto
                 comboBoxModEnt.Visible = false;
                 buttonCamEnt.Visible = false;
                 buttonEliEnti.Visible = false;
+
+                VerActualesEnti(this, null);
             }
             else
                 MessageBox.Show("Elige una entidad");
+
+            
+
         }
     }
 }

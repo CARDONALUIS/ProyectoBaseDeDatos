@@ -285,6 +285,7 @@ namespace PruebaProyecto
                 cambiaAtribu.Visible = false;
                 comboBoxModAtri.Visible = false;
                 comboBoxModAtri.Text = "";
+                VerActualesAtri(this, null);
             }
             else
                 MessageBox.Show("Selecciona un atributos, si no los hay crealos");
@@ -354,6 +355,9 @@ namespace PruebaProyecto
             buttonEliAtri.Visible = false;
             cambiaAtribu.Visible = false;
             comboBoxModAtri.Text = "";
+            comboBoxModAtri.Visible = false;
+
+            VerActualesAtri(this, null);
             r = 0;
         }
     }
