@@ -16,6 +16,9 @@ namespace PruebaProyecto
         
         Entidades vEnti;
         Atributos vAtri;
+        Datos vDatos;
+      
+        
         
         Diccionario dic;
 
@@ -47,7 +50,7 @@ namespace PruebaProyecto
 
                 label1.Text = "";
 
-                label1.Text = "Archivo:" +nomArchivo;
+                label1.Text = "Archivo Diccionario:" + nomArchivo;
                 //Abre el archivo
                 
                 dic.archivo = File.Open(nomArchivo, FileMode.Open, FileAccess.Read);
@@ -219,6 +222,7 @@ namespace PruebaProyecto
             //vDic = new VenEntidades();
             vEnti = new Entidades(dic);
             vAtri = new Atributos(dic);
+            vDatos = new Datos();
         }
 
         private void Button1_Click(object sender, EventArgs e)
@@ -271,7 +275,7 @@ namespace PruebaProyecto
 
             label1.Text = "";
 
-            label1.Text = "Archivo:" + dic.nomArchivo;
+            label1.Text = "Archivo Diccionario:" + dic.nomArchivo;
 
 
             using (BinaryWriter bw = new BinaryWriter(File.Open(dic.nomArchivo, FileMode.Open)))
@@ -284,6 +288,41 @@ namespace PruebaProyecto
         {
 
             
+        }
+
+        private void InsertarRegistrosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            r = 0;
+            vDatos.actualizaDicc(dic);
+            vDatos.ShowDialog();
+        }
+
+
+        /*Metodos del archvio de datos*/
+
+        private void AbrirDatosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string nomArchivoDatos;
+
+            OpenFileDialog abrir = new OpenFileDialog();
+
+            if (abrir.ShowDialog() == DialogResult.OK)
+            {
+                //Guarda el nombre del archivo
+                nomArchivoDatos = abrir.FileName;
+
+                label2.Text = "";
+
+                label2.Text = "Archivo Datos:" + nomArchivoDatos;
+                //Abre el archivo
+
+                vDatos.archivoDatos = File.Open(nomArchivoDatos, FileMode.Open, FileAccess.Read);
+                vDatos.nomArchivoDatos = nomArchivoDatos;
+
+                //actualizaDiccionario(dic.archivo);
+
+                vDatos.archivoDatos.Close();
+            }
         }
     }
 }

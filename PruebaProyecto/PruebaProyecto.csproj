@@ -54,6 +54,12 @@
     <Compile Include="Atributos.Designer.cs">
       <DependentUpon>Atributos.cs</DependentUpon>
     </Compile>
+    <Compile Include="Datos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Datos.Designer.cs">
+      <DependentUpon>Datos.cs</DependentUpon>
+    </Compile>
     <Compile Include="Diccionario.cs" />
     <Compile Include="Entidad.cs" />
     <Compile Include="Entidades.cs">
@@ -78,6 +84,9 @@
     </Compile>
     <EmbeddedResource Include="Atributos.resx">
       <DependentUpon>Atributos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Datos.resx">
+      <DependentUpon>Datos.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Entidades.resx">
       <DependentUpon>Entidades.cs</DependentUpon>
