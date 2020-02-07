@@ -32,14 +32,13 @@
             this.archivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.abrirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nuevoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.abrirDatosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.nuevoDatosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.diccionarioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.entidadesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ventanaAtributos = new System.Windows.Forms.ToolStripMenuItem();
-            this.datosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.insertarRegistrosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.RegistroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
-            this.abrirDatosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.nuevoDatosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label2 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -49,7 +48,7 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.archivoToolStripMenuItem,
             this.diccionarioToolStripMenuItem,
-            this.datosToolStripMenuItem});
+            this.RegistroToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(807, 24);
@@ -70,16 +69,29 @@
             // abrirToolStripMenuItem
             // 
             this.abrirToolStripMenuItem.Name = "abrirToolStripMenuItem";
-            this.abrirToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.abrirToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.abrirToolStripMenuItem.Text = "Abrir Diccionario";
             this.abrirToolStripMenuItem.Click += new System.EventHandler(this.AbrirToolStripMenuItem_Click);
             // 
             // nuevoToolStripMenuItem
             // 
             this.nuevoToolStripMenuItem.Name = "nuevoToolStripMenuItem";
-            this.nuevoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.nuevoToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.nuevoToolStripMenuItem.Text = "Nuevo Diccionario";
             this.nuevoToolStripMenuItem.Click += new System.EventHandler(this.NuevoArchivo);
+            // 
+            // abrirDatosToolStripMenuItem
+            // 
+            this.abrirDatosToolStripMenuItem.Name = "abrirDatosToolStripMenuItem";
+            this.abrirDatosToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.abrirDatosToolStripMenuItem.Text = "Abrir Datos";
+            this.abrirDatosToolStripMenuItem.Click += new System.EventHandler(this.AbrirDatosToolStripMenuItem_Click);
+            // 
+            // nuevoDatosToolStripMenuItem
+            // 
+            this.nuevoDatosToolStripMenuItem.Name = "nuevoDatosToolStripMenuItem";
+            this.nuevoDatosToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.nuevoDatosToolStripMenuItem.Text = "Nuevo Datos";
             // 
             // diccionarioToolStripMenuItem
             // 
@@ -105,20 +117,12 @@
             this.ventanaAtributos.Text = "Atributos";
             this.ventanaAtributos.Click += new System.EventHandler(this.VentanaAtributos_Click);
             // 
-            // datosToolStripMenuItem
+            // RegistroToolStripMenuItem
             // 
-            this.datosToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.insertarRegistrosToolStripMenuItem});
-            this.datosToolStripMenuItem.Name = "datosToolStripMenuItem";
-            this.datosToolStripMenuItem.Size = new System.Drawing.Size(49, 20);
-            this.datosToolStripMenuItem.Text = "Datos";
-            // 
-            // insertarRegistrosToolStripMenuItem
-            // 
-            this.insertarRegistrosToolStripMenuItem.Name = "insertarRegistrosToolStripMenuItem";
-            this.insertarRegistrosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.insertarRegistrosToolStripMenuItem.Text = "InsertarRegistros";
-            this.insertarRegistrosToolStripMenuItem.Click += new System.EventHandler(this.InsertarRegistrosToolStripMenuItem_Click);
+            this.RegistroToolStripMenuItem.Name = "RegistroToolStripMenuItem";
+            this.RegistroToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
+            this.RegistroToolStripMenuItem.Text = "Registro";
+            this.RegistroToolStripMenuItem.Click += new System.EventHandler(this.RegistroToolStripMenuItem_Click);
             // 
             // label1
             // 
@@ -128,19 +132,6 @@
             this.label1.Size = new System.Drawing.Size(108, 13);
             this.label1.TabIndex = 4;
             this.label1.Text = "Archivo Diccionario : ";
-            // 
-            // abrirDatosToolStripMenuItem
-            // 
-            this.abrirDatosToolStripMenuItem.Name = "abrirDatosToolStripMenuItem";
-            this.abrirDatosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.abrirDatosToolStripMenuItem.Text = "Abrir Datos";
-            this.abrirDatosToolStripMenuItem.Click += new System.EventHandler(this.AbrirDatosToolStripMenuItem_Click);
-            // 
-            // nuevoDatosToolStripMenuItem
-            // 
-            this.nuevoDatosToolStripMenuItem.Name = "nuevoDatosToolStripMenuItem";
-            this.nuevoDatosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.nuevoDatosToolStripMenuItem.Text = "Nuevo Datos";
             // 
             // label2
             // 
@@ -180,8 +171,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolStripMenuItem entidadesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ventanaAtributos;
-        private System.Windows.Forms.ToolStripMenuItem datosToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem insertarRegistrosToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem RegistroToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem abrirDatosToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem nuevoDatosToolStripMenuItem;
         private System.Windows.Forms.Label label2;

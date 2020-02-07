@@ -30,10 +30,14 @@
         {
             this.label1 = new System.Windows.Forms.Label();
             this.comboBoxEntiDatos = new System.Windows.Forms.ComboBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.RegistroDataGrid = new System.Windows.Forms.DataGridView();
+            this.RegistroRellDataGrid = new System.Windows.Forms.DataGridView();
             this.GuardaRegistros = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.RegistroDataGrid)).BeginInit();
+            this.RegisInserdataGridView = new System.Windows.Forms.DataGridView();
+            this.label2 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.RegistroRellDataGrid)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.RegisInserdataGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -52,28 +56,19 @@
             this.comboBoxEntiDatos.Name = "comboBoxEntiDatos";
             this.comboBoxEntiDatos.Size = new System.Drawing.Size(121, 21);
             this.comboBoxEntiDatos.TabIndex = 1;
+            this.comboBoxEntiDatos.SelectedIndexChanged += new System.EventHandler(this.CambiaEntiReg);
             // 
-            // button1
+            // RegistroRellDataGrid
             // 
-            this.button1.Location = new System.Drawing.Point(209, 55);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(106, 21);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "GenerarColumnas";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.GeneraCol_Click);
-            // 
-            // RegistroDataGrid
-            // 
-            this.RegistroDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.RegistroDataGrid.Location = new System.Drawing.Point(35, 116);
-            this.RegistroDataGrid.Name = "RegistroDataGrid";
-            this.RegistroDataGrid.Size = new System.Drawing.Size(753, 232);
-            this.RegistroDataGrid.TabIndex = 3;
+            this.RegistroRellDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.RegistroRellDataGrid.Location = new System.Drawing.Point(35, 116);
+            this.RegistroRellDataGrid.Name = "RegistroRellDataGrid";
+            this.RegistroRellDataGrid.Size = new System.Drawing.Size(741, 142);
+            this.RegistroRellDataGrid.TabIndex = 3;
             // 
             // GuardaRegistros
             // 
-            this.GuardaRegistros.Location = new System.Drawing.Point(361, 52);
+            this.GuardaRegistros.Location = new System.Drawing.Point(222, 55);
             this.GuardaRegistros.Name = "GuardaRegistros";
             this.GuardaRegistros.Size = new System.Drawing.Size(97, 24);
             this.GuardaRegistros.TabIndex = 4;
@@ -81,19 +76,58 @@
             this.GuardaRegistros.UseVisualStyleBackColor = true;
             this.GuardaRegistros.Click += new System.EventHandler(this.GuardaRegistros_Click);
             // 
+            // RegisInserdataGridView
+            // 
+            this.RegisInserdataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.RegisInserdataGridView.Location = new System.Drawing.Point(35, 309);
+            this.RegisInserdataGridView.Name = "RegisInserdataGridView";
+            this.RegisInserdataGridView.Size = new System.Drawing.Size(741, 170);
+            this.RegisInserdataGridView.TabIndex = 5;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(32, 278);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(92, 13);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "Vista de Registros";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(366, 56);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 7;
+            this.button1.Text = "Modificar";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(491, 56);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 8;
+            this.button2.Text = "Eliminar";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
             // Datos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.GuardaRegistros);
-            this.Controls.Add(this.RegistroDataGrid);
+            this.ClientSize = new System.Drawing.Size(801, 491);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.RegisInserdataGridView);
+            this.Controls.Add(this.GuardaRegistros);
+            this.Controls.Add(this.RegistroRellDataGrid);
             this.Controls.Add(this.comboBoxEntiDatos);
             this.Controls.Add(this.label1);
             this.Name = "Datos";
             this.Text = "Datos";
-            ((System.ComponentModel.ISupportInitialize)(this.RegistroDataGrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.RegistroRellDataGrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.RegisInserdataGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -103,8 +137,11 @@
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox comboBoxEntiDatos;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.DataGridView RegistroDataGrid;
+        private System.Windows.Forms.DataGridView RegistroRellDataGrid;
         private System.Windows.Forms.Button GuardaRegistros;
+        private System.Windows.Forms.DataGridView RegisInserdataGridView;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
     }
 }

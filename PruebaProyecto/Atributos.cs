@@ -360,5 +360,10 @@ namespace PruebaProyecto
             VerActualesAtri(this, null);
             r = 0;
         }
+
+        private void CambioIndiceAtri(object sender, EventArgs e)
+        {
+            VerActualesAtri(this, null);
+        }
     }
 }

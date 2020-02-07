@@ -269,19 +269,23 @@ namespace PruebaProyecto
 
 
                 dic.archivo.Close();
-                
+
+                label1.Text = "";
+
+                label1.Text = "Archivo Diccionario:" + dic.nomArchivo;
+
+
+                using (BinaryWriter bw = new BinaryWriter(File.Open(dic.nomArchivo, FileMode.Open)))
+                {
+                    bw.Write(dic.cab);
+                }
+
+
 
             }
 
-            label1.Text = "";
-
-            label1.Text = "Archivo Diccionario:" + dic.nomArchivo;
 
 
-            using (BinaryWriter bw = new BinaryWriter(File.Open(dic.nomArchivo, FileMode.Open)))
-            {
-                bw.Write(dic.cab);
-            }
         }
 
         private void Guardar_Archivo(object sender, EventArgs e)
@@ -293,8 +297,7 @@ namespace PruebaProyecto
         private void InsertarRegistrosToolStripMenuItem_Click(object sender, EventArgs e)
         {
             r = 0;
-            vDatos.actualizaDicc(dic);
-            vDatos.ShowDialog();
+            
         }
 
 
@@ -323,6 +326,12 @@ namespace PruebaProyecto
 
                 vDatos.archivoDatos.Close();
             }
+        }
+
+        private void RegistroToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            vDatos.actualizaDicc(dic);
+            vDatos.ShowDialog();
         }
     }
 }

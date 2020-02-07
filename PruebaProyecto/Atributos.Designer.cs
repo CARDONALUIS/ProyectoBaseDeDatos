@@ -77,6 +77,7 @@
             this.comboBoxEntidades.Name = "comboBoxEntidades";
             this.comboBoxEntidades.Size = new System.Drawing.Size(121, 21);
             this.comboBoxEntidades.TabIndex = 2;
+            this.comboBoxEntidades.SelectedIndexChanged += new System.EventHandler(this.CambioIndiceAtri);
             // 
             // textBoxNomAtri
             // 

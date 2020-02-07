@@ -33,6 +33,9 @@ namespace PruebaProyecto
         public List<Atributo> listAtrib;
         public int varSigAtri;
         public int varSigEnti;
+        public FileStream archivoDat;
+        public List<Registro> listReg;
+        
 
         public Entidad(Byte[] _id_enti, String _nomb, int _dirEnt, int _dirAtr, int _dirDat, int _dirSigEnti)
         {
@@ -43,6 +46,7 @@ namespace PruebaProyecto
             DIRDAT = _dirDat;
             DIRSIGENTI = _dirSigEnti;
             listAtrib = new List<Atributo>();
+            listReg = new List<Registro>();
         }
     }    
 }
