@@ -20,11 +20,10 @@ namespace PruebaProyecto
         public int tamaReg { get { return TAMREG; } set { TAMREG = value; } }
 
 
-        public Registro(int _dirReg, int _dirSigReg, int _tamReg)
+        public Registro(int _dirReg, int _dirSigReg)
         {
             DIRREG = _dirReg;
-            DIRSIGREG = _dirSigReg;
-            TAMREG = _tamReg;
+            DIRSIGREG = _dirSigReg;           
         }
 
 

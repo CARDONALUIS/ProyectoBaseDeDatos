@@ -60,6 +60,7 @@
             // 
             // RegistroRellDataGrid
             // 
+            this.RegistroRellDataGrid.AllowUserToAddRows = false;
             this.RegistroRellDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.RegistroRellDataGrid.Location = new System.Drawing.Point(35, 116);
             this.RegistroRellDataGrid.Name = "RegistroRellDataGrid";
