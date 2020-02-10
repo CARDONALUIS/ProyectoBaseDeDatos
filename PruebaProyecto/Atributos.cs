@@ -32,6 +32,7 @@ namespace PruebaProyecto
             r = 0;
 
             comboBoxEntidades.Items.Clear();
+            if(File.Exists(dic.nomArchivo))
             for (int i = 0; i < dic.listEntidad.Count; i++)
             {
                 comboBoxEntidades.Items.Add(dic.listEntidad.ElementAt(i).nombre);
@@ -41,6 +42,7 @@ namespace PruebaProyecto
         private void ActualizarAtributo(object sender, EventArgs e)
         {
             //Obtenemos la entidad actual
+            
             int entSel = comboBoxEntidades.SelectedIndex;
 
             if (entSel != -1 )
@@ -133,6 +135,7 @@ namespace PruebaProyecto
             GridAtributos.Rows.Clear();
             inisializaColumnas();
 
+           
             for (int i = 0; i < ent.listAtrib.Count; i++)
             {
                 GridAtributos.Rows.Add();
@@ -147,6 +150,8 @@ namespace PruebaProyecto
                 GridAtributos.Rows[i].Cells[6].Value = ent.listAtrib.ElementAt(i).dirIndi;
                 GridAtributos.Rows[i].Cells[7].Value = ent.listAtrib.ElementAt(i).dirSigAtri;
             }
+        
+
             r = 0;
         }
 

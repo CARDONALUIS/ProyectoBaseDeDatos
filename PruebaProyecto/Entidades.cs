@@ -12,6 +12,7 @@ using System.Windows.Forms;
 
 namespace PruebaProyecto
 {
+
     public partial class Entidades : Form 
     {
         int r = 0;
@@ -62,6 +63,7 @@ namespace PruebaProyecto
         {
             String nomEnti = "";
 
+            r = 0;
             nomEnti = textBoxEntidad.Text;
 
             if (File.Exists(dic.nomArchivo))
@@ -223,18 +225,21 @@ namespace PruebaProyecto
             GridEntidades.Rows.Clear();
             inisializaEnti();
 
-            for (int i = 0; i < dic.listEntidad.Count; i++)
-            {
-                GridEntidades.Rows.Add();
-                GridEntidades.Rows[i].Cells[0].Value = BitConverter.ToString(dic.listEntidad.ElementAt(i).id_enti);
-                GridEntidades.Rows[i].Cells[1].Value = dic.listEntidad.ElementAt(i).nombre;
-                GridEntidades.Rows[i].Cells[2].Value = dic.listEntidad.ElementAt(i).dirEnti;
-                GridEntidades.Rows[i].Cells[3].Value = dic.listEntidad.ElementAt(i).dirAtri;
-                GridEntidades.Rows[i].Cells[4].Value = dic.listEntidad.ElementAt(i).dirDat;
-                GridEntidades.Rows[i].Cells[5].Value = dic.listEntidad.ElementAt(i).dirSigEnti;
-                r = 0;
-               
-            }
+            if (File.Exists(dic.nomArchivo))
+                for (int i = 0; i < dic.listEntidad.Count; i++)
+                {
+                    GridEntidades.Rows.Add();
+                    GridEntidades.Rows[i].Cells[0].Value = BitConverter.ToString(dic.listEntidad.ElementAt(i).id_enti);
+                    GridEntidades.Rows[i].Cells[1].Value = dic.listEntidad.ElementAt(i).nombre;
+                    GridEntidades.Rows[i].Cells[2].Value = dic.listEntidad.ElementAt(i).dirEnti;
+                    GridEntidades.Rows[i].Cells[3].Value = dic.listEntidad.ElementAt(i).dirAtri;
+                    GridEntidades.Rows[i].Cells[4].Value = dic.listEntidad.ElementAt(i).dirDat;
+                    GridEntidades.Rows[i].Cells[5].Value = dic.listEntidad.ElementAt(i).dirSigEnti;
+                    r = 0;
+
+                }
+            else
+                MessageBox.Show("Abre un archivo o has un nuevo");
         }
 
         private void ButtonModEnti_Click(object sender, EventArgs e)
@@ -346,6 +351,18 @@ namespace PruebaProyecto
 
             
 
+        }
+
+        private void Entidades_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            r = 0;
+            GridEntidades.Columns.Clear();
+            GridEntidades.Rows.Clear();
+            textBoxEntidad.Text = "";
+            buttonCamEnt.Visible = false;
+            buttonEliEnti.Visible = false;
+            inisializaEnti();
+            
         }
     }
 }

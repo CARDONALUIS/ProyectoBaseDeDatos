@@ -333,5 +333,13 @@ namespace PruebaProyecto
             vDatos.actualizaDicc(dic);
             vDatos.ShowDialog();
         }
+
+        private void CerrarDiccionarioToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            dic.cab = -1;
+            dic.archivo.Close();
+            dic.nomArchivo = "";
+            label1.Text = "Archivo Diccionario:";
+        }
     }
 }

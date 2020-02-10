@@ -71,8 +71,8 @@ namespace PruebaProyecto
                     r = 0;
                     entAct.archivoDat = File.Open(entAct.archivoDat.Name, FileMode.Open);
                     long lonArDat = entAct.archivoDat.Length;
-                    Registro reg = new Registro((int)lonArDat, -1);
-                    entAct.listReg.Add(reg);                     
+                    //Registro reg = new Registro((int)lonArDat, -1);
+                    //entAct.listReg.Add(reg);                     
                     entAct.archivoDat.Close();
 
                     r = 0;
@@ -83,8 +83,7 @@ namespace PruebaProyecto
                         r = 0;
                         for (int col = 0; col < RegistroRellDataGrid.Rows[0].Cells.Count; col++)
                         {
-                            //string algo = RegistroRellDataGrid.Rows[0].Cells[0].Value.ToString();
-                            
+
                             r = 0;
                             Atributo act = entAct.listAtrib.ElementAt(col);
                             r = 0;
@@ -111,17 +110,11 @@ namespace PruebaProyecto
                             
                         }
                         bw.Write((long)-1);
-                        //entAct.archivoDat.Close();
                         compruebaFinal(bw);
                     }
 
-               // }
-
-
-                //}
-
                 
-                if(entAct.listReg.Count == 1)
+                /*if (entAct.listReg.Count == 1)
                 {
                     using (BinaryWriter bw = new BinaryWriter(File.Open(dic.nomArchivo, FileMode.Open)))
                     {
@@ -131,10 +124,8 @@ namespace PruebaProyecto
                         entAct.dirDat = entAct.listReg.ElementAt(0).dirReg;
                         r = 0;
                     }
-                    
+                }*/
 
-
-                }
 
                 MessageBox.Show("Tu registros fueron guardados satisfactoriamente");
                 limpiaGridRellReg();
@@ -156,19 +147,20 @@ namespace PruebaProyecto
             
             //using (BinaryWriter bw = new BinaryWriter(File.Open(entAct.archivoDat.Name, FileMode.Open)))
             //{
-                for (int i = 0; i < entAct.listReg.Count; i++)
+            for (int i = 0; i < entAct.listReg.Count; i++)
+            {
+                if (i != entAct.listReg.Count - 1)
                 {
-                    if (i != entAct.listReg.Count - 1)
-                    {
-                        entAct.listReg.ElementAt(i).dirSigReg = entAct.listReg.ElementAt(i + 1).dirReg;
-                    r = 0;
-                    int algo = entAct.listReg.ElementAt(i).dirSigReg - 8;
-                    r = 0;
-                        bw.Seek(entAct.listReg.ElementAt(i).dirSigReg - 8, SeekOrigin.Begin);
-                        bw.Write(entAct.listReg.ElementAt(i).dirSigReg);
-                    }
-
+                    entAct.listReg.ElementAt(i).dirSigReg = entAct.listReg.ElementAt(i + 1).dirReg;
+                r = 0;
+                int algo = entAct.listReg.ElementAt(i).dirSigReg - 8;
+                r = 0;
+                    bw.Seek(entAct.listReg.ElementAt(i).dirSigReg - 8, SeekOrigin.Begin);
+                    bw.Write(entAct.listReg.ElementAt(i).dirSigReg);
                 }
+                
+
+            }
             //}
             //entAct.archivoDat.Close();
             r = 0;
@@ -250,6 +242,7 @@ namespace PruebaProyecto
                 MessageBox.Show("Escoge una entidad");
         }
 
+
         public void agregaRegisExistentes(Entidad ent)
         {
             r = 0;
@@ -313,7 +306,7 @@ namespace PruebaProyecto
                     if (br.ReadInt32() == -1)
                     {
                         r = 0;
-                        
+                        //compruebaFinal(bw);
                         bandSigReg = false; 
                     }
                     
@@ -335,6 +328,9 @@ namespace PruebaProyecto
 
             }
             //
+
+           
+
             ent.archivoDat.Close();
         }
     }

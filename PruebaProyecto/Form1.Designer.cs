@@ -32,14 +32,13 @@
             this.archivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.abrirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nuevoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.abrirDatosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.nuevoDatosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.diccionarioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.entidadesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ventanaAtributos = new System.Windows.Forms.ToolStripMenuItem();
             this.RegistroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.cerrarDiccionarioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -60,8 +59,7 @@
             this.archivoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.abrirToolStripMenuItem,
             this.nuevoToolStripMenuItem,
-            this.abrirDatosToolStripMenuItem,
-            this.nuevoDatosToolStripMenuItem});
+            this.cerrarDiccionarioToolStripMenuItem});
             this.archivoToolStripMenuItem.Name = "archivoToolStripMenuItem";
             this.archivoToolStripMenuItem.Size = new System.Drawing.Size(60, 20);
             this.archivoToolStripMenuItem.Text = "Archivo";
@@ -69,29 +67,16 @@
             // abrirToolStripMenuItem
             // 
             this.abrirToolStripMenuItem.Name = "abrirToolStripMenuItem";
-            this.abrirToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
-            this.abrirToolStripMenuItem.Text = "Abrir Diccionario";
+            this.abrirToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.abrirToolStripMenuItem.Text = "Abrir";
             this.abrirToolStripMenuItem.Click += new System.EventHandler(this.AbrirToolStripMenuItem_Click);
             // 
             // nuevoToolStripMenuItem
             // 
             this.nuevoToolStripMenuItem.Name = "nuevoToolStripMenuItem";
-            this.nuevoToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
-            this.nuevoToolStripMenuItem.Text = "Nuevo Diccionario";
+            this.nuevoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.nuevoToolStripMenuItem.Text = "Nuevo";
             this.nuevoToolStripMenuItem.Click += new System.EventHandler(this.NuevoArchivo);
-            // 
-            // abrirDatosToolStripMenuItem
-            // 
-            this.abrirDatosToolStripMenuItem.Name = "abrirDatosToolStripMenuItem";
-            this.abrirDatosToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
-            this.abrirDatosToolStripMenuItem.Text = "Abrir Datos";
-            this.abrirDatosToolStripMenuItem.Click += new System.EventHandler(this.AbrirDatosToolStripMenuItem_Click);
-            // 
-            // nuevoDatosToolStripMenuItem
-            // 
-            this.nuevoDatosToolStripMenuItem.Name = "nuevoDatosToolStripMenuItem";
-            this.nuevoDatosToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
-            this.nuevoDatosToolStripMenuItem.Text = "Nuevo Datos";
             // 
             // diccionarioToolStripMenuItem
             // 
@@ -142,6 +127,13 @@
             this.label2.TabIndex = 5;
             this.label2.Text = "Archivo Datos: ";
             // 
+            // cerrarDiccionarioToolStripMenuItem
+            // 
+            this.cerrarDiccionarioToolStripMenuItem.Name = "cerrarDiccionarioToolStripMenuItem";
+            this.cerrarDiccionarioToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.cerrarDiccionarioToolStripMenuItem.Text = "Cerrar ";
+            this.cerrarDiccionarioToolStripMenuItem.Click += new System.EventHandler(this.CerrarDiccionarioToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -172,9 +164,8 @@
         private System.Windows.Forms.ToolStripMenuItem entidadesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ventanaAtributos;
         private System.Windows.Forms.ToolStripMenuItem RegistroToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem abrirDatosToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem nuevoDatosToolStripMenuItem;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ToolStripMenuItem cerrarDiccionarioToolStripMenuItem;
     }
 }
 

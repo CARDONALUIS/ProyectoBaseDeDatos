@@ -183,6 +183,7 @@
             this.Controls.Add(this.label1);
             this.Name = "Entidades";
             this.Text = "Entidades";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Entidades_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.GridEntidades)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
