@@ -340,6 +340,13 @@ namespace PruebaProyecto
             dic.archivo.Close();
             dic.nomArchivo = "";
             label1.Text = "Archivo Diccionario:";
+
+            foreach(Entidad a in dic.listEntidad)
+            {
+                a.listAtrib.Clear();
+            }
+            dic.listEntidad.Clear();
+            
         }
     }
 }

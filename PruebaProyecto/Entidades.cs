@@ -93,9 +93,14 @@ namespace PruebaProyecto
 
         public void actualizaGridEnt()
         {
-            GridEntidades.Rows.Add();
+            GridEntidades.Columns.Clear();
+            GridEntidades.Rows.Clear();
+            inisializaEnti();
+
+            
             for (int i = 0; i < dic.listEntidad.Count; i++)
             {
+                GridEntidades.Rows.Add();
                 GridEntidades.Rows[i].Cells[0].Value = BitConverter.ToString(dic.listEntidad.ElementAt(i).id_enti);
                 GridEntidades.Rows[i].Cells[1].Value = dic.listEntidad.ElementAt(i).nombre;
                 GridEntidades.Rows[i].Cells[2].Value = dic.listEntidad.ElementAt(i).dirEnti;
@@ -224,6 +229,7 @@ namespace PruebaProyecto
             GridEntidades.Columns.Clear();
             GridEntidades.Rows.Clear();
             inisializaEnti();
+            r = 0;
 
             if (File.Exists(dic.nomArchivo))
                 for (int i = 0; i < dic.listEntidad.Count; i++)
