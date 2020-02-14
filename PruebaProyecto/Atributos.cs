@@ -279,18 +279,23 @@ namespace PruebaProyecto
 
             if (inAM != -1)
             {
-                Atributo atM = ent.listAtrib.ElementAt(inAM);
+                if (textBoxNomAtri.Text != "" && comboBoxAtrTipo.Text != "" && textBoxAtriLong.Text != "" && comboBoxAtrTip_Ind.SelectedIndex.ToString() != "")
+                {
+                    Atributo atM = ent.listAtrib.ElementAt(inAM);
 
-                atM.nombre = textBoxNomAtri.Text;
-                atM.tipo = comboBoxAtrTipo.Text.ElementAt(0);
-                atM.longitud = Int32.Parse(textBoxAtriLong.Text);
-                atM.tipoIndi = Int32.Parse(comboBoxAtrTip_Ind.SelectedIndex.ToString());
+                    atM.nombre = textBoxNomAtri.Text;
+                    atM.tipo = comboBoxAtrTipo.Text.ElementAt(0);
+                    atM.longitud = Int32.Parse(textBoxAtriLong.Text);
+                    atM.tipoIndi = Int32.Parse(comboBoxAtrTip_Ind.SelectedIndex.ToString());
 
-                buttonEliAtri.Visible = false;
-                cambiaAtribu.Visible = false;
-                comboBoxModAtri.Visible = false;
-                comboBoxModAtri.Text = "";
-                VerActualesAtri(this, null);
+                    buttonEliAtri.Visible = false;
+                    cambiaAtribu.Visible = false;
+                    comboBoxModAtri.Visible = false;
+                    comboBoxModAtri.Text = "";
+                    VerActualesAtri(this, null);
+                }
+                else
+                    MessageBox.Show("Rellena Datos");               
             }
             else
                 MessageBox.Show("Selecciona un atributos, si no los hay crealos");

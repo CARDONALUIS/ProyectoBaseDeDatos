@@ -27,8 +27,6 @@ namespace PruebaProyecto
             InitializeComponent();
             listEntDat = new List<FileStream>();
 
-            
-
         }
         
         public void actualizaDicc(Diccionario d)
@@ -55,13 +53,13 @@ namespace PruebaProyecto
         }
 
 
-       
-
         public void GeneraArchivos()
         {
 
         }
 
+
+        
         private void GuardaRegistros_Click(object sender, EventArgs e)
         {
             if (entAct != null)
@@ -90,14 +88,15 @@ namespace PruebaProyecto
                             string valor = RegistroRellDataGrid.Rows[0].Cells[col].Value.ToString();
                             if (act.tipo == 'C')
                             {
-                                bw.Write(valor);
+                                bw.Write(valor.ToCharArray());
                                 int contChar = 0;
                                 r = 0;
                                 
-                                while (contChar < act.longitud - 1 - valor.Length)
+                                while (contChar < act.longitud - valor.Length)
                                 {
                                     bw.Write('-');
                                     contChar++;
+                                r = 0;
                                 }
                                 r = 0;
                                 contChar = 0;
@@ -113,6 +112,7 @@ namespace PruebaProyecto
                         compruebaFinal(bw);
                     }
 
+                actualizaPrimerRegEnt(entAct);
                 
                 /*if (entAct.listReg.Count == 1)
                 {
@@ -132,8 +132,32 @@ namespace PruebaProyecto
             }
             else
                 MessageBox.Show("Elige una entidad");
+
+
             //RegistroDataGrid.Refresh();
             //RegistroDataGrid.DataSource = null;
+        }
+
+        public void actualizaPrimerRegEnt(Entidad entAct)
+        {
+            entAct.archivoDat = File.Open(entAct.nombre + ".dat", FileMode.Open);
+            BinaryReader br = new BinaryReader(entAct.archivoDat);
+            long valorPri = br.ReadInt32();
+
+            r = 0;
+            if (valorPri >= 0)
+            {
+                using (BinaryWriter bw = new BinaryWriter(File.Open(dic.nomArchivo, FileMode.Open)))
+                {
+                    r = 0;
+                    bw.Seek((int)entAct.dirEnti + 51, SeekOrigin.Begin);
+                    bw.Write(valorPri);
+                    entAct.dirDat = valorPri;
+                    r = 0;
+                }
+            }
+            
+
         }
 
         public void escribeRegistro()
@@ -152,9 +176,9 @@ namespace PruebaProyecto
                 if (i != entAct.listReg.Count - 1)
                 {
                     entAct.listReg.ElementAt(i).dirSigReg = entAct.listReg.ElementAt(i + 1).dirReg;
-                r = 0;
-                int algo = entAct.listReg.ElementAt(i).dirSigReg - 8;
-                r = 0;
+                    r = 0;
+                    int algo = entAct.listReg.ElementAt(i).dirSigReg - 8;
+                    r = 0;
                     bw.Seek(entAct.listReg.ElementAt(i).dirSigReg - 8, SeekOrigin.Begin);
                     bw.Write(entAct.listReg.ElementAt(i).dirSigReg);
                 }
