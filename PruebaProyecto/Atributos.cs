@@ -288,6 +288,22 @@ namespace PruebaProyecto
                     atM.longitud = Int32.Parse(textBoxAtriLong.Text);
                     atM.tipoIndi = Int32.Parse(comboBoxAtrTip_Ind.SelectedIndex.ToString());
 
+                    using (BinaryWriter bw = new BinaryWriter(File.Open(dic.nomArchivo, FileMode.Open)))
+                    {
+                        bw.Seek((int)atM.dirAtri+5, SeekOrigin.Begin);
+                        bw.Write(atM.nombre);
+
+                        bw.Seek((int)atM.dirAtri + 35, SeekOrigin.Begin);
+                        bw.Write(atM.tipo);
+
+                        bw.Seek((int)atM.dirAtri + 36, SeekOrigin.Begin);
+                        bw.Write(atM.longitud);
+
+                        bw.Seek((int)atM.dirAtri + 48, SeekOrigin.Begin);
+                        bw.Write(atM.tipoIndi);
+
+                    }
+
                     buttonEliAtri.Visible = false;
                     cambiaAtribu.Visible = false;
                     comboBoxModAtri.Visible = false;

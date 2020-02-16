@@ -252,9 +252,7 @@ namespace PruebaProyecto
 
         private void NuevoArchivo(object sender, EventArgs e)
         {
-                      
             //"GUARDAR UN ARCHIVO"
-
             //Abrir "Guardar como"
             SaveFileDialog saveDialog = new SaveFileDialog();
             if(saveDialog.ShowDialog() == DialogResult.OK)
