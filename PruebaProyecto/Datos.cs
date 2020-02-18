@@ -21,12 +21,13 @@ namespace PruebaProyecto
         public List<FileStream> listEntDat ;
         Entidad entAct;
         int lonRegisAct = 16;
+        bool bandElim = false;
+        
 
         public Datos()
         {
             InitializeComponent();
             listEntDat = new List<FileStream>();
-
         }
         
         public void actualizaDicc(Diccionario d)
@@ -331,6 +332,38 @@ namespace PruebaProyecto
            
 
             ent.archivoDat.Close();
+        }
+
+        private void RegisInserdataGridView_SelectionChanged(object sender, EventArgs e)
+        {
+            /*for(int i = 0; i< entAct.listAtrib.Count;i++)
+             {
+                 RegisInserdataGridView.Rows[0].Cells[i+1].Value = RegisInserdataGridView.CurrentRow.Cells[i + 1].Value;
+             }*/
+
+            
+
+        }
+
+        private void EliminarReg_Click(object sender, EventArgs e)
+        {
+            bandElim = true;
+        }
+
+        private void RegisInserdataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            int algo;
+            if (bandElim == true)
+            {
+                
+                algo = RegisInserdataGridView.CurrentRow.Index ;
+
+                MessageBox.Show("Voy a cambiar el valor de " + RegisInserdataGridView.Rows[algo - 1].Cells[entAct.listAtrib.Count + 1].Value+ " por "+RegisInserdataGridView.Rows[algo+1].Cells[0].Value);
+                MessageBox.Show("Vas a eliminar el renglon " + algo+" valor: "+ RegisInserdataGridView.Rows[algo].Cells[1].Value);
+                bandElim = false;
+            }
+            
+            r = 0;
         }
     }
 }
