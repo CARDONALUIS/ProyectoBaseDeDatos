@@ -34,8 +34,9 @@
             this.GuardaRegistros = new System.Windows.Forms.Button();
             this.RegisInserdataGridView = new System.Windows.Forms.DataGridView();
             this.label2 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.ModificaRegistro = new System.Windows.Forms.Button();
             this.EliminarReg = new System.Windows.Forms.Button();
+            this.AplicaCambio = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.RegistroRellDataGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.RegisInserdataGridView)).BeginInit();
             this.SuspendLayout();
@@ -96,18 +97,19 @@
             this.label2.TabIndex = 6;
             this.label2.Text = "Vista de Registros";
             // 
-            // button1
+            // ModificaRegistro
             // 
-            this.button1.Location = new System.Drawing.Point(366, 56);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 7;
-            this.button1.Text = "Modificar";
-            this.button1.UseVisualStyleBackColor = true;
+            this.ModificaRegistro.Location = new System.Drawing.Point(367, 21);
+            this.ModificaRegistro.Name = "ModificaRegistro";
+            this.ModificaRegistro.Size = new System.Drawing.Size(75, 23);
+            this.ModificaRegistro.TabIndex = 7;
+            this.ModificaRegistro.Text = "Modificar";
+            this.ModificaRegistro.UseVisualStyleBackColor = true;
+            this.ModificaRegistro.Click += new System.EventHandler(this.ModificaRegistro_Click);
             // 
             // EliminarReg
             // 
-            this.EliminarReg.Location = new System.Drawing.Point(491, 56);
+            this.EliminarReg.Location = new System.Drawing.Point(491, 21);
             this.EliminarReg.Name = "EliminarReg";
             this.EliminarReg.Size = new System.Drawing.Size(75, 23);
             this.EliminarReg.TabIndex = 8;
@@ -115,13 +117,24 @@
             this.EliminarReg.UseVisualStyleBackColor = true;
             this.EliminarReg.Click += new System.EventHandler(this.EliminarReg_Click);
             // 
+            // AplicaCambio
+            // 
+            this.AplicaCambio.Location = new System.Drawing.Point(367, 65);
+            this.AplicaCambio.Name = "AplicaCambio";
+            this.AplicaCambio.Size = new System.Drawing.Size(83, 23);
+            this.AplicaCambio.TabIndex = 9;
+            this.AplicaCambio.Text = "AplicaCambio";
+            this.AplicaCambio.UseVisualStyleBackColor = true;
+            this.AplicaCambio.Click += new System.EventHandler(this.AplicaCambio_Click);
+            // 
             // Datos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(801, 491);
+            this.Controls.Add(this.AplicaCambio);
             this.Controls.Add(this.EliminarReg);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.ModificaRegistro);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.RegisInserdataGridView);
             this.Controls.Add(this.GuardaRegistros);
@@ -146,7 +159,8 @@
         private System.Windows.Forms.Button GuardaRegistros;
         private System.Windows.Forms.DataGridView RegisInserdataGridView;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button ModificaRegistro;
         private System.Windows.Forms.Button EliminarReg;
+        private System.Windows.Forms.Button AplicaCambio;
     }
 }

@@ -22,12 +22,14 @@ namespace PruebaProyecto
         Entidad entAct;
         int lonRegisAct = 16;
         bool bandElim = false;
+        bool bandModi = false;
         
 
         public Datos()
         {
             InitializeComponent();
             listEntDat = new List<FileStream>();
+            AplicaCambio.Visible = false;
         }
         
         public void actualizaDicc(Diccionario d)
@@ -156,33 +158,17 @@ namespace PruebaProyecto
 
         public void compruebaFinal(BinaryWriter bw)
         {
-            /*r = 0;
-            foreach(Atributo a in entAct.listAtrib)
-            {
-                lonRegisAct += a.longitud;
-            }
-            lonRegisAct = lonRegisAct + 16;*/
-
             for (int i = 1; i < RegisInserdataGridView.Rows.Count; i++)
             {
                 r = 0;
                 if (i != RegisInserdataGridView.Rows.Count)
                 {
                     RegisInserdataGridView.Rows[i-1].Cells[entAct.listAtrib.Count+1].Value = RegisInserdataGridView.Rows[i].Cells[0].Value;
-
-                    //entAct.listReg.ElementAt(i).dirSigReg = entAct.listReg.ElementAt(i + 1).dirReg;
-                    r = 0;
-                    //int algo = Int32.Parse(RegisInserdataGridView.Rows[i-1].Cells[entAct.listAtrib.Count + 1].Value.ToString());
-                    int Pos = Int32.Parse(RegisInserdataGridView.Rows[i-1].Cells[0].Value.ToString())+ entAct.longAtributos - 8;
-                    int aPoner = Int32.Parse(RegisInserdataGridView.Rows[i].Cells[0].Value.ToString());
-
-                    r = 0;
                     bw.Seek(Int32.Parse(RegisInserdataGridView.Rows[i - 1].Cells[0].Value.ToString()) + entAct.longAtributos - 8, SeekOrigin.Begin);
                     bw.Write(Int32.Parse(RegisInserdataGridView.Rows[i].Cells[0].Value.ToString()));
                 }
             }
-            //}
-            //entAct.archivoDat.Close();
+
             r = 0;
         }
 
@@ -375,13 +361,15 @@ namespace PruebaProyecto
 
         private void RegisInserdataGridView_SelectionChanged(object sender, EventArgs e)
         {
-            /*for(int i = 0; i< entAct.listAtrib.Count;i++)
-             {
-                 RegisInserdataGridView.Rows[0].Cells[i+1].Value = RegisInserdataGridView.CurrentRow.Cells[i + 1].Value;
-             }*/
+            if (bandModi)
+            {
+                for (int i = 0; i < entAct.listAtrib.Count; i++)
+                {
+                    RegistroRellDataGrid.Rows[0].Cells[i].Value = RegisInserdataGridView.CurrentRow.Cells[i+1].Value;
+                }
+            }
 
-            
-
+            bandModi = false;
         }
 
         private void EliminarReg_Click(object sender, EventArgs e)
@@ -453,6 +441,80 @@ namespace PruebaProyecto
         private void Datos_FormClosing(object sender, FormClosingEventArgs e)
         {
             lonRegisAct = 0;
+            AplicaCambio.Visible = false;
+            limpiaGridRellReg();
+            limpiaGridInsertadosReg();
+            comboBoxEntiDatos.Items.Clear();
+        }
+
+        private void ModificaRegistro_Click(object sender, EventArgs e)
+        {
+            bandModi = true;
+            MessageBox.Show("Selecciona el renglon a modificar");
+            AplicaCambio.Visible = true;
+
+        }
+
+        private void AplicaCambio_Click(object sender, EventArgs e)
+        {
+            for(int i = 0; i < entAct.listAtrib.Count;i++)
+            {
+                RegisInserdataGridView.CurrentRow.Cells[i + 1].Value = RegistroRellDataGrid.Rows[0].Cells[i].Value;
+            }
+            int posI = 0;
+            int dir = 0;
+            string posS = "";
+            int contChar = 0;
+
+            using (BinaryWriter bw = new BinaryWriter(File.Open(entAct.nombre + ".dat", FileMode.Open)))
+            {
+                // bw.Seek(, SeekOrigin.Begin);
+                
+                int longAcumReg = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[0].Value.ToString()) + 8;
+                bw.Seek(longAcumReg, SeekOrigin.Begin);
+
+                r = 0;
+                for (int i = 0; i < entAct.listAtrib.Count; i++)
+                {
+                    if (entAct.listAtrib.ElementAt(i).tipo == 'C')
+                    {
+                        
+                        //posS = RegisInserdataGridView.CurrentRow.Cells[i + 1].Value.ToString();                 
+                        r = 0;
+                        bw.Write(RegisInserdataGridView.CurrentRow.Cells[i + 1].Value.ToString());
+                        while (contChar < entAct.listAtrib.ElementAt(i).longitud - RegisInserdataGridView.CurrentRow.Cells[i + 1].Value.ToString().Length)
+                        {
+                            bw.Write('-');
+                            contChar++;
+                            r = 0;
+                        }
+                        r = 0;
+                        contChar = 0;
+                        longAcumReg += entAct.listAtrib.ElementAt(i).longitud;
+                        bw.Seek(longAcumReg, SeekOrigin.Begin);
+                        //dir = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[0].Value.ToString()) + entAct.listAtrib.ElementAt(i).longitud;
+                    }
+                    else
+                    {
+                        posI = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[i + 1].Value.ToString());
+                        r = 0;
+                        bw.Write(Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[i + 1].Value.ToString()));
+
+                        longAcumReg += 4;
+                        r = 0;
+                        bw.Seek(longAcumReg, SeekOrigin.Begin);
+                    }
+                    
+                    r = 0;
+                    //bw.Write((int)RegisInserdataGridView.CurrentRow.Cells[i+1].Value);
+                    //bw.Seek((int)RegisInserdataGridView.CurrentRow.Cells[i].Value+entAct.listAtrib.ElementAt(i).longitud,SeekOrigin.Begin);
+
+                    //RegisInserdataGridView.CurrentRow.Cells[i + 1].Value = RegistroRellDataGrid.Rows[0].Cells[i].Value;
+                }
+                longAcumReg = 0;
+                //RegisInserdataGridView.CurrentRow.Cells[i + 1].Value;
+
+            }
         }
     }
 }
