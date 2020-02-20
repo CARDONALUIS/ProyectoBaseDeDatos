@@ -35,6 +35,7 @@ namespace PruebaProyecto
         public int varSigEnti;
         public FileStream archivoDat;
         public List<Registro> listReg;
+        public int longAtributos;
         
 
         public Entidad(Byte[] _id_enti, String _nomb, int _dirEnt, int _dirAtr, int _dirDat, int _dirSigEnti)
@@ -47,6 +48,15 @@ namespace PruebaProyecto
             DIRSIGENTI = _dirSigEnti;
             listAtrib = new List<Atributo>();
             listReg = new List<Registro>();
+        }
+
+        public int leerDatoReg(int pos)
+        {
+            this.archivoDat = File.Open(this.nombre + ".dat", FileMode.Open);
+            BinaryReader br = new BinaryReader(this.archivoDat);
+            this.archivoDat.Seek(pos, SeekOrigin.Begin);
+            int dir = br.ReadInt32();
+            return dir;
         }
     }    
 }

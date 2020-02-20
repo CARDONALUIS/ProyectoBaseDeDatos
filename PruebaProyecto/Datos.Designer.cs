@@ -130,6 +130,7 @@
             this.Controls.Add(this.label1);
             this.Name = "Datos";
             this.Text = "Datos";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Datos_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.RegistroRellDataGrid)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.RegisInserdataGridView)).EndInit();
             this.ResumeLayout(false);

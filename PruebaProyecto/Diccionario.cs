@@ -193,6 +193,7 @@ namespace PruebaProyecto
             this.archivo.Close();
         }
         
+       
 
     }
 }

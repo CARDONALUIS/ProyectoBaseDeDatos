@@ -45,6 +45,17 @@ namespace PruebaProyecto
         {
             ent.archivoDat = (new FileStream(ent.nombre+".dat", FileMode.Create));
             entAct.archivoDat.Close();
+
+            /*int contAtrLon = 0;
+
+            foreach (Atributo a in entAct.listAtrib)
+            {
+                contAtrLon += a.longitud;
+
+            }
+
+
+            entAct.longAtributos = contAtrLon+16;*/
         }
 
 
@@ -145,7 +156,13 @@ namespace PruebaProyecto
 
         public void compruebaFinal(BinaryWriter bw)
         {
-            r = 0;
+            /*r = 0;
+            foreach(Atributo a in entAct.listAtrib)
+            {
+                lonRegisAct += a.longitud;
+            }
+            lonRegisAct = lonRegisAct + 16;*/
+
             for (int i = 1; i < RegisInserdataGridView.Rows.Count; i++)
             {
                 r = 0;
@@ -155,10 +172,13 @@ namespace PruebaProyecto
 
                     //entAct.listReg.ElementAt(i).dirSigReg = entAct.listReg.ElementAt(i + 1).dirReg;
                     r = 0;
-                    int algo = Int32.Parse(RegisInserdataGridView.Rows[i-1].Cells[entAct.listAtrib.Count + 1].Value.ToString());
+                    //int algo = Int32.Parse(RegisInserdataGridView.Rows[i-1].Cells[entAct.listAtrib.Count + 1].Value.ToString());
+                    int Pos = Int32.Parse(RegisInserdataGridView.Rows[i-1].Cells[0].Value.ToString())+ entAct.longAtributos - 8;
+                    int aPoner = Int32.Parse(RegisInserdataGridView.Rows[i].Cells[0].Value.ToString());
+
                     r = 0;
-                    bw.Seek(Int32.Parse(RegisInserdataGridView.Rows[i-1].Cells[entAct.listAtrib.Count + 1].Value.ToString())-8, SeekOrigin.Begin);
-                    bw.Write(Int32.Parse(RegisInserdataGridView.Rows[i - 1].Cells[entAct.listAtrib.Count + 1].Value.ToString()));
+                    bw.Seek(Int32.Parse(RegisInserdataGridView.Rows[i - 1].Cells[0].Value.ToString()) + entAct.longAtributos - 8, SeekOrigin.Begin);
+                    bw.Write(Int32.Parse(RegisInserdataGridView.Rows[i].Cells[0].Value.ToString()));
                 }
             }
             //}
@@ -238,6 +258,8 @@ namespace PruebaProyecto
             }
             else
                 MessageBox.Show("Escoge una entidad");
+
+            lonRegisAct = 0;
         }
 
 
@@ -253,6 +275,14 @@ namespace PruebaProyecto
             ent.archivoDat = File.Open(ent.nombre+".dat", FileMode.Open);
             BinaryReader br = new BinaryReader(ent.archivoDat);
 
+            int contAtrLon = 0;
+
+            foreach (Atributo a in entAct.listAtrib)
+            {
+                contAtrLon += a.longitud;
+            }
+            entAct.longAtributos = contAtrLon + 16;
+
             r = 0;
             while (bandSigReg)
             {
@@ -260,7 +290,12 @@ namespace PruebaProyecto
                 //ent.archivoDat.Seek(dirReg, SeekOrigin.Begin);
                 RegisInserdataGridView.Rows.Add();
                 r = 0;
+                
+                if (conRen == 0)
+                    dirReg = (int)entAct.dirDat;
+                else
                 dirReg = br.ReadInt32();
+
                 dirRegAct = dirReg;
                 r = 0;
                 RegisInserdataGridView.Rows[conRen].Cells[0].Value = dirReg;
@@ -312,15 +347,19 @@ namespace PruebaProyecto
                 }
                 //dirReg = dirReg + 8;
                 ent.archivoDat.Seek(dirReg, SeekOrigin.Begin);
+
                 dirSigReg = br.ReadInt32();
                 RegisInserdataGridView.Rows[conRen].Cells[ent.listAtrib.Count+1].Value = dirSigReg;
                 r = 0;
-                
+
 
                 //ent.listReg.Add(new Registro(dirRegAct, dirSigReg));
 
-                if(bandSigReg)
-                ent.archivoDat.Seek(dirSigReg, SeekOrigin.Begin);
+                if (bandSigReg)
+                {
+                    ent.archivoDat.Seek(dirSigReg, SeekOrigin.Begin);
+                    r = 0;
+                }
 
                 r = 0;
                 conRen++;
@@ -350,20 +389,70 @@ namespace PruebaProyecto
             bandElim = true;
         }
 
-        private void RegisInserdataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+        
+
+        private void RegisInserdataGridView_CellClick(object sender, DataGridViewCellEventArgs e)//Elimina Registro
         {
-            int algo;
+            int indFilEli;
             if (bandElim == true)
             {
-                
-                algo = RegisInserdataGridView.CurrentRow.Index ;
+                //MessageBox.Show("Voy a cambiar el valor de " + RegisInserdataGridView.Rows[algo - 1].Cells[entAct.listAtrib.Count + 1].Value+ " por "+RegisInserdataGridView.Rows[algo+1].Cells[0].Value);
+                //MessageBox.Show("Vas a eliminar el renglon " + algo+" valor: "+ RegisInserdataGridView.Rows[algo].Cells[1].Value);
 
-                MessageBox.Show("Voy a cambiar el valor de " + RegisInserdataGridView.Rows[algo - 1].Cells[entAct.listAtrib.Count + 1].Value+ " por "+RegisInserdataGridView.Rows[algo+1].Cells[0].Value);
-                MessageBox.Show("Vas a eliminar el renglon " + algo+" valor: "+ RegisInserdataGridView.Rows[algo].Cells[1].Value);
+                indFilEli = RegisInserdataGridView.CurrentRow.Index;
+
+                //Prueba de direccion 
+                //int dir = entAct.leerDatoReg((int)RegisInserdataGridView.Rows[indFilEli - 1].Cells[entAct.listAtrib.Count + 1].Value - 8);
+                r = 0;
+
+                using (BinaryWriter bw = new BinaryWriter(File.Open(entAct.nombre + ".dat", FileMode.Open)))
+                {
+                    r = 0;
+
+                    if ((int)RegisInserdataGridView.Rows[indFilEli].Cells[0].Value  == entAct.dirDat)//Es el primer registro
+                    {
+                        entAct.dirDat = (int)RegisInserdataGridView.Rows[indFilEli + 1].Cells[0].Value;
+                        using (BinaryWriter bwD = new BinaryWriter(File.Open(dic.nomArchivo, FileMode.Open)))
+                        {
+                            bwD.Seek((int)entAct.dirEnti + 51, SeekOrigin.Begin);
+                            bwD.Write(entAct.dirDat);
+                        }
+                            
+
+                    }
+                    else
+                    if ((int)RegisInserdataGridView.Rows[indFilEli].Cells[entAct.listAtrib.Count + 1].Value == -1)//Es el ultimo registro
+                    {
+                        r = 0;
+                        int algo = (int)RegisInserdataGridView.Rows[indFilEli - 1].Cells[entAct.listAtrib.Count + 1].Value-8;
+                        r = 0;
+
+
+                        bw.Seek((int)RegisInserdataGridView.Rows[indFilEli - 1].Cells[entAct.listAtrib.Count + 1].Value-8, SeekOrigin.Begin);
+                        bw.Write(-1);
+                    }
+                    else//Es cualquier registro de en medio
+                    {
+                        r = 0;
+                        bw.Seek((int)RegisInserdataGridView.Rows[indFilEli - 1].Cells[entAct.listAtrib.Count + 1].Value - 8, SeekOrigin.Begin);
+                        bw.Write((int)RegisInserdataGridView.Rows[indFilEli + 1].Cells[0].Value);
+                    }
+                                        
+                    r = 0;
+                }
+      
+                limpiaGridInsertadosReg();
+
                 bandElim = false;
             }
             
+            
             r = 0;
+        }
+
+        private void Datos_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            lonRegisAct = 0;
         }
     }
 }
