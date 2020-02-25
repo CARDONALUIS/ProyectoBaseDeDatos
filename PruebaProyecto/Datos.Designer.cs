@@ -86,6 +86,7 @@
             this.RegisInserdataGridView.Size = new System.Drawing.Size(741, 170);
             this.RegisInserdataGridView.TabIndex = 5;
             this.RegisInserdataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.RegisInserdataGridView_CellClick);
+            this.RegisInserdataGridView.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.RegisInserdataGridView_ColumnHeaderMouseClick);
             this.RegisInserdataGridView.SelectionChanged += new System.EventHandler(this.RegisInserdataGridView_SelectionChanged);
             // 
             // label2

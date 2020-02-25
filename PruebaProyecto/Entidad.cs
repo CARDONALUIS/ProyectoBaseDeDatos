@@ -36,6 +36,8 @@ namespace PruebaProyecto
         public FileStream archivoDat;
         public List<Registro> listReg;
         public int longAtributos;
+        public int posCveBus;
+        public char tipoCveBus;
         
 
         public Entidad(Byte[] _id_enti, String _nomb, int _dirEnt, int _dirAtr, int _dirDat, int _dirSigEnti)
