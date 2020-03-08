@@ -237,7 +237,7 @@ namespace PruebaProyecto
 
 
             r = 0;
-               
+                
                 while (string.CompareOrdinal(cadComp, cadCveAct) < 0)
                 {
                     r = 0;
@@ -587,8 +587,10 @@ namespace PruebaProyecto
                 posAtrBus = 0;
                 foreach (Atributo a in entAct.listAtrib)
                 {
+                    r = 0;
                     if (a.tipoIndi == 1)
                     {
+                        r = 0;
                         MessageBox.Show("El atributo de busqueda es " + a.nombre);
                         bandAtrBus = true;
                         entAct.tipoCveBus = a.tipo;
@@ -798,7 +800,7 @@ namespace PruebaProyecto
                 //int dir = entAct.leerDatoReg((int)RegisInserdataGridView.Rows[indFilEli - 1].Cells[entAct.listAtrib.Count + 1].Value - 8);
                 r = 0;
 
-                using (BinaryWriter bw = new BinaryWriter(File.Open(entAct.nombre + ".dat", FileMode.Open)))
+                using (BinaryWriter bw = new BinaryWriter(File.Open(BitConverter.ToString(entAct.id_enti) + ".dat", FileMode.Open)))
                 {
                     r = 0;
 
@@ -874,7 +876,7 @@ namespace PruebaProyecto
             int contChar = 0;
             //RegisInserdataGridView.Sort(RegisInserdataGridView.Columns[posAtrBus], ListSortDirection.Ascending);
 
-            using (BinaryWriter bw = new BinaryWriter(File.Open(entAct.nombre + ".dat", FileMode.Open)))
+            using (BinaryWriter bw = new BinaryWriter(File.Open(BitConverter.ToString(entAct.id_enti) + ".dat", FileMode.Open)))
             {
                 // bw.Seek(, SeekOrigin.Begin);
                 
