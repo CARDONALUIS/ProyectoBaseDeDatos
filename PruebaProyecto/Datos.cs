@@ -47,7 +47,7 @@ namespace PruebaProyecto
 
         public void creaArchivosDat(Entidad ent)
         {
-            ent.archivoDat = (new FileStream(ent.nombre+".dat", FileMode.Create));
+            ent.archivoDat = (new FileStream(BitConverter.ToString(ent.id_enti) + ".dat", FileMode.Create));
             entAct.archivoDat.Close();
 
             /*int contAtrLon = 0;
@@ -84,7 +84,7 @@ namespace PruebaProyecto
                 r = 0;
 
 
-                using (BinaryWriter bw = new BinaryWriter(File.Open(entAct.nombre + ".dat", FileMode.Open)))
+                using (BinaryWriter bw = new BinaryWriter(File.Open(BitConverter.ToString(entAct.id_enti) + ".dat", FileMode.Open)))
                 {
                     bw.Seek((int)lonArDat, SeekOrigin.Begin);
                     bw.Write(lonArDat);
@@ -179,7 +179,7 @@ namespace PruebaProyecto
             string cadCveAct;
 
             // "<" La cadena 1 va antes de la cadena 2
-            entAct.archivoDat = File.Open(entAct.nombre + ".dat", FileMode.Open);
+            entAct.archivoDat = File.Open(BitConverter.ToString(entAct.id_enti) + ".dat", FileMode.Open);
             BinaryReader br = new BinaryReader(entAct.archivoDat);
 
 
@@ -201,8 +201,10 @@ namespace PruebaProyecto
             }
             else
             {
-                cadCveAct = br.ReadInt32().ToString();
-                
+                int num = br.ReadInt32();
+                //cadCveAct = br.ReadInt32().ToString();
+                cadCveAct = num.ToString();
+                r = 0;
             }
 
 
@@ -219,11 +221,22 @@ namespace PruebaProyecto
             int dataGridRen = 0;
             bool bandUlt = false;
             bool bandPri = true;
+            //int  = 0;
 
-            if(entAct.tipoCveBus == 'C')
+            if (entAct.tipoCveBus == 'C')
             {
                 cadComp = new string(br.ReadChars(10));
-                r = 0;
+            }
+            else
+            {
+                int cad = br.ReadInt32();
+                cadComp = cad.ToString();
+            }
+                 
+                //cadComp = new string(int r = br.ReadInt32());
+
+
+            r = 0;
                
                 while (string.CompareOrdinal(cadComp, cadCveAct) < 0)
                 {
@@ -266,8 +279,17 @@ namespace PruebaProyecto
                     {
                         r = 0;
                         entAct.archivoDat.Seek(direSigReg + entAct.posCveBus, SeekOrigin.Begin);
-                        cadComp = new string(br.ReadChars(10));
-                        posRegCom = direSigReg;
+                    //cadComp = new string(br.ReadChars(10));
+                        if (entAct.tipoCveBus == 'C')
+                        {
+                            cadComp = new string(br.ReadChars(10));
+                        }
+                        else
+                        {
+                            int cad = br.ReadInt32();
+                            cadComp = cad.ToString();
+                        }
+                    posRegCom = direSigReg;
                         r = 0;
                     }
 
@@ -390,11 +412,12 @@ namespace PruebaProyecto
 
 
                 dataGridRen = 0;
-            }
-            else
+            //}
+            /*
+            else// es entero
             {
 
-            }
+            }*/
 
 
             entAct.archivoDat.Close();
@@ -493,7 +516,7 @@ namespace PruebaProyecto
 
         public void actualizaPrimerRegEnt(Entidad entAct)
         {
-            entAct.archivoDat = File.Open(entAct.nombre + ".dat", FileMode.Open);
+            entAct.archivoDat = File.Open(BitConverter.ToString(entAct.id_enti) + ".dat", FileMode.Open);
             BinaryReader br = new BinaryReader(entAct.archivoDat);
             long valorPri = br.ReadInt32();
 
@@ -635,7 +658,7 @@ namespace PruebaProyecto
             int dirReg = (int)ent.dirDat, dirRegAct, dirSigReg;
             //if()
             
-            ent.archivoDat = File.Open(ent.nombre+".dat", FileMode.Open);
+            ent.archivoDat = File.Open(BitConverter.ToString(ent.id_enti) + ".dat", FileMode.Open);
             BinaryReader br = new BinaryReader(ent.archivoDat);
 
             int contAtrLon = 0;
