@@ -117,6 +117,7 @@ namespace PruebaProyecto
                         }
                         else
                         {
+                            r = 0;
                             bw.Write(Int32.Parse(valor));
                             r = 0;
                         }
@@ -127,6 +128,8 @@ namespace PruebaProyecto
 
                     r = 0;
                     bw.Write((long)-1);
+                    r = 0;
+
                     RegisInserdataGridView.Rows[RegisInserdataGridView.Rows.Count - 1].Cells[entAct.listAtrib.Count + 1].Value = -1;
 
                     if (!bandAtrBus)
@@ -184,7 +187,6 @@ namespace PruebaProyecto
 
             //int posUltReg = (int)entAct.archivoDat.Length - entAct.longAtributos;
 
-            r = 0;
 
             //ordenaCLV_C();
 
@@ -280,6 +282,7 @@ namespace PruebaProyecto
                             
 
                             bw.Write(direSigReg);
+                            bandUltModiAtr = false; 
                         }
 
                             bandUlt = true;
@@ -489,7 +492,7 @@ namespace PruebaProyecto
             BinaryReader br = new BinaryReader(entAct.archivoDat);
             long valorPri = br.ReadInt32();
 
-            r = 0;
+           
             if (valorPri  >= 0)
             {
                 using (BinaryWriter bw = new BinaryWriter(File.Open(dic.nomArchivo, FileMode.Open)))
