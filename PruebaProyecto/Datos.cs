@@ -26,6 +26,7 @@ namespace PruebaProyecto
         int posAtrBus = 0;
         bool bandAtrBus = false;
         bool bandModAtrBus = false;
+        bool bandUltModiAtr = false;
 
 
 
@@ -170,6 +171,9 @@ namespace PruebaProyecto
             return cadCorrecta;
         }
 
+
+
+
         public void ordenaPorClv(int posUltReg, int posDataGrid)
         {
             string cadCveAct;
@@ -181,6 +185,9 @@ namespace PruebaProyecto
             //int posUltReg = (int)entAct.archivoDat.Length - entAct.longAtributos;
 
             r = 0;
+
+            //ordenaCLV_C();
+
 
             entAct.archivoDat.Seek(posUltReg + entAct.posCveBus, SeekOrigin.Begin);
             if(entAct.tipoCveBus =='C')
@@ -229,6 +236,7 @@ namespace PruebaProyecto
             while (string.CompareOrdinal(cadComp, cadCveAct) < 0)
                 {
                     r = 0;
+                
                     bandPri = false;
 
                     int posRegAct = posRegCom;
@@ -244,41 +252,104 @@ namespace PruebaProyecto
                     if(direSigReg == -1)//llego al registro final
                     {
                         r = 0;
+                    /*if (bandUltModiAtr)
+                    {
+
+                    }
+                    else
+                    {*/
+                    
                         entAct.archivoDat.Close();
                         using (BinaryWriter bw = new BinaryWriter(File.Open(entAct.archivoDat.Name, FileMode.Open)))
                         {
                             RegisInserdataGridView.Rows[dataGridRen].Cells[entAct.listAtrib.Count + 1].Value = posUltReg;
                             RegisInserdataGridView.Rows[posDataGrid].Cells[entAct.listAtrib.Count + 1].Value = direSigReg;
-                           
+
                             r = 0;
                             int p = posRegAct + entAct.longAtributos - 8;
                             r = 0;
 
-                            bw.Seek(posRegAct + entAct.longAtributos-8, SeekOrigin.Begin);
+                            bw.Seek(posRegAct + entAct.longAtributos - 8, SeekOrigin.Begin);
                             bw.Write(posUltReg);
-                            bandUlt = true;
+
+                        //Ver si no altera
+                        if (bandUltModiAtr)
+                        {
+                            RegisInserdataGridView.Rows[posDataGrid + 1].Cells[entAct.listAtrib.Count + 1].Value = posUltReg;
+                            bw.Seek(posUltReg + entAct.longAtributos - 8, SeekOrigin.Begin);
                             
+
+                            bw.Write(direSigReg);
+                        }
+
+                            bandUlt = true;
+
                         }
                         entAct.archivoDat = File.Open(entAct.archivoDat.Name, FileMode.Open);
                         break;
+                    //}
                         
                     }
                     else//Si no llega hasta el ultimo registro//No necesita confirmacion
                     {
                         r = 0;
-                        entAct.archivoDat.Seek(direSigReg + entAct.posCveBus, SeekOrigin.Begin);
-                        if (entAct.tipoCveBus == 'C')
+                        if (bandModAtrBus && direSigReg == posUltReg)
                         {
+                            r = 0;
 
-                            cadComp = new string(br.ReadChars(10));
-                        r = 0;
+
+                        entAct.archivoDat.Close();
+                        using (BinaryWriter bw = new BinaryWriter(File.Open(entAct.archivoDat.Name, FileMode.Open)))
+                        {                            
+                            bw.Seek(Int32.Parse(RegisInserdataGridView.Rows[dataGridRen].Cells[0].Value.ToString())+entAct.longAtributos-8, SeekOrigin.Begin);
+                            bw.Write(Int32.Parse(RegisInserdataGridView.Rows[posDataGrid+1].Cells[0].Value.ToString()));
+
+                            RegisInserdataGridView.Rows[dataGridRen].Cells[entAct.listAtrib.Count + 1].Value = RegisInserdataGridView.Rows[posDataGrid + 1].Cells[0].Value;
+                            //posUltReg =
                         }
-                        else
-                        {
-                            int cad = br.ReadInt32();
-                            cadComp = cad.ToString();
-                        }
-                    posRegCom = direSigReg;
+
+                        entAct.archivoDat = File.Open(entAct.archivoDat.Name, FileMode.Open);
+                        br = new BinaryReader(entAct.archivoDat);
+
+                        //entAct.archivoDat = File.Open(BitConverter.ToString(entAct.id_enti) + ".dat", FileMode.Open);
+                        //BinaryReader br = new BinaryReader(entAct.archivoDat);
+
+                        direSigReg += entAct.longAtributos;
+
+                        bandUltModiAtr = true;
+                        r = 0;/*
+                            entAct.archivoDat.Seek(direSigReg + entAct.posCveBus, SeekOrigin.Begin);
+                            if (entAct.tipoCveBus == 'C')
+                            {
+
+                                cadComp = new string(br.ReadChars(10));
+                                r = 0;
+                            }
+                            else
+                            {
+                                int cad = br.ReadInt32();
+                                cadComp = cad.ToString();
+                            }
+                            posRegCom = direSigReg;
+                            */
+                    }
+                        //else
+                        //{
+                            r = 0;
+                            entAct.archivoDat.Seek(direSigReg + entAct.posCveBus, SeekOrigin.Begin);
+                            if (entAct.tipoCveBus == 'C')
+                            {
+
+                                cadComp = new string(br.ReadChars(10));
+                                r = 0;
+                            }
+                            else
+                            {
+                                int cad = br.ReadInt32();
+                                cadComp = cad.ToString();
+                            }
+                            posRegCom = direSigReg;
+                       // }
                         r = 0;
                     }
 
