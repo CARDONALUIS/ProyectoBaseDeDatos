@@ -37,6 +37,8 @@
             this.ModificaRegistro = new System.Windows.Forms.Button();
             this.EliminarReg = new System.Windows.Forms.Button();
             this.AplicaCambio = new System.Windows.Forms.Button();
+            this.EventoIndPrim = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.RegistroRellDataGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.RegisInserdataGridView)).BeginInit();
             this.SuspendLayout();
@@ -70,7 +72,7 @@
             // 
             // GuardaRegistros
             // 
-            this.GuardaRegistros.Location = new System.Drawing.Point(222, 55);
+            this.GuardaRegistros.Location = new System.Drawing.Point(179, 52);
             this.GuardaRegistros.Name = "GuardaRegistros";
             this.GuardaRegistros.Size = new System.Drawing.Size(97, 24);
             this.GuardaRegistros.TabIndex = 4;
@@ -100,7 +102,7 @@
             // 
             // ModificaRegistro
             // 
-            this.ModificaRegistro.Location = new System.Drawing.Point(367, 21);
+            this.ModificaRegistro.Location = new System.Drawing.Point(310, 21);
             this.ModificaRegistro.Name = "ModificaRegistro";
             this.ModificaRegistro.Size = new System.Drawing.Size(75, 23);
             this.ModificaRegistro.TabIndex = 7;
@@ -110,7 +112,7 @@
             // 
             // EliminarReg
             // 
-            this.EliminarReg.Location = new System.Drawing.Point(491, 21);
+            this.EliminarReg.Location = new System.Drawing.Point(421, 21);
             this.EliminarReg.Name = "EliminarReg";
             this.EliminarReg.Size = new System.Drawing.Size(75, 23);
             this.EliminarReg.TabIndex = 8;
@@ -120,7 +122,7 @@
             // 
             // AplicaCambio
             // 
-            this.AplicaCambio.Location = new System.Drawing.Point(367, 65);
+            this.AplicaCambio.Location = new System.Drawing.Point(310, 70);
             this.AplicaCambio.Name = "AplicaCambio";
             this.AplicaCambio.Size = new System.Drawing.Size(83, 23);
             this.AplicaCambio.TabIndex = 9;
@@ -128,11 +130,33 @@
             this.AplicaCambio.UseVisualStyleBackColor = true;
             this.AplicaCambio.Click += new System.EventHandler(this.AplicaCambio_Click);
             // 
+            // EventoIndPrim
+            // 
+            this.EventoIndPrim.AccessibleName = "EventoIndPrim";
+            this.EventoIndPrim.Location = new System.Drawing.Point(542, 52);
+            this.EventoIndPrim.Name = "EventoIndPrim";
+            this.EventoIndPrim.Size = new System.Drawing.Size(86, 24);
+            this.EventoIndPrim.TabIndex = 10;
+            this.EventoIndPrim.Text = "IndicePrimario";
+            this.EventoIndPrim.UseVisualStyleBackColor = true;
+            this.EventoIndPrim.Click += new System.EventHandler(this.EventoIndPrim_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(653, 52);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(105, 24);
+            this.button2.TabIndex = 11;
+            this.button2.Text = "IndiceSecundario";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
             // Datos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(801, 491);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.EventoIndPrim);
             this.Controls.Add(this.AplicaCambio);
             this.Controls.Add(this.EliminarReg);
             this.Controls.Add(this.ModificaRegistro);
@@ -163,5 +187,7 @@
         private System.Windows.Forms.Button ModificaRegistro;
         private System.Windows.Forms.Button EliminarReg;
         private System.Windows.Forms.Button AplicaCambio;
+        private System.Windows.Forms.Button EventoIndPrim;
+        private System.Windows.Forms.Button button2;
     }
 }

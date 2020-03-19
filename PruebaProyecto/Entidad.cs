@@ -34,11 +34,20 @@ namespace PruebaProyecto
         public int varSigAtri;
         public int varSigEnti;
         public FileStream archivoDat;
+        public FileStream archivoIndPri;
+        public string nombreArchivoIndP;
         public List<Registro> listReg;
         public int longAtributos;
         public int posCveBus;
         public char tipoCveBus;
-        
+        public char tipoCvePrima;
+        public int posCvePrima;
+        public int longClvPrim;
+        public int capacidadRegIndPri;
+        public int longRegIndPri;
+        public int contIndPrims = 0;
+        public int indColIndPrim = 0;
+
 
         public Entidad(Byte[] _id_enti, String _nomb, int _dirEnt, int _dirAtr, int _dirDat, int _dirSigEnti)
         {
