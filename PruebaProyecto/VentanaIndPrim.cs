@@ -17,6 +17,8 @@ namespace PruebaProyecto
         {
             InitializeComponent();
 
+            
+
 
             DataGridViewTextBoxColumn Columna1 = new DataGridViewTextBoxColumn();
             Columna1.HeaderText = "Clave Primaria";

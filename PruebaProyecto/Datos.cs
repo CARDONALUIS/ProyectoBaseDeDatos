@@ -145,6 +145,8 @@ namespace PruebaProyecto
                 dirSig = br2.ReadInt32();
                 r = 0;
 
+                entAct.archivoIndPri.Close();
+
             }
 
             entAct.archivoIndPri.Close();
@@ -231,9 +233,13 @@ namespace PruebaProyecto
                 r = 0;
                 //}
             }
+
+            entAct.archivoIndPri.Close();
             vIP.asignaListInd(listIndPri);
             vIP.ShowDialog();
+            vIP.dataGridIndPrim.Rows.Clear();
             listIndPri.Clear();
+
 
             //entAct.archivoIndPri.Seek(0, SeekOrigin.Begin);
             /*
@@ -272,37 +278,35 @@ namespace PruebaProyecto
 
         public void reacomodaPorPosi(int pos)
         {
+            string indP, indP2;
+            int dir, dir2;  
+            int posOrg = pos;
+            //pos++;
+
+            r = 0;
+
             entAct.archivoIndPri.Close();
             entAct.archivoIndPri = File.Open(entAct.archivoIndPri.Name, FileMode.Open);
-            BinaryReader br = new BinaryReader(entAct.archivoIndPri);
+            BinaryReader br1 = new BinaryReader(entAct.archivoIndPri);
+            r = 0;
+            entAct.archivoIndPri.Seek( pos * entAct.longRegIndPri, SeekOrigin.Begin);
 
-            entAct.archivoIndPri.Seek(pos * entAct.longRegIndPri, SeekOrigin.Begin);
 
-
-            string indP, indP2;
-            int dir, dir2;
-
-            if (entAct.tipoCvePrima == 'C')
-            {
-
-                indP = br.ReadChars(entAct.longClvPrim).ToString();
-            }
+            if (entAct.tipoCvePrima == 'E')
+                indP = br1.ReadInt32().ToString();
             else
-            {
-                indP = br.ReadInt32().ToString();
-            }
+                indP = br1.ReadChars(entAct.longClvPrim).ToString();
 
-            dir = br.ReadInt32();
-            pos++;
 
             r = 0;
-            
-            r = 0;
-            while(indP != "-1")
+
+            while (indP != "-1")
             {
+                entAct.archivoIndPri.Close();
                 entAct.archivoIndPri = File.Open(entAct.archivoIndPri.Name, FileMode.Open);
                 BinaryReader br2 = new BinaryReader(entAct.archivoIndPri);
-                entAct.archivoIndPri.Seek(pos + 1 * entAct.longRegIndPri, SeekOrigin.Begin);
+                r = 0;
+                entAct.archivoIndPri.Seek((pos+1) * entAct.longRegIndPri, SeekOrigin.Begin);
 
 
                 if (entAct.tipoCvePrima == 'E')
@@ -342,9 +346,52 @@ namespace PruebaProyecto
                 dir = br2.ReadInt32();
                 r = 0;*/
 
+                entAct.archivoIndPri.Close();
             }
+            r = 0;
+            int posAreco = pos - posOrg;
+            r = 0;
+
+            while(posAreco > 0)
+            {
+                entAct.archivoIndPri.Close();
+                entAct.archivoIndPri = File.Open(entAct.archivoIndPri.Name, FileMode.Open);
+                BinaryReader br3 = new BinaryReader(entAct.archivoIndPri);
+                r = 0;
+                entAct.archivoIndPri.Seek((pos-1) * entAct.longRegIndPri, SeekOrigin.Begin);
 
 
+                if (entAct.tipoCvePrima == 'E')
+                    indP = br3.ReadInt32().ToString();
+                else
+                    indP = br3.ReadChars(entAct.longClvPrim).ToString();
+
+                dir = br3.ReadInt32();
+
+                r = 0;
+                entAct.archivoIndPri.Close();
+                using (BinaryWriter bw = new BinaryWriter(File.Open(entAct.archivoIndPri.Name, FileMode.Open)))
+                {
+                    //entAct.archivoIndPri = File.Open(entAct.archivoIndPri.Name, FileMode.Open);
+                    bw.Seek(pos* entAct.longRegIndPri, SeekOrigin.Begin);
+                    //entAct.archivoIndPri.Seek(posIndP-entAct.longRegIndPri, SeekOrigin.Begin);
+
+                    if (entAct.tipoCvePrima == 'E')
+                        bw.Write(Int32.Parse(indP));
+                    else
+                        bw.Write(indP);
+
+                    bw.Write(dir);
+                }
+                r = 0;
+
+                //posOrg++;
+                posAreco--;
+                pos--;
+                //posOrg++;
+                entAct.archivoIndPri.Close();
+            }
+            entAct.archivoIndPri.Close();
         }
 
 
@@ -426,7 +473,7 @@ namespace PruebaProyecto
                 r = 0;
 
             }
-
+            entAct.archivoIndPri.Close();
             r = 0;
         }
 
@@ -555,6 +602,8 @@ namespace PruebaProyecto
             }
             else
                 leeIndPrim();
+
+            entAct.archivoIndPri.Close();
         }
 
         
@@ -1066,8 +1115,9 @@ namespace PruebaProyecto
                             entAct.capacidadRegIndPri = 2048 / entAct.longClvPrim + 8;
                             entAct.longRegIndPri = entAct.longClvPrim + 8;
 
-                            
+    
                             entAct.archivoIndPri = File.Open(BitConverter.ToString(a.id_atri) + ".idx", FileMode.Open);
+                            entAct.archivoIndPri.Close();
                         }
                             
 
