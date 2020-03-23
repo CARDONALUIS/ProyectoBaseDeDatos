@@ -31,7 +31,7 @@ namespace PruebaProyecto
         bool bandUltModiAtr = false;
         VentanaIndPrim vIP = new VentanaIndPrim();
         int indColIndPri = 0;
-        int ceroAgre;
+
 
 
 
@@ -55,7 +55,6 @@ namespace PruebaProyecto
 
         public void creaArchivosDat(Entidad ent)
         {
-
             ent.archivoDat = (new FileStream(BitConverter.ToString(ent.id_enti) + ".dat", FileMode.Create));
             entAct.archivoDat.Close();
         }
@@ -1263,6 +1262,7 @@ namespace PruebaProyecto
 
                     if ((int)RegisInserdataGridView.Rows[indFilEli].Cells[0].Value  == entAct.dirDat)//Es el primer registro
                     {
+                        r = 0;
                         entAct.dirDat = (int)RegisInserdataGridView.Rows[indFilEli + 1].Cells[0].Value;
                         using (BinaryWriter bwD = new BinaryWriter(File.Open(dic.nomArchivo, FileMode.Open)))
                         {
@@ -1277,28 +1277,26 @@ namespace PruebaProyecto
                     {
                         r = 0;
                         int algo = (int)RegisInserdataGridView.Rows[indFilEli - 1].Cells[entAct.listAtrib.Count + 1].Value-8;
-                        r = 0;
-
 
                         bw.Seek((int)RegisInserdataGridView.Rows[indFilEli - 1].Cells[entAct.listAtrib.Count + 1].Value-8, SeekOrigin.Begin);
                         bw.Write(-1);
                     }
                     else//Es cualquier registro de en medio
                     {
-                        r = 0;
-                        bw.Seek((int)RegisInserdataGridView.Rows[indFilEli - 1].Cells[entAct.listAtrib.Count + 1].Value - 8, SeekOrigin.Begin);
+                        bw.Seek((int)RegisInserdataGridView.Rows[indFilEli - 1].Cells[0].Value + entAct.longAtributos - 8, SeekOrigin.Begin);
                         bw.Write((int)RegisInserdataGridView.Rows[indFilEli + 1].Cells[0].Value);
                     }
                                         
                     r = 0;
                 }
-                 
+
+                r = 0;
                 
                 if(bandAtrPri)
                 {
                     eliminaRegClvPrim((int)RegisInserdataGridView.Rows[indFilEli].Cells[0].Value);
                 }
-                limpiaGridInsertadosReg();
+                //limpiaGridInsertadosReg();
 
                 bandElim = false;
             }
@@ -1333,6 +1331,9 @@ namespace PruebaProyecto
 
             int posI = 0;
             int contChar = 0;
+
+            //int dirRegaModi = 
+            
             //RegisInserdataGridView.Sort(RegisInserdataGridView.Columns[posAtrBus], ListSortDirection.Ascending);
 
             using (BinaryWriter bw = new BinaryWriter(File.Open(BitConverter.ToString(entAct.id_enti) + ".dat", FileMode.Open)))
@@ -1340,12 +1341,20 @@ namespace PruebaProyecto
                 // bw.Seek(, SeekOrigin.Begin);
                 
                 int longAcumReg = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[0].Value.ToString()) + 8;
+                r = 0;
                 bw.Seek(longAcumReg, SeekOrigin.Begin);
 
                 r = 0;
                 for (int i = 0; i < entAct.listAtrib.Count; i++)
                 {
                     r = 0;
+
+                    /*if(entAct.listAtrib.ElementAt(i).tipoIndi == 2)
+                    {
+                        modifClvPrim(longAcumReg-8);
+                        longAcumReg += entAct.longAtributos;
+                    }*/
+
                     if (entAct.listAtrib.ElementAt(i).tipo == 'C')
                     {
                         bw.Seek(longAcumReg, SeekOrigin.Begin);
@@ -1396,8 +1405,22 @@ namespace PruebaProyecto
             {               
                 r = 0;
                 bandModAtrBus = true;
+                //int val = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[0].Value.ToString());
+                //int val2 = RegisInserdataGridView.CurrentRow.Index;
+                r = 0;
                 ordenaPorClv(Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[0].Value.ToString()), RegisInserdataGridView.CurrentRow.Index);
+
+                //EliminarReg_Click(this, null);
+                //RegisInserdataGridView_CellClick(this, null);
+                //ordenaPorClv(Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[0].Value.ToString()), RegisInserdataGridView.CurrentRow.Index);
+                //ordenaPorClv(val, val2);
+                //GuardaRegistros_Click(this, null);
             }
+        }
+
+        public void modifClvPrim(int dirReg)
+        {
+
         }
 
         private void RegisInserdataGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
