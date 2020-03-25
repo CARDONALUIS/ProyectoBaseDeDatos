@@ -31,6 +31,8 @@ namespace PruebaProyecto
         bool bandUltModiAtr = false;
         VentanaIndPrim vIP = new VentanaIndPrim();
         int indColIndPri = 0;
+        long dirAuxElimReg = 0;
+        long dirSigAuxElimReg = 0;
 
 
 
@@ -339,9 +341,13 @@ namespace PruebaProyecto
             entAct.archivoDat.Close();
             entAct.archivoDat = File.Open(entAct.archivoDat.Name, FileMode.Open);
             BinaryReader br = new BinaryReader(entAct.archivoDat);
-
+            int dirUltReg;
             r = 0;
-            int dirUltReg = (int)entAct.archivoDat.Length - entAct.longAtributos;
+            if (!bandModAtrBus)
+                dirUltReg = (int)entAct.archivoDat.Length - entAct.longAtributos;
+            else
+                dirUltReg = (int)dirAuxElimReg;
+
             entAct.archivoDat.Seek(entAct.posCvePrima+dirUltReg, SeekOrigin.Begin);
             
             r = 0;
@@ -548,23 +554,42 @@ namespace PruebaProyecto
                  
                 entAct.archivoDat.Close();
 
+                if(!bandModAtrBus)
                 RegisInserdataGridView.Rows[RegisInserdataGridView.Rows.Count-1].Cells[0].Value = (int)lonArDat; 
+                else
+                    RegisInserdataGridView.Rows[RegisInserdataGridView.Rows.Count - 1].Cells[0].Value = (int)dirAuxElimReg;
                 r = 0;
 
 
                 using (BinaryWriter bw = new BinaryWriter(File.Open(BitConverter.ToString(entAct.id_enti) + ".dat", FileMode.Open)))
                 {
-                    bw.Seek((int)lonArDat, SeekOrigin.Begin);
-                    bw.Write(lonArDat);
+                    if (bandModAtrBus == true)
+                    {
+                        r = 0;
+                        bw.Seek((int)dirAuxElimReg, SeekOrigin.Begin);
+                        bw.Write(dirAuxElimReg);
+                        //RegisInserdataGridView.Rows[RegisInserdataGridView.Rows.Count - 1].Cells[0].Value = (int)dirAuxElimReg;
+                        
+                    }
+                    else
+                    {
+                        bw.Seek((int)lonArDat, SeekOrigin.Begin);
+                        bw.Write(lonArDat);
+                    }
+
                     r = 0;
                     for (int col = 0; col < RegistroRellDataGrid.Rows[0].Cells.Count; col++)
                     {
                         r = 0;
                         Atributo act = entAct.listAtrib.ElementAt(col);
                         r = 0;
-                        RegisInserdataGridView.Rows[RegisInserdataGridView.Rows.Count - 1].Cells[col + 1].Value = RegistroRellDataGrid.Rows[0].Cells[col].Value.ToString();
+
+                        //if (!bandModAtrBus)
+                            RegisInserdataGridView.Rows[RegisInserdataGridView.Rows.Count - 1].Cells[col + 1].Value = RegistroRellDataGrid.Rows[0].Cells[col].Value.ToString();
+
                         valor = RegistroRellDataGrid.Rows[0].Cells[col].Value.ToString();
 
+                        r = 0;
                         if (act.tipo == 'C')
                         {
                             bw.Write(valor.ToCharArray());
@@ -590,10 +615,27 @@ namespace PruebaProyecto
                     }
 
                     r = 0;
-                    bw.Write((long)-1);
-                    r = 0;
+                    if (bandModAtrBus == true)
+                    {
+                        r = 0;
+                        bw.Seek((int)dirAuxElimReg+entAct.longAtributos+8, SeekOrigin.Begin);
+                        bw.Write(dirSigAuxElimReg);
+                        RegisInserdataGridView.Rows[RegisInserdataGridView.Rows.Count - 1].Cells[0].Value = (int)dirAuxElimReg;                             
+                        //RegisInserdataGridView.Rows[RegisInserdataGridView.Rows.Count - 2].Cells[0].Value = 445;
+                        int valor4 = Int32.Parse(RegisInserdataGridView.Rows[RegisInserdataGridView.Rows.Count - 2].Cells[0].Value.ToString());
+                        r = 0;
+                        bw.Seek(Int32.Parse(RegisInserdataGridView.Rows[RegisInserdataGridView.Rows.Count - 2].Cells[0].Value.ToString()) + entAct.longAtributos + 8, SeekOrigin.Begin);
+                        bw.Write(-1);
+                        //bandAtr = false;
+                    }
+                    else
+                    {
+                        bw.Write((long)-1);
 
-                    RegisInserdataGridView.Rows[RegisInserdataGridView.Rows.Count - 1].Cells[entAct.listAtrib.Count + 1].Value = -1;
+                        r = 0;
+
+                        RegisInserdataGridView.Rows[RegisInserdataGridView.Rows.Count - 1].Cells[entAct.listAtrib.Count + 1].Value = -1;
+                    }
 
                     if (!bandAtrBus)
                         compruebaFinal(bw);
@@ -607,7 +649,11 @@ namespace PruebaProyecto
 
                 if (bandAtrBus)
                 {
-                    ordenaPorClv((int)lonArDat, RegisInserdataGridView.Rows.Count - 1);                  
+                    if(!bandModAtrBus)
+                    ordenaPorClv((int)lonArDat, RegisInserdataGridView.Rows.Count - 1); 
+                    else
+                        ordenaPorClv((int)dirAuxElimReg, RegisInserdataGridView.Rows.Count - 1);
+
                 }
 
                 if (bandAtrPri)
@@ -743,7 +789,7 @@ namespace PruebaProyecto
                             bw.Write(posUltReg);
 
                             //Ver si no altera
-                            if (bandUltModiAtr)
+                            /*if (bandUltModiAtr)
                             {
                                 RegisInserdataGridView.Rows[posDataGrid + 1].Cells[entAct.listAtrib.Count + 1].Value = posUltReg;
                                 bw.Seek(posUltReg + entAct.longAtributos - 8, SeekOrigin.Begin);
@@ -751,7 +797,7 @@ namespace PruebaProyecto
 
                                 bw.Write(direSigReg);
                                 bandUltModiAtr = false;
-                            }
+                            }*/
 
                             bandUlt = true;
 
@@ -761,11 +807,10 @@ namespace PruebaProyecto
                     }
                     else//Si no llega hasta el ultimo registro//No necesita confirmacion
                     {
-                        r = 0;
-                        if (bandModAtrBus && direSigReg == posUltReg)
+                        /*r = 0;
+                        if(bandModAtrBus && direSigReg == posUltReg)
                         {
                             r = 0;
-
 
                             entAct.archivoDat.Close();
                             using (BinaryWriter bw = new BinaryWriter(File.Open(entAct.archivoDat.Name, FileMode.Open)))
@@ -798,18 +843,33 @@ namespace PruebaProyecto
                             int cad = br.ReadInt32();
                             cadComp = cad.ToString();
                         }
+                        posRegCom = direSigReg;*/
+                         r = 0;
+                        entAct.archivoDat.Seek(direSigReg + entAct.posCveBus, SeekOrigin.Begin);
+                    //cadComp = new string(br.ReadChars(10));
+                        if (entAct.tipoCveBus == 'C')
+                        {
+                            cadComp = new string(br.ReadChars(10));
+                        }
+                        else
+                        {
+                            int cad = br.ReadInt32();
+                            cadComp = cad.ToString();
+                        }
                         posRegCom = direSigReg;
+                        r = 0;
+
 
                     }
 
-                if (entAct.tipoCveBus == 'E')
-                {
-                    string[] nuev = adaptNumero(cadComp, cadCveAct);
+                    if (entAct.tipoCveBus == 'E')
+                    {
+                        string[] nuev = adaptNumero(cadComp, cadCveAct);
 
-                    cadComp = nuev.ElementAt(0);
-                    cadCveAct = nuev.ElementAt(1);    
-                }
-                    dataGridRen++;
+                        cadComp = nuev.ElementAt(0);
+                        cadCveAct = nuev.ElementAt(1);    
+                    }
+                        dataGridRen++;
 
                 }
                 
@@ -822,7 +882,7 @@ namespace PruebaProyecto
                         bw.Seek(Int32.Parse(RegisInserdataGridView.Rows[dataGridRen - 1].Cells[0].Value.ToString()) + entAct.longAtributos - 8, SeekOrigin.Begin);
                         bw.Write(posUltReg);
 
-                        if (bandModAtrBus)
+                        /*if (bandModAtrBus)
                         {
                             bw.Seek(Int32.Parse(RegisInserdataGridView.Rows[dataGridRen].Cells[0].Value.ToString()) + entAct.longAtributos - 8, SeekOrigin.Begin);
                             bw.Write(Int32.Parse(RegisInserdataGridView.Rows[posDataGrid+1].Cells[0].Value.ToString()));
@@ -830,7 +890,7 @@ namespace PruebaProyecto
                             RegisInserdataGridView.Rows[dataGridRen].Cells[entAct.listAtrib.Count + 1].Value = RegisInserdataGridView.Rows[posDataGrid+1].Cells[0].Value;
 
                             bandModAtrBus = false;
-                        }
+                        }*/
 
                         bw.Seek(posUltReg + entAct.longAtributos - 8, SeekOrigin.Begin);
                         bw.Write(posRegCom);
@@ -859,13 +919,13 @@ namespace PruebaProyecto
                     {
                         bw.Seek(Int32.Parse(RegisInserdataGridView.Rows[posDataGrid].Cells[0].Value.ToString()) + entAct.longAtributos - 8, SeekOrigin.Begin);
                         bw.Write(posRegCom);
-                        if (bandModAtrBus)
+                        /*if (bandModAtrBus)
                         {
                             bw.Seek(Int32.Parse(RegisInserdataGridView.Rows[posDataGrid-1].Cells[0].Value.ToString()) + entAct.longAtributos - 8, SeekOrigin.Begin);
                             bw.Write(Int32.Parse(RegisInserdataGridView.Rows[posDataGrid+1].Cells[0].Value.ToString()));
                             RegisInserdataGridView.Rows[posDataGrid-1].Cells[entAct.listAtrib.Count + 1].Value = RegisInserdataGridView.Rows[posDataGrid].Cells[entAct.listAtrib.Count + 1].Value;
                             bandModAtrBus = false;
-                        }
+                        }*/
 
                     }
                     RegisInserdataGridView.Rows[posDataGrid].Cells[entAct.listAtrib.Count + 1].Value = posRegCom;
@@ -883,14 +943,14 @@ namespace PruebaProyecto
                         bw.Write(posUltReg);
                         bw.Seek(posUltReg + entAct.longAtributos - 8, SeekOrigin.Begin);
                         bw.Write(posRegCom);
-                    if (bandModAtrBus)
+                    /*if (bandModAtrBus)
                     {
                         //Este es cambio por modifiAtri
                         bw.Seek(posRegCom + entAct.longAtributos - 8, SeekOrigin.Begin);
                         bw.Write(Int32.Parse(RegisInserdataGridView.Rows[posDataGrid + 1].Cells[0].Value.ToString()));
                         RegisInserdataGridView.Rows[dataGridRen].Cells[entAct.listAtrib.Count + 1].Value = Int32.Parse(RegisInserdataGridView.Rows[posDataGrid + 1].Cells[0].Value.ToString());
                         bandModAtrBus = false;
-                    }
+                    }*/
 
 
                         RegisInserdataGridView.Rows[dataGridRen - 1].Cells[entAct.listAtrib.Count + 1].Value = posUltReg;
@@ -960,7 +1020,10 @@ namespace PruebaProyecto
 
             bandAtrBus = false;
             bandAtrPri = false;
+            if (!bandModAtrBus)
+            { 
             limpiaGridRellReg();
+            }
             limpiaGridInsertadosReg();
             Object inEn = comboBoxEntiDatos.SelectedItem;
             r = 0;
@@ -1064,19 +1127,29 @@ namespace PruebaProyecto
                 entAct.longAtributos = lonRegisAct;
                 r = 0;
 
-                foreach (Atributo a in entReg.listAtrib)
-                {
+                
+                    foreach (Atributo a in entReg.listAtrib)
+                    {
                     //Columna 1 del grid de registros por rellenar
-                    DataGridViewTextBoxColumn Columna2 = new DataGridViewTextBoxColumn();
-                    Columna2.HeaderText = a.nombre;
-                    RegistroRellDataGrid.Columns.Add(Columna2);
+                    if (!bandModAtrBus)
+                    {
+                        DataGridViewTextBoxColumn Columna2 = new DataGridViewTextBoxColumn();
+                        Columna2.HeaderText = a.nombre;
+                        RegistroRellDataGrid.Columns.Add(Columna2);
+                        
+                    }
 
-                    //Columnas del grid de registrosRellenados
-                    DataGridViewTextBoxColumn Columna3 = new DataGridViewTextBoxColumn();
-                    Columna3.HeaderText = a.nombre;
-                    RegisInserdataGridView.Columns.Add(Columna3);
-                }
-                RegistroRellDataGrid.Rows.Add();
+                        //Columnas del grid de registrosRellenados
+                        DataGridViewTextBoxColumn Columna3 = new DataGridViewTextBoxColumn();
+                        Columna3.HeaderText = a.nombre;
+                        RegisInserdataGridView.Columns.Add(Columna3);
+
+                    }
+
+                    if (!bandModAtrBus)
+                    RegistroRellDataGrid.Rows.Add();
+
+
 
                 //Columna ultima del grid de registrosRellenados
                 DataGridViewTextBoxColumn Columna4 = new DataGridViewTextBoxColumn();
@@ -1296,7 +1369,7 @@ namespace PruebaProyecto
                 {
                     eliminaRegClvPrim((int)RegisInserdataGridView.Rows[indFilEli].Cells[0].Value);
                 }
-                //limpiaGridInsertadosReg();
+                limpiaGridInsertadosReg();
 
                 bandElim = false;
             }
@@ -1405,22 +1478,29 @@ namespace PruebaProyecto
             {               
                 r = 0;
                 bandModAtrBus = true;
-                //int val = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[0].Value.ToString());
-                //int val2 = RegisInserdataGridView.CurrentRow.Index;
+                dirAuxElimReg = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[0].Value.ToString());
+                dirSigAuxElimReg = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[entAct.listAtrib.Count+1].Value.ToString());
                 r = 0;
-                ordenaPorClv(Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[0].Value.ToString()), RegisInserdataGridView.CurrentRow.Index);
-
-                //EliminarReg_Click(this, null);
-                //RegisInserdataGridView_CellClick(this, null);
-                //ordenaPorClv(Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[0].Value.ToString()), RegisInserdataGridView.CurrentRow.Index);
-                //ordenaPorClv(val, val2);
                 //GuardaRegistros_Click(this, null);
+                EliminarReg_Click(this, null);
+                RegisInserdataGridView_CellClick(this,null);
+                CambiaEntiReg(this, null);
+                GuardaRegistros_Click(this, null);
+                bandModAtrBus = false;
+
+                //hasPuenteDeReg(Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[0].Value.ToString()));
+                //ordenaPorClv(Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[0].Value.ToString()), RegisInserdataGridView.CurrentRow.Index);
+
             }
         }
 
-        public void modifClvPrim(int dirReg)
+        public void hasPuenteDeReg(int dirReacomo)
         {
-
+            /*for(int i = 0; i< RegisInserdataGridView.Rows.Count;i++)
+            {
+                bw.Seek((int)RegisInserdataGridView.Rows[indFilEli - 1].Cells[0].Value + entAct.longAtributos - 8, SeekOrigin.Begin);
+                bw.Write((int)RegisInserdataGridView.Rows[indFilEli + 1].Cells[0].Value);
+            }*/
         }
 
         private void RegisInserdataGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
