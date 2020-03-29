@@ -35,18 +35,32 @@ namespace PruebaProyecto
         public int varSigEnti;
         public FileStream archivoDat;
         public FileStream archivoIndPri;
+
+        public List<FileStream> lisArchIndSec = new List<FileStream>();
+
         public string nombreArchivoIndP;
         public List<Registro> listReg;
         public int longAtributos;
         public int posCveBus;
         public char tipoCveBus;
         public char tipoCvePrima;
+        public List<char> listipoCveSec = new List<char>();
         public int posCvePrima;
+        public List<int> lisposCveSec = new List<int>();
         public int longClvPrim;
+        public List<int> lislongClvSec = new List<int>();
+
         public int capacidadRegIndPri;
+        public List<int> lisCapacidadRegIndSec = new List<int>();
+
         public int longRegIndPri;
+        public List<int> lisLongRegIndSec = new List<int>();
+
         public int contIndPrims = 0;
         public int indColIndPrim = 0;
+
+        public int contIndSec = 0;
+        
 
 
         public Entidad(Byte[] _id_enti, String _nomb, int _dirEnt, int _dirAtr, int _dirDat, int _dirSigEnti)
@@ -59,6 +73,7 @@ namespace PruebaProyecto
             DIRSIGENTI = _dirSigEnti;
             listAtrib = new List<Atributo>();
             listReg = new List<Registro>();
+
         }
 
         public int leerDatoReg(int pos)
