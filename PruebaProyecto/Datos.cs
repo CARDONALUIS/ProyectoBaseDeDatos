@@ -27,12 +27,14 @@ namespace PruebaProyecto
         int posAtrBus = 0;
         bool bandAtrBus = false;
         bool bandAtrPri = false;
+        bool bandAtrSec = false;
         bool bandModAtrBus = false;
         bool bandUltModiAtr = false;
         VentanaIndPrim vIP = new VentanaIndPrim();
         int indColIndPri = 0;
         long dirAuxElimReg = 0;
         long dirSigAuxElimReg = 0;
+
 
 
 
@@ -1077,22 +1079,17 @@ namespace PruebaProyecto
                                 bloque[i] = 0xFF;
                             }
                             bw.Write(bloque);
-
-                            entAct.capacidadRegIndPri = 2048 / entAct.longClvPrim + 8;
-                            entAct.longRegIndPri = entAct.longClvPrim + 8;
-
                             entAct.archivoIndPri.Close();
                         }
                         else
                         {
-                            entAct.capacidadRegIndPri = 2048 / entAct.longClvPrim + 8;
-                            entAct.longRegIndPri = entAct.longClvPrim + 8;
-
-
                             entAct.archivoIndPri = File.Open(BitConverter.ToString(a.id_atri) + ".idx", FileMode.Open);
                             entAct.archivoIndPri.Close();
                         }
 
+
+                        entAct.capacidadRegIndPri = 2048 / entAct.longClvPrim + 8;
+                        entAct.longRegIndPri = entAct.longClvPrim + 8;
 
                         break;
                     }
@@ -1102,6 +1099,73 @@ namespace PruebaProyecto
                 entAct.posCvePrima = posAtrPri + 8;
 
 
+                /*Aqui me obtiene si tiene inidices secundarios*/
+
+                int posAtrSec = 0;
+
+                foreach (Atributo a in entAct.listAtrib)
+                {
+                    r = 0;
+                    if (a.tipoIndi == 3)
+                    {
+                        r = 0;
+                        MessageBox.Show("El atributo Secundario es " + a.nombre);
+                        bandAtrSec = true;
+                        
+
+
+                        if (a.dirIndi == -1)
+                        {
+                            //entAct.listipoCveSec.Add(a.tipo);
+                            //entAct.lislongClvSec.Add(a.longitud);
+
+                            //entAct.lisArchIndSec.Add(new FileStream(BitConverter.ToString(a.id_atri) + ".idx", FileMode.Create));
+                            //BinaryWriter bw = new BinaryWriter(entAct.archivoIndPri);
+
+                            /*
+                            Byte[] bloque = new Byte[2048];
+                            for (int i = 0; i < 2048; i++)
+                            {
+                                bloque[i] = 0xFF;
+                            }
+                            bw.Write(bloque);*/
+
+
+                            //entAct.archivoIndPri.Close();
+
+                            //entAct.lisCapacidadRegIndSec.Add(2048 / entAct.lislongClvSec.ElementAt(entAct.contIndSec) + 8);
+                            //entAct.lisLongRegIndSec.Add(entAct.lisLongRegIndSec.ElementAt(entAct.contIndSec) + 8);
+
+                            IndiceSecundario indSec = new IndiceSecundario(a.tipo,a.longitud, new FileStream(BitConverter.ToString(a.id_atri) + ".idx", FileMode.Create), 2048/ (a.longitud+8),a.longitud+8, entAct.contIndSec,0, posAtrSec+8);
+
+                            entAct.lisIndSec.Add(indSec);
+                        }
+                        else
+                        {
+                            IndiceSecundario indSec = new IndiceSecundario(a.tipo, a.longitud, new FileStream(BitConverter.ToString(a.id_atri) + ".idx", FileMode.Create), 2048 / (a.longitud + 8), a.longitud + 8, entAct.contIndSec, 1, posAtrSec+8);
+
+                            entAct.lisIndSec.Add(indSec);
+                            /*entAct.archivoIndPri = File.Open(BitConverter.ToString(a.id_atri) + ".idx", FileMode.Open);
+                            entAct.archivoIndPri.Close();*/
+                        }
+
+                        
+
+
+                        entAct.contIndSec++;
+
+                        //lisPosAtrSec.Add(posAtrSec + 8);
+
+                    }
+                    else
+                        posAtrSec += a.longitud;
+                }
+
+                /*foreach (int a in lisPosAtrSec)
+                {
+                    //entAct.p = posAtrPri + 8;
+                    entAct.lisposCveSec.Add(a);
+                }*/
 
 
                 /*

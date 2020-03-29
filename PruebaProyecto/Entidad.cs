@@ -44,23 +44,15 @@ namespace PruebaProyecto
         public int posCveBus;
         public char tipoCveBus;
         public char tipoCvePrima;
-        public List<char> listipoCveSec = new List<char>();
         public int posCvePrima;
-        public List<int> lisposCveSec = new List<int>();
         public int longClvPrim;
-        public List<int> lislongClvSec = new List<int>();
-
         public int capacidadRegIndPri;
-        public List<int> lisCapacidadRegIndSec = new List<int>();
-
         public int longRegIndPri;
-        public List<int> lisLongRegIndSec = new List<int>();
-
         public int contIndPrims = 0;
         public int indColIndPrim = 0;
-
         public int contIndSec = 0;
-        
+
+        public List<IndiceSecundario> lisIndSec = new List<IndiceSecundario>();
 
 
         public Entidad(Byte[] _id_enti, String _nomb, int _dirEnt, int _dirAtr, int _dirDat, int _dirSigEnti)
