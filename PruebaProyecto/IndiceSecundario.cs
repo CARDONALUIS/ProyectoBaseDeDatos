@@ -29,6 +29,7 @@ namespace PruebaProyecto
 
             if (tipoOpArch == 0)
             {
+                int r = 0;
                 BinaryWriter bw = new BinaryWriter(archSec);
 
                 Byte[] bloque = new Byte[2048];
@@ -40,6 +41,7 @@ namespace PruebaProyecto
             }
             else
             {
+                _archSec.Close();
                 archSec = File.Open(_archSec.Name, FileMode.Open);
                 archSec.Close();
             }

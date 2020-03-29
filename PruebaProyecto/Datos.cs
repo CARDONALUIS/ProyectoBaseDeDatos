@@ -31,6 +31,7 @@ namespace PruebaProyecto
         bool bandModAtrBus = false;
         bool bandUltModiAtr = false;
         VentanaIndPrim vIP = new VentanaIndPrim();
+        venIndiceSec vIS = new venIndiceSec();
         int indColIndPri = 0;
         long dirAuxElimReg = 0;
         long dirSigAuxElimReg = 0;
@@ -64,6 +65,396 @@ namespace PruebaProyecto
         }
 
 
+        /* 
+        AQUI EMPIEZAN METDOS DE INDICES SECUNDARIOS     
+        */
+
+
+        /*Evento para el llamdo a la ventana de IndiSecundario*/
+        private void eventoIndiSec_Click(object sender, EventArgs e)
+        {
+            if (entAct != null)
+            {
+                vIS.entAct = entAct;
+                vIS.Show();
+            }
+            else
+                MessageBox.Show("Selecciona una entidad");
+            /*entAct.archivoIndPri = File.Open(entAct.archivoIndPri.Name, FileMode.Open);
+            BinaryReader br = new BinaryReader(entAct.archivoIndPri);
+            Object comp;
+
+            entAct.archivoIndPri.Seek(0, SeekOrigin.Begin);
+
+            if (entAct.tipoCvePrima == 'C')
+            {
+                comp = new string(br.ReadChars(entAct.longClvPrim));
+            }
+            else
+            {
+                comp = br.ReadInt32();
+            }
+
+            int posIni = 0;
+
+
+
+
+            while (comp.ToString() != "-1" && char.IsLetterOrDigit(comp.ToString().ElementAt(0)))
+            {
+                //if (entAct.tipoCvePrima == 'C')
+                //{
+                IndicePrimario indP = new IndicePrimario();
+
+                entAct.archivoIndPri.Seek(posIni, SeekOrigin.Begin);
+                if (entAct.tipoCvePrima == 'C')
+                {
+                    indP.clv_prim = new string(br.ReadChars(entAct.longClvPrim));
+                }
+                else
+                {
+                    indP.clv_prim = br.ReadInt32();
+                }
+
+
+                indP.dir_reg = br.ReadInt32();
+                r = 0;
+                listIndPri.Add(indP);
+
+                r = 0;
+                posIni = posIni + entAct.longRegIndPri;
+
+                //comp.ToString() = new string(br.ReadChars(entAct.longClvPrim).ToString().ToCharArray());
+                entAct.archivoIndPri.Seek(posIni, SeekOrigin.Begin);
+                r = 0;
+                if (entAct.tipoCvePrima == 'C')
+                {
+                    comp = new string(br.ReadChars(entAct.longClvPrim));
+                }
+                else
+                {
+                    comp = br.ReadInt32();
+                }
+
+                r = 0;
+                //}
+            }
+
+            entAct.archivoIndPri.Close();
+            vIP.asignaListInd(listIndPri);
+            vIP.ShowDialog();
+            vIP.dataGridIndPrim.Rows.Clear();
+            listIndPri.Clear();*/
+        }
+
+
+        /*
+        Este metodo reacomoda segun las claves secundaria que se ingresaron 
+        */
+        public void reacomodaPorPosiSec(int pos, int indArchSec)
+        {
+            string indS;
+            int dir;
+            int posOrg = pos;
+
+            entAct.lisIndSec.ElementAt(indArchSec).archSec = File.Open(entAct.lisIndSec.ElementAt(indArchSec).archSec.Name, FileMode.Open);
+            BinaryReader br1 = new BinaryReader(entAct.lisIndSec.ElementAt(indArchSec).archSec);
+            r = 0;
+            entAct.lisIndSec.ElementAt(indArchSec).archSec.Seek(pos * entAct.lisIndSec.ElementAt(indArchSec).longBloqSec, SeekOrigin.Begin);
+
+
+            if (entAct.lisIndSec.ElementAt(indArchSec).tipo== 'E')
+                indS = br1.ReadInt32().ToString();
+            else
+                indS = new string(br1.ReadChars(entAct.lisIndSec.ElementAt(indArchSec).longAtrSec));
+
+            r = 0;
+            while (indS != "-1" && char.IsLetterOrDigit(indS.ElementAt(0)))
+            {
+                //entAct.lisIndSec.ElementAt(indArchSec).archSec.Close();
+                //entAct.archivoIndPri = File.Open(entAct.archivoIndPri.Name, FileMode.Open);
+                BinaryReader br2 = new BinaryReader(entAct.lisIndSec.ElementAt(indArchSec).archSec);
+                r = 0;
+                entAct.lisIndSec.ElementAt(indArchSec).archSec.Seek((pos + 1) * entAct.lisIndSec.ElementAt(indArchSec).longBloqSec, SeekOrigin.Begin);
+
+
+                if (entAct.lisIndSec.ElementAt(indArchSec).tipo == 'E')
+                    indS = br2.ReadInt32().ToString();
+                else
+                    indS = new string(br2.ReadChars(entAct.lisIndSec.ElementAt(indArchSec).longAtrSec));
+
+                pos++;
+                r = 0;
+                //entAct.archivoIndPri.Close();
+            }
+            r = 0;
+            int posAreco = pos - posOrg;
+            r = 0;
+
+            while (posAreco > 0)
+            {
+                //entAct.archivoIndPri.Close();
+                //entAct.archivoIndPri = File.Open(entAct.archivoIndPri.Name, FileMode.Open);
+                BinaryReader br3 = new BinaryReader(entAct.lisIndSec.ElementAt(indArchSec).archSec);
+                r = 0;
+                entAct.lisIndSec.ElementAt(indArchSec).archSec.Seek((pos - 1) * entAct.lisIndSec.ElementAt(indArchSec).longBloqSec, SeekOrigin.Begin);
+
+
+                if (entAct.lisIndSec.ElementAt(indArchSec).tipo== 'E')
+                    indS = br3.ReadInt32().ToString();
+                else
+                    indS = new string(br3.ReadChars(entAct.lisIndSec.ElementAt(indArchSec).longAtrSec));
+
+                dir = br3.ReadInt32();
+
+                r = 0;
+                entAct.lisIndSec.ElementAt(indArchSec).archSec.Close();
+                using (BinaryWriter bw = new BinaryWriter(File.Open(entAct.lisIndSec.ElementAt(indArchSec).archSec.Name, FileMode.Open)))
+                {
+                    //entAct.archivoIndPri = File.Open(entAct.archivoIndPri.Name, FileMode.Open);
+                    bw.Seek(pos * entAct.lisIndSec.ElementAt(indArchSec).longBloqSec, SeekOrigin.Begin);
+                    //entAct.archivoIndPri.Seek(posIndP-entAct.longRegIndPri, SeekOrigin.Begin);
+
+                    if (entAct.lisIndSec.ElementAt(indArchSec).tipo == 'E')
+                        bw.Write(Int32.Parse(indS));
+                    else
+                        bw.Write(indS.ToCharArray());
+                    // bw.Write(indP);
+
+                    bw.Write(dir);
+                }
+                r = 0;
+
+                //posOrg++;
+                posAreco--;
+                pos--;
+                //posOrg++;
+            }
+            entAct.lisIndSec.ElementAt(indArchSec).archSec.Close();
+            r = 0;
+        }
+
+
+        /*Este metodo me obtiene la posicion a escribir en el archivo para el indice secundario*/
+        public int obtenPoscionAEscribirIDS(Object clvPrim, int indArch)
+        {
+            r = 0;
+            entAct.lisIndSec.ElementAt(indArch).archSec.Close();
+            entAct.lisIndSec.ElementAt(indArch).archSec = File.Open(entAct.lisIndSec.ElementAt(indArch).archSec.Name, FileMode.Open);
+
+            BinaryReader brBy = new BinaryReader(entAct.lisIndSec.ElementAt(indArch).archSec);
+            BinaryReader brCo = new BinaryReader(entAct.lisIndSec.ElementAt(indArch).archSec);
+
+            int posicion = 0;
+
+            r = 0;
+            entAct.lisIndSec.ElementAt(indArch).archSec.Seek(0, SeekOrigin.Begin);
+
+            string valoACom = "";
+
+            if (entAct.lisIndSec.ElementAt(indArch).tipo == 'C')
+            {
+                r = 0;
+                valoACom = new string(brCo.ReadChars(entAct.lisIndSec.ElementAt(indArch).longAtrSec));
+                r = 0;
+            }
+            else
+            {
+                r = 0;
+                valoACom = brCo.ReadInt32().ToString();
+                r = 0;
+            }
+
+            r = 0;
+            string comp = clvPrim.ToString();
+            int posCom = entAct.lisIndSec.ElementAt(indArch).longBloqSec;
+            r = 0;
+
+            if (entAct.lisIndSec.ElementAt(indArch).tipo == 'E')
+            {
+                string[] nuev = adaptNumero(valoACom, comp);
+
+                valoACom = nuev.ElementAt(0);
+                comp = nuev.ElementAt(1);
+            }
+
+            r = 0;
+          
+            while (string.CompareOrdinal(valoACom, comp) < 0 && valoACom != "-1")//Aqui aplicar el de que si son iguales las guarde iguales
+            {
+                r = 0;
+                entAct.lisIndSec.ElementAt(indArch).archSec.Seek(posCom, SeekOrigin.Begin);
+
+                if (entAct.lisIndSec.ElementAt(indArch).tipo == 'C')
+                {
+                    valoACom = new string(brCo.ReadChars(entAct.lisIndSec.ElementAt(indArch).longAtrSec));
+                }
+                else
+                {
+                    valoACom = brCo.ReadInt32().ToString();
+                }
+                //r = 0;
+                posicion++;
+                posCom += entAct.lisIndSec.ElementAt(indArch).longBloqSec;
+                r = 0;
+
+                if (entAct.lisIndSec.ElementAt(indArch).tipo == 'E')
+                {
+                    string[] nuev = adaptNumero(valoACom, comp);
+
+                    valoACom = nuev.ElementAt(0);
+                    comp = nuev.ElementAt(1);
+                }
+            }
+            
+            r = 0;
+
+            entAct.lisIndSec.ElementAt(indArch).archSec.Close();
+            return posicion;
+
+
+        }
+
+
+        /*Escribe en el archivos secundario el valor de su llave secundaria*/
+        public void guardaArchivosIndSec()
+        {
+            r = 0;
+            foreach(IndiceSecundario a in entAct.lisIndSec)
+            {
+                entAct.archivoDat = File.Open(entAct.archivoDat.Name, FileMode.Open);
+                BinaryReader br = new BinaryReader(entAct.archivoDat);
+                int dirUltReg;
+
+                r = 0;
+                if (!bandModAtrBus)
+                    dirUltReg = (int)entAct.archivoDat.Length - entAct.longAtributos;
+                else
+                    dirUltReg = (int)dirAuxElimReg;
+
+
+                entAct.archivoDat.Seek(a.posAtrSec + dirUltReg, SeekOrigin.Begin);
+                //entAct.archivoDat.Seek(entAct.posCvePrima + dirUltReg, SeekOrigin.Begin);
+
+
+                //Esta es una clase generica para guardar valores de estructuras de llaves
+                IndicePrimario indP = new IndicePrimario();
+                int posAGuardReg = 0;
+
+
+                r = 0;
+
+                if (a.tipo == 'C')
+                {
+                    r = 0;
+                    indP.clv_prim = new string(br.ReadChars(a.longAtrSec));
+                }
+                else
+                {
+                    indP.clv_prim = br.ReadInt32();
+                }
+
+                /*
+                if (entAct.tipoCvePrima == 'C')
+                {
+                    r = 0;
+                    indP.clv_prim = new string(br.ReadChars(entAct.longClvPrim));
+                }
+                else
+                {
+                    indP.clv_prim = br.ReadInt32();
+                }*/
+                r = 0;
+
+                posAGuardReg = obtenPoscionAEscribirIDS(indP.clv_prim, a.contIndSec);
+                //indP.clv_prim = valorInd;
+                reacomodaPorPosiSec(posAGuardReg, a.contIndSec);
+
+                //indP.dir_reg = dirUltReg;
+                //entAct.contIndPrims++;
+
+                r = 0;
+                using (BinaryWriter bw = new BinaryWriter(File.Open(a.archSec.Name, FileMode.Open)))
+                {
+
+                    bw.Seek(posAGuardReg * a.longBloqSec, SeekOrigin.Begin);
+                    //a.dirIndi = 0;
+                    //bw.Write();
+                    r = 0;
+                    if (a.tipo == 'C')
+                    {
+                        //string algo = indP.clv_prim.ToString().ToCharArray();
+                        bw.Write(indP.clv_prim.ToString().ToCharArray());
+                        int contChar = 0;
+                        while (contChar < a.longAtrSec - indP.clv_prim.ToString().ToCharArray().Length)
+                        {
+                            bw.Write('-');
+                            contChar++;
+                            r = 0;
+                        }
+                        contChar = 0;
+                    }
+                    else
+                    {
+                        int algo = Convert.ToInt32(indP.clv_prim);
+                        r = 0;
+                        bw.Write(algo);
+                    }
+
+                    //bw.Seek(posAGuardReg+entAct.longClvPrim, SeekOrigin.Begin);
+                    bw.Write(a.archSec.Length);
+                    r = 0;
+
+                }
+                entAct.archivoDat.Close();
+
+            }
+        }
+
+
+        public void datosIndSec()
+        {
+
+            r = 0;
+            foreach (Atributo a in entAct.listAtrib)
+            {
+                if (a.dirIndi == -1 && a.tipoIndi == 3)
+                {
+                    r = 0;
+                    using (BinaryWriter bw = new BinaryWriter(File.Open(dic.nomArchivo, FileMode.Open)))
+                    {
+                        bw.Seek((int)a.dirAtri + 52, SeekOrigin.Begin);
+                        a.dirIndi = 0;
+                        bw.Write(0);
+
+                    }
+
+
+
+                    //break;
+                }
+                else
+                r = 0;
+            }
+            r = 0;
+            //if (bandPrimario == true)
+            //{
+
+                guardaArchivosIndSec();
+            //}
+            //else
+              //  leeIndPrim();
+
+            //entAct.archivoIndPri.Close();
+
+        }
+        /*
+         * TERMINAN METODOS DE INDICES SECUNDARIOS
+         */
+
+
+
+        #region  MetodosindPrim
         public void eliminaRegClvPrim(int dirEli)
         {
             r = 0;
@@ -240,103 +631,6 @@ namespace PruebaProyecto
             r = 0;
             guardaArchivosIndPri();
         }
-
-        public void reacomodaPorPosi(int pos)
-        {
-            string indP, indP2;
-            int dir, dir2;
-            int posOrg = pos;
-            //pos++;
-
-            r = 0;
-
-            entAct.archivoIndPri.Close();
-            entAct.archivoIndPri = File.Open(entAct.archivoIndPri.Name, FileMode.Open);
-            BinaryReader br1 = new BinaryReader(entAct.archivoIndPri);
-            r = 0;
-            entAct.archivoIndPri.Seek(pos * entAct.longRegIndPri, SeekOrigin.Begin);
-
-
-            if (entAct.tipoCvePrima == 'E')
-                indP = br1.ReadInt32().ToString();
-            else
-                indP = new string(br1.ReadChars(entAct.longClvPrim));
-
-
-
-
-            /*char al = indP.ElementAt(0);
-
-            r = 0;
-
-            bool es = char.IsLetterOrDigit(indP.ElementAt(0));*/
-            r = 0;
-
-            while (indP != "-1" && char.IsLetterOrDigit(indP.ElementAt(0)))
-            {
-                entAct.archivoIndPri.Close();
-                entAct.archivoIndPri = File.Open(entAct.archivoIndPri.Name, FileMode.Open);
-                BinaryReader br2 = new BinaryReader(entAct.archivoIndPri);
-                r = 0;
-                entAct.archivoIndPri.Seek((pos + 1) * entAct.longRegIndPri, SeekOrigin.Begin);
-
-
-                if (entAct.tipoCvePrima == 'E')
-                    indP = br2.ReadInt32().ToString();
-                else
-                    indP = new string(br2.ReadChars(entAct.longClvPrim));
-
-                pos++;
-                r = 0;
-                entAct.archivoIndPri.Close();
-            }
-            r = 0;
-            int posAreco = pos - posOrg;
-            r = 0;
-
-            while (posAreco > 0)
-            {
-                entAct.archivoIndPri.Close();
-                entAct.archivoIndPri = File.Open(entAct.archivoIndPri.Name, FileMode.Open);
-                BinaryReader br3 = new BinaryReader(entAct.archivoIndPri);
-                r = 0;
-                entAct.archivoIndPri.Seek((pos - 1) * entAct.longRegIndPri, SeekOrigin.Begin);
-
-
-                if (entAct.tipoCvePrima == 'E')
-                    indP = br3.ReadInt32().ToString();
-                else
-                    indP = new string(br3.ReadChars(entAct.longClvPrim));
-
-                dir = br3.ReadInt32();
-
-                r = 0;
-                entAct.archivoIndPri.Close();
-                using (BinaryWriter bw = new BinaryWriter(File.Open(entAct.archivoIndPri.Name, FileMode.Open)))
-                {
-                    //entAct.archivoIndPri = File.Open(entAct.archivoIndPri.Name, FileMode.Open);
-                    bw.Seek(pos * entAct.longRegIndPri, SeekOrigin.Begin);
-                    //entAct.archivoIndPri.Seek(posIndP-entAct.longRegIndPri, SeekOrigin.Begin);
-
-                    if (entAct.tipoCvePrima == 'E')
-                        bw.Write(Int32.Parse(indP));
-                    else
-                        bw.Write(indP.ToCharArray());
-                    // bw.Write(indP);
-
-                    bw.Write(dir);
-                }
-                r = 0;
-
-                //posOrg++;
-                posAreco--;
-                pos--;
-                //posOrg++;
-                entAct.archivoIndPri.Close();
-            }
-            entAct.archivoIndPri.Close();
-        }
-
 
         public void guardaArchivosIndPri()
         {
@@ -545,6 +839,108 @@ namespace PruebaProyecto
         }
 
 
+        #endregion
+
+        public void reacomodaPorPosi(int pos)
+        {
+            string indP;
+            int dir;
+            int posOrg = pos;
+            //pos++;
+
+            r = 0;
+
+            entAct.archivoIndPri.Close();
+            entAct.archivoIndPri = File.Open(entAct.archivoIndPri.Name, FileMode.Open);
+            BinaryReader br1 = new BinaryReader(entAct.archivoIndPri);
+            r = 0;
+            entAct.archivoIndPri.Seek(pos * entAct.longRegIndPri, SeekOrigin.Begin);
+
+
+            if (entAct.tipoCvePrima == 'E')
+                indP = br1.ReadInt32().ToString();
+            else
+                indP = new string(br1.ReadChars(entAct.longClvPrim));
+
+
+
+
+            /*char al = indP.ElementAt(0);
+
+            r = 0;
+
+            bool es = char.IsLetterOrDigit(indP.ElementAt(0));*/
+            r = 0;
+
+            while (indP != "-1" && char.IsLetterOrDigit(indP.ElementAt(0)))
+            {
+                entAct.archivoIndPri.Close();
+                entAct.archivoIndPri = File.Open(entAct.archivoIndPri.Name, FileMode.Open);
+                BinaryReader br2 = new BinaryReader(entAct.archivoIndPri);
+                r = 0;
+                entAct.archivoIndPri.Seek((pos + 1) * entAct.longRegIndPri, SeekOrigin.Begin);
+
+
+                if (entAct.tipoCvePrima == 'E')
+                    indP = br2.ReadInt32().ToString();
+                else
+                    indP = new string(br2.ReadChars(entAct.longClvPrim));
+
+                pos++;
+                r = 0;
+                entAct.archivoIndPri.Close();
+            }
+            r = 0;
+            int posAreco = pos - posOrg;
+            r = 0;
+
+            while (posAreco > 0)
+            {
+                entAct.archivoIndPri.Close();
+                entAct.archivoIndPri = File.Open(entAct.archivoIndPri.Name, FileMode.Open);
+                BinaryReader br3 = new BinaryReader(entAct.archivoIndPri);
+                r = 0;
+                entAct.archivoIndPri.Seek((pos - 1) * entAct.longRegIndPri, SeekOrigin.Begin);
+
+
+                if (entAct.tipoCvePrima == 'E')
+                    indP = br3.ReadInt32().ToString();
+                else
+                    indP = new string(br3.ReadChars(entAct.longClvPrim));
+
+                dir = br3.ReadInt32();
+
+                r = 0;
+                entAct.archivoIndPri.Close();
+                using (BinaryWriter bw = new BinaryWriter(File.Open(entAct.archivoIndPri.Name, FileMode.Open)))
+                {
+                    //entAct.archivoIndPri = File.Open(entAct.archivoIndPri.Name, FileMode.Open);
+                    bw.Seek(pos * entAct.longRegIndPri, SeekOrigin.Begin);
+                    //entAct.archivoIndPri.Seek(posIndP-entAct.longRegIndPri, SeekOrigin.Begin);
+
+                    if (entAct.tipoCvePrima == 'E')
+                        bw.Write(Int32.Parse(indP));
+                    else
+                        bw.Write(indP.ToCharArray());
+                    // bw.Write(indP);
+
+                    bw.Write(dir);
+                }
+                r = 0;
+
+                //posOrg++;
+                posAreco--;
+                pos--;
+                //posOrg++;
+                entAct.archivoIndPri.Close();
+            }
+            entAct.archivoIndPri.Close();
+        }
+
+
+        
+
+
         private void GuardaRegistros_Click(object sender, EventArgs e)
         {
             string valor = "";
@@ -649,6 +1045,12 @@ namespace PruebaProyecto
                 if (bandAtrPri)
                 {
                     datosIndiPrim();
+                }
+
+                if(bandAtrSec)
+                {
+                    r = 0;
+                    datosIndSec();
                 }
 
                 MessageBox.Show("Tu registros fueron guardados satisfactoriamente");
@@ -1010,6 +1412,7 @@ namespace PruebaProyecto
 
             bandAtrBus = false;
             bandAtrPri = false;
+            bandAtrSec = false;
             if (!bandModAtrBus)
             {
                 limpiaGridRellReg();
@@ -1116,42 +1519,29 @@ namespace PruebaProyecto
 
                         if (a.dirIndi == -1)
                         {
-                            //entAct.listipoCveSec.Add(a.tipo);
-                            //entAct.lislongClvSec.Add(a.longitud);
-
-                            //entAct.lisArchIndSec.Add(new FileStream(BitConverter.ToString(a.id_atri) + ".idx", FileMode.Create));
-                            //BinaryWriter bw = new BinaryWriter(entAct.archivoIndPri);
-
-                            /*
-                            Byte[] bloque = new Byte[2048];
-                            for (int i = 0; i < 2048; i++)
-                            {
-                                bloque[i] = 0xFF;
-                            }
-                            bw.Write(bloque);*/
-
-
-                            //entAct.archivoIndPri.Close();
-
-                            //entAct.lisCapacidadRegIndSec.Add(2048 / entAct.lislongClvSec.ElementAt(entAct.contIndSec) + 8);
-                            //entAct.lisLongRegIndSec.Add(entAct.lisLongRegIndSec.ElementAt(entAct.contIndSec) + 8);
-
+                            r = 0;
                             IndiceSecundario indSec = new IndiceSecundario(a.tipo,a.longitud, new FileStream(BitConverter.ToString(a.id_atri) + ".idx", FileMode.Create), 2048/ (a.longitud+8),a.longitud+8, entAct.contIndSec,0, posAtrSec+8);
 
                             entAct.lisIndSec.Add(indSec);
+                     
                         }
                         else
                         {
-                            IndiceSecundario indSec = new IndiceSecundario(a.tipo, a.longitud, new FileStream(BitConverter.ToString(a.id_atri) + ".idx", FileMode.Create), 2048 / (a.longitud + 8), a.longitud + 8, entAct.contIndSec, 1, posAtrSec+8);
+                            /*string nomArchSec = BitConverter.ToString(a.id_atri) + ".idx";
+                            r = 0;
+                            FileStream fileStream;*/
+                            r = 0;
+                            FileStream archSec = File.Open(BitConverter.ToString(a.id_atri) + ".idx", FileMode.Open);
 
+                            IndiceSecundario indSec = new IndiceSecundario(a.tipo, a.longitud, archSec , 2048 / (a.longitud + 8), a.longitud + 8, entAct.contIndSec, 1, posAtrSec+8);
                             entAct.lisIndSec.Add(indSec);
-                            /*entAct.archivoIndPri = File.Open(BitConverter.ToString(a.id_atri) + ".idx", FileMode.Open);
-                            entAct.archivoIndPri.Close();*/
+                            archSec.Close();
+
                         }
 
-                        
 
 
+                        posAtrSec += a.longitud;
                         entAct.contIndSec++;
 
                         //lisPosAtrSec.Add(posAtrSec + 8);
@@ -1161,11 +1551,6 @@ namespace PruebaProyecto
                         posAtrSec += a.longitud;
                 }
 
-                /*foreach (int a in lisPosAtrSec)
-                {
-                    //entAct.p = posAtrPri + 8;
-                    entAct.lisposCveSec.Add(a);
-                }*/
 
 
                 /*
@@ -1559,5 +1944,6 @@ namespace PruebaProyecto
             r = 0;
         }
 
+        
     }
 }

@@ -35,9 +35,6 @@ namespace PruebaProyecto
         public int varSigEnti;
         public FileStream archivoDat;
         public FileStream archivoIndPri;
-
-        public List<FileStream> lisArchIndSec = new List<FileStream>();
-
         public string nombreArchivoIndP;
         public List<Registro> listReg;
         public int longAtributos;

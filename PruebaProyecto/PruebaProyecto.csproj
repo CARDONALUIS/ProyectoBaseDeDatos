@@ -85,6 +85,12 @@
     <Compile Include="VenEntidades.Designer.cs">
       <DependentUpon>VenEntidades.cs</DependentUpon>
     </Compile>
+    <Compile Include="venIndiceSec.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="venIndiceSec.Designer.cs">
+      <DependentUpon>venIndiceSec.cs</DependentUpon>
+    </Compile>
     <Compile Include="VentanaIndPrim.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -114,6 +120,9 @@
     </Compile>
     <EmbeddedResource Include="VenEntidades.resx">
       <DependentUpon>VenEntidades.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="venIndiceSec.resx">
+      <DependentUpon>venIndiceSec.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="VentanaIndPrim.resx">
       <DependentUpon>VentanaIndPrim.cs</DependentUpon>
