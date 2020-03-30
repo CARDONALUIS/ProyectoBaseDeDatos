@@ -17,6 +17,8 @@ namespace PruebaProyecto
         public int contIndSec;
         public int posAtrSec;
 
+        
+
         public IndiceSecundario(char _tipo, int _longAtrSec, FileStream _archSec, int _capacidadTotBloq, int _longBloqSec, int _contIndSec, int tipoOpArch, int _posAtrSec)
         {
             tipo = _tipo;
@@ -26,6 +28,7 @@ namespace PruebaProyecto
             longBloqSec = _longBloqSec;
             contIndSec = _contIndSec;
             posAtrSec = _posAtrSec;
+            
 
             if (tipoOpArch == 0)
             {
@@ -46,6 +49,22 @@ namespace PruebaProyecto
                 archSec.Close();
             }
 
+        }
+
+        public void creaCajon(int dirDeCajon)
+        {
+            
+            BinaryWriter bw = new BinaryWriter(archSec);
+
+            bw.Seek(dirDeCajon, SeekOrigin.Begin);
+
+            Byte[] bloque = new Byte[2048];
+            for (int i = 0; i < 2048; i++)
+            {
+                bloque[i] = 0xFF;
+            }
+            bw.Write(bloque);
+            int r = 0;
         }
 
         

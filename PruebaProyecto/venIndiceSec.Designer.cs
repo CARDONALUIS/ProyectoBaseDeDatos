@@ -42,6 +42,7 @@
             this.atriLlavSec.Name = "atriLlavSec";
             this.atriLlavSec.Size = new System.Drawing.Size(121, 21);
             this.atriLlavSec.TabIndex = 0;
+            this.atriLlavSec.SelectedIndexChanged += new System.EventHandler(this.cambAtrSec);
             // 
             // llaveSecGrid
             // 

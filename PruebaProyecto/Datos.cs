@@ -35,6 +35,7 @@ namespace PruebaProyecto
         int indColIndPri = 0;
         long dirAuxElimReg = 0;
         long dirSigAuxElimReg = 0;
+        bool bandCajonRep = false;
 
 
 
@@ -70,81 +71,51 @@ namespace PruebaProyecto
         */
 
 
+        /*Este metodo coloca en su cajon correspondientes las direccion de los regitros */
+        public void colocaEnCajon(int dirCajon, int dirReg, int indArchSec)
+        {
+            string valorCajon = "";
+
+            entAct.lisIndSec.ElementAt(indArchSec).archSec = File.Open(entAct.lisIndSec.ElementAt(indArchSec).archSec.Name, FileMode.Open);
+            BinaryReader br1 = new BinaryReader(entAct.lisIndSec.ElementAt(indArchSec).archSec);
+
+
+            entAct.lisIndSec.ElementAt(indArchSec).archSec.Seek(dirCajon,SeekOrigin.Begin);
+            valorCajon = br1.ReadInt32().ToString();
+
+            int dirAct = dirCajon;
+            while (valorCajon != "-1")
+            {
+                dirAct += 8;
+                entAct.lisIndSec.ElementAt(indArchSec).archSec.Seek(dirCajon, SeekOrigin.Begin);
+                valorCajon = br1.ReadInt32().ToString();
+
+            }
+
+            entAct.lisIndSec.ElementAt(indArchSec).archSec.Close();
+
+            using (BinaryWriter bw = new BinaryWriter(File.Open(entAct.lisIndSec.ElementAt(indArchSec).archSec.Name, FileMode.Open)))
+            {
+                entAct.lisIndSec.ElementAt(indArchSec).archSec.Seek(dirAct, SeekOrigin.Begin);
+                bw.Write(dirReg);
+            }
+
+            bandCajonRep = false;
+        }
+        
         /*Evento para el llamdo a la ventana de IndiSecundario*/
         private void eventoIndiSec_Click(object sender, EventArgs e)
         {
+            vIS = new venIndiceSec(); 
             if (entAct != null)
             {
                 vIS.entAct = entAct;
+                vIS.asignaValores();
                 vIS.Show();
             }
             else
                 MessageBox.Show("Selecciona una entidad");
-            /*entAct.archivoIndPri = File.Open(entAct.archivoIndPri.Name, FileMode.Open);
-            BinaryReader br = new BinaryReader(entAct.archivoIndPri);
-            Object comp;
-
-            entAct.archivoIndPri.Seek(0, SeekOrigin.Begin);
-
-            if (entAct.tipoCvePrima == 'C')
-            {
-                comp = new string(br.ReadChars(entAct.longClvPrim));
-            }
-            else
-            {
-                comp = br.ReadInt32();
-            }
-
-            int posIni = 0;
-
-
-
-
-            while (comp.ToString() != "-1" && char.IsLetterOrDigit(comp.ToString().ElementAt(0)))
-            {
-                //if (entAct.tipoCvePrima == 'C')
-                //{
-                IndicePrimario indP = new IndicePrimario();
-
-                entAct.archivoIndPri.Seek(posIni, SeekOrigin.Begin);
-                if (entAct.tipoCvePrima == 'C')
-                {
-                    indP.clv_prim = new string(br.ReadChars(entAct.longClvPrim));
-                }
-                else
-                {
-                    indP.clv_prim = br.ReadInt32();
-                }
-
-
-                indP.dir_reg = br.ReadInt32();
-                r = 0;
-                listIndPri.Add(indP);
-
-                r = 0;
-                posIni = posIni + entAct.longRegIndPri;
-
-                //comp.ToString() = new string(br.ReadChars(entAct.longClvPrim).ToString().ToCharArray());
-                entAct.archivoIndPri.Seek(posIni, SeekOrigin.Begin);
-                r = 0;
-                if (entAct.tipoCvePrima == 'C')
-                {
-                    comp = new string(br.ReadChars(entAct.longClvPrim));
-                }
-                else
-                {
-                    comp = br.ReadInt32();
-                }
-
-                r = 0;
-                //}
-            }
-
-            entAct.archivoIndPri.Close();
-            vIP.asignaListInd(listIndPri);
-            vIP.ShowDialog();
-            vIP.dataGridIndPrim.Rows.Clear();
-            listIndPri.Clear();*/
+           
         }
 
 
@@ -306,6 +277,21 @@ namespace PruebaProyecto
                     comp = nuev.ElementAt(1);
                 }
             }
+
+            if (string.CompareOrdinal(valoACom, comp) == 0)
+            {
+                r = 0;
+                bandCajonRep = true;
+            }
+            else
+            {
+                r = 0;
+
+                
+                entAct.lisIndSec.ElementAt(indArch).creaCajon((int)entAct.lisIndSec.ElementAt(indArch).archSec.Length);
+                r = 0;
+            }
+
             
             r = 0;
 
@@ -354,58 +340,80 @@ namespace PruebaProyecto
                     indP.clv_prim = br.ReadInt32();
                 }
 
-                /*
-                if (entAct.tipoCvePrima == 'C')
-                {
-                    r = 0;
-                    indP.clv_prim = new string(br.ReadChars(entAct.longClvPrim));
-                }
-                else
-                {
-                    indP.clv_prim = br.ReadInt32();
-                }*/
+                indP.dir_reg = dirUltReg;
+
                 r = 0;
 
                 posAGuardReg = obtenPoscionAEscribirIDS(indP.clv_prim, a.contIndSec);
                 //indP.clv_prim = valorInd;
-                reacomodaPorPosiSec(posAGuardReg, a.contIndSec);
-
-                //indP.dir_reg = dirUltReg;
-                //entAct.contIndPrims++;
 
                 r = 0;
-                using (BinaryWriter bw = new BinaryWriter(File.Open(a.archSec.Name, FileMode.Open)))
+                if (!bandCajonRep)
                 {
-
-                    bw.Seek(posAGuardReg * a.longBloqSec, SeekOrigin.Begin);
-                    //a.dirIndi = 0;
-                    //bw.Write();
                     r = 0;
-                    if (a.tipo == 'C')
+                    reacomodaPorPosiSec(posAGuardReg, a.contIndSec);
+
+                    //a.archSec = File.Open(a.archSec.Name, FileMode.Open);
+                    //long longArchSec = a.archSec.Length;
+                    //a.archSec.Close();
+                    r = 0;
+                    a.archSec = File.Open(a.archSec.Name, FileMode.Open);
+                    long longArchSec = a.archSec.Length - 2048;
+                    a.archSec.Close();
+                    r = 0;
+                    using (BinaryWriter bw = new BinaryWriter(File.Open(a.archSec.Name, FileMode.Open)))
                     {
-                        //string algo = indP.clv_prim.ToString().ToCharArray();
-                        bw.Write(indP.clv_prim.ToString().ToCharArray());
-                        int contChar = 0;
-                        while (contChar < a.longAtrSec - indP.clv_prim.ToString().ToCharArray().Length)
-                        {
-                            bw.Write('-');
-                            contChar++;
-                            r = 0;
-                        }
-                        contChar = 0;
-                    }
-                    else
-                    {
-                        int algo = Convert.ToInt32(indP.clv_prim);
+
+                        bw.Seek(posAGuardReg * a.longBloqSec, SeekOrigin.Begin);
+                        //a.dirIndi = 0;
+                        //bw.Write();
                         r = 0;
-                        bw.Write(algo);
-                    }
+                        if (a.tipo == 'C')
+                        {
+                            //string algo = indP.clv_prim.ToString().ToCharArray();
+                            bw.Write(indP.clv_prim.ToString().ToCharArray());
+                            int contChar = 0;
+                            while (contChar < a.longAtrSec - indP.clv_prim.ToString().ToCharArray().Length)
+                            {
+                                bw.Write('-');
+                                contChar++;
+                                r = 0;
+                            }
+                            contChar = 0;
+                        }
+                        else
+                        {
+                            int algo = Convert.ToInt32(indP.clv_prim);
+                            r = 0;
+                            bw.Write(algo);
+                        }
 
-                    //bw.Seek(posAGuardReg+entAct.longClvPrim, SeekOrigin.Begin);
-                    bw.Write(a.archSec.Length);
-                    r = 0;
+                        //bw.Seek(posAGuardReg+entAct.longClvPrim, SeekOrigin.Begin);
+                        //a.archSec = File.Open(a.archSec.Name, FileMode.Open);
+                        bw.Write(longArchSec);
+
+
+                        //a.archSec.Close();
+                         r = 0;
+
+                        //Escribir en cajon la primer direccion
+                        bw.Seek((int)longArchSec, SeekOrigin.Begin);
+                        bw.Write(dirUltReg);
+                    }
 
                 }
+                else
+                {
+                    r = 0;
+                    colocaEnCajon((posAGuardReg+1) * 2048, dirUltReg, a.contIndSec);
+                }
+                
+                
+
+                //indP.dir_reg = dirUltReg;
+
+                r = 0;
+     
                 entAct.archivoDat.Close();
 
             }
@@ -1413,6 +1421,8 @@ namespace PruebaProyecto
             bandAtrBus = false;
             bandAtrPri = false;
             bandAtrSec = false;
+            //entAct.lisIndSec.Clear();
+            //entAct.lisIndSec = new List<IndiceSecundario>();
             if (!bandModAtrBus)
             {
                 limpiaGridRellReg();
@@ -1505,6 +1515,9 @@ namespace PruebaProyecto
                 /*Aqui me obtiene si tiene inidices secundarios*/
 
                 int posAtrSec = 0;
+                entAct.lisIndSec.Clear();
+                entAct.contIndSec = 0;
+                
 
                 foreach (Atributo a in entAct.listAtrib)
                 {
@@ -1514,7 +1527,8 @@ namespace PruebaProyecto
                         r = 0;
                         MessageBox.Show("El atributo Secundario es " + a.nombre);
                         bandAtrSec = true;
-                        
+
+                       
 
 
                         if (a.dirIndi == -1)
@@ -1531,6 +1545,7 @@ namespace PruebaProyecto
                             r = 0;
                             FileStream fileStream;*/
                             r = 0;
+                           
                             FileStream archSec = File.Open(BitConverter.ToString(a.id_atri) + ".idx", FileMode.Open);
 
                             IndiceSecundario indSec = new IndiceSecundario(a.tipo, a.longitud, archSec , 2048 / (a.longitud + 8), a.longitud + 8, entAct.contIndSec, 1, posAtrSec+8);
