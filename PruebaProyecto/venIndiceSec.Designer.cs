@@ -51,6 +51,8 @@
             this.llaveSecGrid.Name = "llaveSecGrid";
             this.llaveSecGrid.Size = new System.Drawing.Size(329, 214);
             this.llaveSecGrid.TabIndex = 1;
+            this.llaveSecGrid.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.agregaMarcosGrid_click);
+            this.llaveSecGrid.SelectionChanged += new System.EventHandler(this.agregaMarcos_evento);
             // 
             // cajonGrid
             // 

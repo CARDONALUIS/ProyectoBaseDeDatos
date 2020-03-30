@@ -74,30 +74,40 @@ namespace PruebaProyecto
         /*Este metodo coloca en su cajon correspondientes las direccion de los regitros */
         public void colocaEnCajon(int dirCajon, int dirReg, int indArchSec)
         {
+            r = 0;
             string valorCajon = "";
 
             entAct.lisIndSec.ElementAt(indArchSec).archSec = File.Open(entAct.lisIndSec.ElementAt(indArchSec).archSec.Name, FileMode.Open);
             BinaryReader br1 = new BinaryReader(entAct.lisIndSec.ElementAt(indArchSec).archSec);
 
-
+            r = 0;
             entAct.lisIndSec.ElementAt(indArchSec).archSec.Seek(dirCajon,SeekOrigin.Begin);
             valorCajon = br1.ReadInt32().ToString();
 
+            r = 0;
             int dirAct = dirCajon;
+
             while (valorCajon != "-1")
             {
+                r = 0;
                 dirAct += 8;
-                entAct.lisIndSec.ElementAt(indArchSec).archSec.Seek(dirCajon, SeekOrigin.Begin);
+                entAct.lisIndSec.ElementAt(indArchSec).archSec.Seek(dirAct, SeekOrigin.Begin);
                 valorCajon = br1.ReadInt32().ToString();
+                r = 0;
 
             }
 
+            r = 0;
+
             entAct.lisIndSec.ElementAt(indArchSec).archSec.Close();
 
+            r = 0;
             using (BinaryWriter bw = new BinaryWriter(File.Open(entAct.lisIndSec.ElementAt(indArchSec).archSec.Name, FileMode.Open)))
             {
-                entAct.lisIndSec.ElementAt(indArchSec).archSec.Seek(dirAct, SeekOrigin.Begin);
+                r = 0;
+                bw.Seek(dirAct, SeekOrigin.Begin);
                 bw.Write(dirReg);
+                r = 0;
             }
 
             bandCajonRep = false;
@@ -166,6 +176,8 @@ namespace PruebaProyecto
             {
                 //entAct.archivoIndPri.Close();
                 //entAct.archivoIndPri = File.Open(entAct.archivoIndPri.Name, FileMode.Open);
+                entAct.lisIndSec.ElementAt(indArchSec).archSec.Close();
+                entAct.lisIndSec.ElementAt(indArchSec).archSec = File.Open(entAct.lisIndSec.ElementAt(indArchSec).archSec.Name, FileMode.Open);
                 BinaryReader br3 = new BinaryReader(entAct.lisIndSec.ElementAt(indArchSec).archSec);
                 r = 0;
                 entAct.lisIndSec.ElementAt(indArchSec).archSec.Seek((pos - 1) * entAct.lisIndSec.ElementAt(indArchSec).longBloqSec, SeekOrigin.Begin);

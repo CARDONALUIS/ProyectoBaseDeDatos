@@ -15,6 +15,7 @@ namespace PruebaProyecto
     {
         int r = 0;
         public Entidad entAct;
+        IndiceSecundario indActGlob;
 
         public venIndiceSec()
         {
@@ -56,7 +57,7 @@ namespace PruebaProyecto
 
             //Atributo atrMost = entAct.listAtrib.Find(x => x.nombre == atrSel);
             IndiceSecundario indAct = entAct.lisIndSec.Find(x => x.contIndSec == atrSel);
-
+            indActGlob = indAct;
 
             r = 0;
 
@@ -129,6 +130,52 @@ namespace PruebaProyecto
 
             indAct.archSec.Close();
             //int inEM = comboBoxModEnt.SelectedIndex;
+        }
+
+        //evento para dar click en la llave para agregar marcos
+        private void agregaMarcos_evento(object sender, EventArgs e)
+        {
+            r = 0;
+        }
+
+        private void agregaMarcosGrid_click(object sender, DataGridViewCellEventArgs e)
+        {
+            r = 0;
+            cajonGrid.Rows.Clear();
+
+            int dirLeerMarco = Int32.Parse(llaveSecGrid.CurrentRow.Cells[1].Value.ToString());
+
+            indActGlob.archSec = File.Open(indActGlob.archSec.Name, FileMode.Open);
+            BinaryReader br = new BinaryReader(indActGlob.archSec);
+            Object comp;
+
+            indActGlob.archSec.Seek(dirLeerMarco, SeekOrigin.Begin);
+
+            comp = br.ReadInt32();
+            int fila = 0;
+
+            r = 0;
+            while (comp.ToString() != "-1")
+            {
+
+                cajonGrid.Rows.Add();
+                cajonGrid.Rows[fila].Cells[0].Value = comp;
+
+                r = 0;
+
+                dirLeerMarco += 8;
+                indActGlob.archSec.Seek(dirLeerMarco, SeekOrigin.Begin);
+
+                comp = br.ReadInt32();
+
+                fila++;
+                r = 0;
+
+            }
+
+            indActGlob.archSec.Close();
+
+
         }
     }
 }
