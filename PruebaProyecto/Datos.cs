@@ -70,6 +70,127 @@ namespace PruebaProyecto
         AQUI EMPIEZAN METDOS DE INDICES SECUNDARIOS     
         */
 
+        /*
+         Elimina en indices secundarios
+             */
+
+        public void eliminaBloquSec(string clavpri, int dirEli, int contIndSec)
+        {
+            entAct.lisIndSec.ElementAt(contIndSec).archSec = File.Open(entAct.lisIndSec.ElementAt(contIndSec).archSec.Name, FileMode.Open);
+            BinaryReader br1 = new BinaryReader(entAct.lisIndSec.ElementAt(contIndSec).archSec);
+            string busInd;
+
+            int longCad = clavpri.Length;
+
+            int pos = 0;
+
+
+            entAct.lisIndSec.ElementAt(contIndSec).archSec.Seek(pos, SeekOrigin.Begin);
+
+            if (entAct.lisIndSec.ElementAt(contIndSec).tipo == 'C')
+                busInd = new string(br1.ReadChars(longCad));
+            else
+                busInd = br1.ReadInt32().ToString();
+
+            int posIndP = entAct.longRegIndPri + entAct.longClvPrim;
+            
+
+            pos += entAct.lisIndSec.ElementAt(contIndSec).longBloqSec;
+
+
+            //Busca el cajon
+            while (busInd != clavpri)
+            {
+                r = 0;
+                entAct.lisIndSec.ElementAt(contIndSec).archSec.Seek(pos, SeekOrigin.Begin);
+
+                if (entAct.lisIndSec.ElementAt(contIndSec).tipo == 'C')
+                    busInd = new string(br1.ReadChars(longCad));
+                else
+                    busInd = br1.ReadInt32().ToString();
+
+                pos += entAct.lisIndSec.ElementAt(contIndSec).longBloqSec;
+                r = 0;
+            }
+
+            entAct.lisIndSec.ElementAt(contIndSec).archSec.Seek(pos-8, SeekOrigin.Begin);
+            int dirCajonBorr = br1.ReadInt32();
+            
+            r = 0;
+            
+            
+
+
+            entAct.lisIndSec.ElementAt(contIndSec).archSec.Seek(dirCajonBorr, SeekOrigin.Begin);
+            int dirCom = br1.ReadInt32();
+
+            r = 0;
+
+            pos = dirCajonBorr;
+            pos += 8;
+            while (dirCom != dirEli)
+            {
+                r = 0;
+                entAct.lisIndSec.ElementAt(contIndSec).archSec.Seek(pos-8, SeekOrigin.Begin);
+
+                dirCom = br1.ReadInt32();
+
+                pos += 8;
+                r = 0;
+            }
+
+            r = 0;
+
+
+
+            string findEnd;
+
+            entAct.lisIndSec.ElementAt(contIndSec).archSec.Seek(pos, SeekOrigin.Begin);
+            findEnd = br1.ReadInt32().ToString();
+
+            r = 0;
+
+            //entAct.archivoIndPri.Close();
+
+            while (findEnd != "-1")
+            {
+                entAct.lisIndSec.ElementAt(contIndSec).archSec.Close();
+                using (BinaryWriter bw = new BinaryWriter(File.Open(entAct.lisIndSec.ElementAt(contIndSec).archSec.Name, FileMode.Open)))
+                {
+                    //entAct.archivoIndPri = File.Open(entAct.archivoIndPri.Name, FileMode.Open);
+                    bw.Seek(pos - 8, SeekOrigin.Begin);
+                    //entAct.archivoIndPri.Seek(posIndP-entAct.longRegIndPri, SeekOrigin.Begin);
+                    bw.Write(Int32.Parse(findEnd));
+                }
+                r = 0;
+                pos +=  8;
+
+
+                entAct.lisIndSec.ElementAt(contIndSec).archSec = File.Open(entAct.lisIndSec.ElementAt(contIndSec).archSec.Name, FileMode.Open);
+                BinaryReader br2 = new BinaryReader(entAct.lisIndSec.ElementAt(contIndSec).archSec);
+                entAct.lisIndSec.ElementAt(contIndSec).archSec.Seek(pos, SeekOrigin.Begin);
+
+                findEnd = br2.ReadInt32().ToString();
+                r = 0;
+                entAct.lisIndSec.ElementAt(contIndSec).archSec.Close();
+
+            }
+
+            r = 0;
+            //Este me escribe el -1 al final del archivo o el valor nulo
+            entAct.lisIndSec.ElementAt(contIndSec).archSec.Close();
+            using (BinaryWriter bw = new BinaryWriter(File.Open(entAct.lisIndSec.ElementAt(contIndSec).archSec.Name, FileMode.Open)))
+            {
+                r = 0;
+                bw.Seek(pos - 8, SeekOrigin.Begin);
+                bw.Write(Int32.Parse(findEnd));
+            }
+            
+
+            r = 0;
+            
+        }
+
 
         /*Este metodo coloca en su cajon correspondientes las direccion de los regitros */
         public void colocaEnCajon(int dirCajon, int dirReg, int indArchSec)
@@ -1814,7 +1935,7 @@ namespace PruebaProyecto
                         r = 0;
                         int algo = (int)RegisInserdataGridView.Rows[indFilEli - 1].Cells[entAct.listAtrib.Count + 1].Value - 8;
 
-                        bw.Seek((int)RegisInserdataGridView.Rows[indFilEli - 1].Cells[entAct.listAtrib.Count + 1].Value - 8, SeekOrigin.Begin);
+                        bw.Seek((int)RegisInserdataGridView.Rows[indFilEli - 1].Cells[0].Value + entAct.longAtributos - 8, SeekOrigin.Begin);
                         bw.Write(-1);
                     }
                     else//Es cualquier registro de en medio
@@ -1832,6 +1953,29 @@ namespace PruebaProyecto
                 {
                     eliminaRegClvPrim((int)RegisInserdataGridView.Rows[indFilEli].Cells[0].Value);
                 }
+
+                if(bandAtrSec)
+                {
+                    List<int> lisPosIndSec = new List<int>();
+                    for (int i = 0; i < entAct.listAtrib.Count; i++)
+                    {
+                        if(entAct.listAtrib.ElementAt(i).tipoIndi == 3)
+                        {
+                            lisPosIndSec.Add(i + 1);
+                        }
+                    }
+
+                    int j = 0;
+                    foreach (IndiceSecundario a in entAct.lisIndSec)
+                    {
+                        r = 0;
+                        eliminaBloquSec(RegisInserdataGridView.Rows[indFilEli].Cells[lisPosIndSec.ElementAt(j)].Value.ToString(), (int)RegisInserdataGridView.Rows[indFilEli].Cells[0].Value, a.contIndSec);
+                        j++;
+                    }
+                      
+                    
+                }
+
                 limpiaGridInsertadosReg();
 
                 bandElim = false;
