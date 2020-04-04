@@ -372,6 +372,7 @@ namespace PruebaProyecto
             r = 0;
             string comp = clvPrim.ToString();
             int posCom = entAct.lisIndSec.ElementAt(indArch).longBloqSec;
+            int dirCom = 0;
             r = 0;
 
             if (entAct.lisIndSec.ElementAt(indArch).tipo == 'E')
@@ -400,7 +401,9 @@ namespace PruebaProyecto
                 //r = 0;
                 posicion++;
                 posCom += entAct.lisIndSec.ElementAt(indArch).longBloqSec;
+                dirCom = brCo.ReadInt32();
                 r = 0;
+              
 
                 if (entAct.lisIndSec.ElementAt(indArch).tipo == 'E')
                 {
@@ -420,7 +423,7 @@ namespace PruebaProyecto
             {
                 r = 0;
 
-                
+                dirCom = posicion;
                 entAct.lisIndSec.ElementAt(indArch).creaCajon((int)entAct.lisIndSec.ElementAt(indArch).archSec.Length);
                 r = 0;
             }
@@ -429,7 +432,9 @@ namespace PruebaProyecto
             r = 0;
 
             entAct.lisIndSec.ElementAt(indArch).archSec.Close();
-            return posicion;
+
+            return dirCom;
+            //return posicion;
 
 
         }
@@ -485,10 +490,6 @@ namespace PruebaProyecto
                 {
                     r = 0;
                     reacomodaPorPosiSec(posAGuardReg, a.contIndSec);
-
-                    //a.archSec = File.Open(a.archSec.Name, FileMode.Open);
-                    //long longArchSec = a.archSec.Length;
-                    //a.archSec.Close();
                     r = 0;
                     a.archSec = File.Open(a.archSec.Name, FileMode.Open);
                     long longArchSec = a.archSec.Length - 2048;
@@ -498,12 +499,12 @@ namespace PruebaProyecto
                     {
 
                         bw.Seek(posAGuardReg * a.longBloqSec, SeekOrigin.Begin);
-                        //a.dirIndi = 0;
-                        //bw.Write();
+                        //bw.Seek(posAGuardReg , SeekOrigin.Begin);
+
                         r = 0;
                         if (a.tipo == 'C')
                         {
-                            //string algo = indP.clv_prim.ToString().ToCharArray();
+
                             bw.Write(indP.clv_prim.ToString().ToCharArray());
                             int contChar = 0;
                             while (contChar < a.longAtrSec - indP.clv_prim.ToString().ToCharArray().Length)
@@ -520,16 +521,10 @@ namespace PruebaProyecto
                             r = 0;
                             bw.Write(algo);
                         }
-
-                        //bw.Seek(posAGuardReg+entAct.longClvPrim, SeekOrigin.Begin);
-                        //a.archSec = File.Open(a.archSec.Name, FileMode.Open);
                         bw.Write(longArchSec);
 
-
-                        //a.archSec.Close();
                          r = 0;
 
-                        //Escribir en cajon la primer direccion
                         bw.Seek((int)longArchSec, SeekOrigin.Begin);
                         bw.Write(dirUltReg);
                     }
@@ -537,8 +532,21 @@ namespace PruebaProyecto
                 }
                 else
                 {
+                    if (posAGuardReg == 0)
+                    {
+                        r = 0;
+                        a.archSec = File.Open(a.archSec.Name, FileMode.Open);
+                        BinaryReader br2 = new BinaryReader(a.archSec);
+                        a.archSec.Seek(a.longAtrSec, SeekOrigin.Begin);
+
+                        //string hola = new string(br2.ReadChars(a.longAtrSec));
+                        posAGuardReg = br2.ReadInt32();
+                        a.archSec.Close();
+                        r = 0;
+                    }
                     r = 0;
-                    colocaEnCajon((posAGuardReg+1) * 2048, dirUltReg, a.contIndSec);
+                    colocaEnCajon(posAGuardReg , dirUltReg, a.contIndSec);
+                    //colocaEnCajon((posAGuardReg+1) * 2048, dirUltReg, a.contIndSec);
                 }
                 
                 
