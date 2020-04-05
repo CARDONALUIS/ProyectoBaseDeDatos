@@ -97,7 +97,7 @@ namespace PruebaProyecto
 
             pos += entAct.lisIndSec.ElementAt(contIndSec).longBloqSec;
 
-
+            r = 0;
             //Busca el cajon
             while (busInd != clavpri)
             {
@@ -127,11 +127,14 @@ namespace PruebaProyecto
             r = 0;
 
             pos = dirCajonBorr;
-            pos += 8;
+
+            //pos += 8;
+
+            r = 0;
             while (dirCom != dirEli)
             {
                 r = 0;
-                entAct.lisIndSec.ElementAt(contIndSec).archSec.Seek(pos-8, SeekOrigin.Begin);
+                entAct.lisIndSec.ElementAt(contIndSec).archSec.Seek(pos+8, SeekOrigin.Begin);
 
                 dirCom = br1.ReadInt32();
 
@@ -145,7 +148,7 @@ namespace PruebaProyecto
 
             string findEnd;
 
-            entAct.lisIndSec.ElementAt(contIndSec).archSec.Seek(pos, SeekOrigin.Begin);
+            entAct.lisIndSec.ElementAt(contIndSec).archSec.Seek(pos+8, SeekOrigin.Begin);
             findEnd = br1.ReadInt32().ToString();
 
             r = 0;
@@ -158,7 +161,7 @@ namespace PruebaProyecto
                 using (BinaryWriter bw = new BinaryWriter(File.Open(entAct.lisIndSec.ElementAt(contIndSec).archSec.Name, FileMode.Open)))
                 {
                     //entAct.archivoIndPri = File.Open(entAct.archivoIndPri.Name, FileMode.Open);
-                    bw.Seek(pos - 8, SeekOrigin.Begin);
+                    bw.Seek(pos, SeekOrigin.Begin);
                     //entAct.archivoIndPri.Seek(posIndP-entAct.longRegIndPri, SeekOrigin.Begin);
                     bw.Write(Int32.Parse(findEnd));
                 }
@@ -168,9 +171,10 @@ namespace PruebaProyecto
 
                 entAct.lisIndSec.ElementAt(contIndSec).archSec = File.Open(entAct.lisIndSec.ElementAt(contIndSec).archSec.Name, FileMode.Open);
                 BinaryReader br2 = new BinaryReader(entAct.lisIndSec.ElementAt(contIndSec).archSec);
-                entAct.lisIndSec.ElementAt(contIndSec).archSec.Seek(pos, SeekOrigin.Begin);
+                entAct.lisIndSec.ElementAt(contIndSec).archSec.Seek(pos+8, SeekOrigin.Begin);
 
                 findEnd = br2.ReadInt32().ToString();
+
                 r = 0;
                 entAct.lisIndSec.ElementAt(contIndSec).archSec.Close();
 
@@ -182,7 +186,7 @@ namespace PruebaProyecto
             using (BinaryWriter bw = new BinaryWriter(File.Open(entAct.lisIndSec.ElementAt(contIndSec).archSec.Name, FileMode.Open)))
             {
                 r = 0;
-                bw.Seek(pos - 8, SeekOrigin.Begin);
+                bw.Seek(pos, SeekOrigin.Begin);
                 bw.Write(Int32.Parse(findEnd));
             }
             
