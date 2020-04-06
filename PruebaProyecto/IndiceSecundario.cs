@@ -52,8 +52,7 @@ namespace PruebaProyecto
         }
 
         public void creaCajon(int dirDeCajon)
-        {
-            
+        {           
             BinaryWriter bw = new BinaryWriter(archSec);
 
             bw.Seek(dirDeCajon, SeekOrigin.Begin);

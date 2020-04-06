@@ -74,6 +74,121 @@ namespace PruebaProyecto
          Elimina en indices secundarios
              */
 
+        public void cajonVacio(int dirCajon, int contIndSec)//Elimina la referencia a ese cajon en el bloque principla del archivo secundario
+        {
+            r = 0;
+            entAct.lisIndSec.ElementAt(contIndSec).archSec = File.Open(entAct.lisIndSec.ElementAt(contIndSec).archSec.Name, FileMode.Open);
+            BinaryReader br2 = new BinaryReader(entAct.lisIndSec.ElementAt(contIndSec).archSec);
+            entAct.lisIndSec.ElementAt(contIndSec).archSec.Seek(dirCajon, SeekOrigin.Begin);
+
+            string findEnd = br2.ReadInt32().ToString();
+            int pos = 0;
+            int posAElim = 0;
+
+            r = 0;
+            if(findEnd == "-1")
+            {
+                entAct.lisIndSec.ElementAt(contIndSec).archSec.Seek(pos +entAct.lisIndSec.ElementAt(contIndSec).longAtrSec, SeekOrigin.Begin);
+                findEnd = br2.ReadInt32().ToString();
+
+                r = 0;
+
+                while (findEnd != dirCajon.ToString())
+                {
+                    pos += entAct.lisIndSec.ElementAt(contIndSec).longBloqSec;
+                    entAct.lisIndSec.ElementAt(contIndSec).archSec.Seek(pos+entAct.lisIndSec.ElementAt(contIndSec).longAtrSec, SeekOrigin.Begin);
+                    findEnd = br2.ReadInt32().ToString();
+                    posAElim++;
+                    r = 0;
+                }
+                r = 0;
+                pos += entAct.lisIndSec.ElementAt(contIndSec).longBloqSec;
+                string finArch;
+
+                r = 0;
+           
+
+                entAct.lisIndSec.ElementAt(contIndSec).archSec.Seek(pos, SeekOrigin.Begin);
+                //finArch = br2.ReadChars(.ToString();
+                if(entAct.lisIndSec.ElementAt(contIndSec).tipo == 'C')
+                {
+                    finArch = new string(br2.ReadChars(entAct.lisIndSec.ElementAt(contIndSec).longAtrSec));
+                }
+                else
+                {
+                    finArch = br2.ReadInt32().ToString();
+                }
+
+                int dirCajoMov = br2.ReadInt32();
+                r = 0;
+
+                //entAct.archivoIndPri.Close();
+
+                while (finArch != "-1" && char.IsLetterOrDigit(finArch[0]))
+                {
+                    r = 0;
+                    entAct.lisIndSec.ElementAt(contIndSec).archSec.Close();
+                    using (BinaryWriter bw = new BinaryWriter(File.Open(entAct.lisIndSec.ElementAt(contIndSec).archSec.Name, FileMode.Open)))
+                    {
+                        bw.Seek(pos- entAct.lisIndSec.ElementAt(contIndSec).longBloqSec, SeekOrigin.Begin);
+                        //bw.Seek(0, SeekOrigin.Begin);
+
+                        if (entAct.lisIndSec.ElementAt(contIndSec).tipo == 'E')
+                            bw.Write(Int32.Parse(finArch));
+                        else
+                            bw.Write(finArch.ToCharArray());
+
+                        bw.Write(dirCajoMov);
+
+                    }
+                    r = 0;
+                    pos += entAct.lisIndSec.ElementAt(contIndSec).longBloqSec;
+
+                    r = 0;
+
+                    entAct.lisIndSec.ElementAt(contIndSec).archSec = File.Open(entAct.lisIndSec.ElementAt(contIndSec).archSec.Name, FileMode.Open);
+                    BinaryReader br3 = new BinaryReader(entAct.lisIndSec.ElementAt(contIndSec).archSec);
+                    entAct.lisIndSec.ElementAt(contIndSec).archSec.Seek(pos, SeekOrigin.Begin);
+
+                    //finArch = br3.ReadInt32().ToString();
+                    if (entAct.lisIndSec.ElementAt(contIndSec).tipo == 'C')
+                    {
+                        finArch = new string(br3.ReadChars(entAct.lisIndSec.ElementAt(contIndSec).longAtrSec));
+                    }
+                    else
+                    {
+                        finArch = br3.ReadInt32().ToString();
+                    }
+
+                    dirCajoMov = br3.ReadInt32();
+
+
+                    r = 0;
+                    entAct.lisIndSec.ElementAt(contIndSec).archSec.Close();
+
+                }
+
+                r = 0;
+                //Este me escribe el -1 al final del archivo o el valor nulo
+                entAct.lisIndSec.ElementAt(contIndSec).archSec.Close();
+                using (BinaryWriter bw = new BinaryWriter(File.Open(entAct.lisIndSec.ElementAt(contIndSec).archSec.Name, FileMode.Open)))
+                {
+                    r = 0;
+                    bw.Seek(pos - entAct.lisIndSec.ElementAt(contIndSec).longBloqSec, SeekOrigin.Begin);
+
+                    if (entAct.lisIndSec.ElementAt(contIndSec).tipo == 'E')
+                        bw.Write(Int32.Parse(finArch));
+                    else
+                        bw.Write(finArch.ToCharArray());
+
+                    bw.Write(dirCajoMov);
+                }
+            }
+            
+            entAct.lisIndSec.ElementAt(contIndSec).archSec.Close();
+        }
+
+
         public void eliminaBloquSec(string clavpri, int dirEli, int contIndSec)
         {
             entAct.lisIndSec.ElementAt(contIndSec).archSec = File.Open(entAct.lisIndSec.ElementAt(contIndSec).archSec.Name, FileMode.Open);
@@ -117,10 +232,7 @@ namespace PruebaProyecto
             int dirCajonBorr = br1.ReadInt32();
             
             r = 0;
-            
-            
-
-
+           
             entAct.lisIndSec.ElementAt(contIndSec).archSec.Seek(dirCajonBorr, SeekOrigin.Begin);
             int dirCom = br1.ReadInt32();
 
@@ -189,6 +301,8 @@ namespace PruebaProyecto
                 bw.Seek(pos, SeekOrigin.Begin);
                 bw.Write(Int32.Parse(findEnd));
             }
+
+            cajonVacio(dirCajonBorr, contIndSec);
             
 
             r = 0;
@@ -675,7 +789,7 @@ namespace PruebaProyecto
                 if (entAct.tipoCvePrima == 'E')
                     findEnd = br2.ReadInt32().ToString();
                 else
-                    findEnd = br2.ReadChars(entAct.longClvPrim).ToString();
+                    findEnd = new string(br2.ReadChars(entAct.longClvPrim));
 
                 dirSig = br2.ReadInt32();
                 r = 0;
@@ -883,6 +997,8 @@ namespace PruebaProyecto
 
             valor = brBy.ReadBytes(entAct.longRegIndPri);
 
+            r = 0;
+
             entAct.archivoIndPri.Seek(0, SeekOrigin.Begin);
 
             string valoACom = "";
@@ -905,6 +1021,7 @@ namespace PruebaProyecto
             int posCom = entAct.longRegIndPri;
             r = 0;
 
+            if(valoACom != "-1")
             if (entAct.tipoCvePrima == 'E')
             {
                 string[] nuev = adaptNumero(valoACom, comp);
@@ -935,13 +1052,14 @@ namespace PruebaProyecto
                     posCom += entAct.longRegIndPri;
                     r = 0;
 
-                    if (entAct.tipoCvePrima == 'E')
-                    {
-                        string[] nuev = adaptNumero(valoACom, comp);
+                    if (valoACom != "-1")
+                        if (entAct.tipoCvePrima == 'E')
+                        {
+                            string[] nuev = adaptNumero(valoACom, comp);
 
-                        valoACom = nuev.ElementAt(0);
-                        comp = nuev.ElementAt(1);
-                    }
+                            valoACom = nuev.ElementAt(0);
+                            comp = nuev.ElementAt(1);
+                        }
                 }
             }
             r = 0;
@@ -971,18 +1089,13 @@ namespace PruebaProyecto
                         bw.Seek((int)a.dirAtri + 52, SeekOrigin.Begin);
                         a.dirIndi = 0;
                         bw.Write(0);
-
                     }
-
-
-
                     break;
                 }
             }
             r = 0;
             if (bandPrimario == true)
             {
-
                 guardaArchivosIndPri();
             }
             else
@@ -1234,6 +1347,7 @@ namespace PruebaProyecto
 
             int ceroAgre = cad2.Length - cad1.Length;
             r = 0;
+
             if (ceroAgre < 0)
                 for (int i = 0; i < Math.Abs(ceroAgre); i++)
                 {
