@@ -109,7 +109,6 @@ namespace PruebaProyecto
            
 
                 entAct.lisIndSec.ElementAt(contIndSec).archSec.Seek(pos, SeekOrigin.Begin);
-                //finArch = br2.ReadChars(.ToString();
                 if(entAct.lisIndSec.ElementAt(contIndSec).tipo == 'C')
                 {
                     finArch = new string(br2.ReadChars(entAct.lisIndSec.ElementAt(contIndSec).longAtrSec));
@@ -122,8 +121,6 @@ namespace PruebaProyecto
                 int dirCajoMov = br2.ReadInt32();
                 r = 0;
 
-                //entAct.archivoIndPri.Close();
-
                 while (finArch != "-1" && char.IsLetterOrDigit(finArch[0]))
                 {
                     r = 0;
@@ -131,15 +128,11 @@ namespace PruebaProyecto
                     using (BinaryWriter bw = new BinaryWriter(File.Open(entAct.lisIndSec.ElementAt(contIndSec).archSec.Name, FileMode.Open)))
                     {
                         bw.Seek(pos- entAct.lisIndSec.ElementAt(contIndSec).longBloqSec, SeekOrigin.Begin);
-                        //bw.Seek(0, SeekOrigin.Begin);
-
                         if (entAct.lisIndSec.ElementAt(contIndSec).tipo == 'E')
                             bw.Write(Int32.Parse(finArch));
                         else
                             bw.Write(finArch.ToCharArray());
-
                         bw.Write(dirCajoMov);
-
                     }
                     r = 0;
                     pos += entAct.lisIndSec.ElementAt(contIndSec).longBloqSec;
@@ -150,7 +143,6 @@ namespace PruebaProyecto
                     BinaryReader br3 = new BinaryReader(entAct.lisIndSec.ElementAt(contIndSec).archSec);
                     entAct.lisIndSec.ElementAt(contIndSec).archSec.Seek(pos, SeekOrigin.Begin);
 
-                    //finArch = br3.ReadInt32().ToString();
                     if (entAct.lisIndSec.ElementAt(contIndSec).tipo == 'C')
                     {
                         finArch = new string(br3.ReadChars(entAct.lisIndSec.ElementAt(contIndSec).longAtrSec));
@@ -167,9 +159,7 @@ namespace PruebaProyecto
                     entAct.lisIndSec.ElementAt(contIndSec).archSec.Close();
 
                 }
-
                 r = 0;
-                //Este me escribe el -1 al final del archivo o el valor nulo
                 entAct.lisIndSec.ElementAt(contIndSec).archSec.Close();
                 using (BinaryWriter bw = new BinaryWriter(File.Open(entAct.lisIndSec.ElementAt(contIndSec).archSec.Name, FileMode.Open)))
                 {
@@ -213,7 +203,6 @@ namespace PruebaProyecto
             pos += entAct.lisIndSec.ElementAt(contIndSec).longBloqSec;
 
             r = 0;
-            //Busca el cajon
             while (busInd != clavpri)
             {
                 r = 0;
@@ -237,11 +226,7 @@ namespace PruebaProyecto
             int dirCom = br1.ReadInt32();
 
             r = 0;
-
             pos = dirCajonBorr;
-
-            //pos += 8;
-
             r = 0;
             while (dirCom != dirEli)
             {
@@ -265,16 +250,13 @@ namespace PruebaProyecto
 
             r = 0;
 
-            //entAct.archivoIndPri.Close();
 
             while (findEnd != "-1")
             {
                 entAct.lisIndSec.ElementAt(contIndSec).archSec.Close();
                 using (BinaryWriter bw = new BinaryWriter(File.Open(entAct.lisIndSec.ElementAt(contIndSec).archSec.Name, FileMode.Open)))
                 {
-                    //entAct.archivoIndPri = File.Open(entAct.archivoIndPri.Name, FileMode.Open);
                     bw.Seek(pos, SeekOrigin.Begin);
-                    //entAct.archivoIndPri.Seek(posIndP-entAct.longRegIndPri, SeekOrigin.Begin);
                     bw.Write(Int32.Parse(findEnd));
                 }
                 r = 0;
@@ -293,7 +275,6 @@ namespace PruebaProyecto
             }
 
             r = 0;
-            //Este me escribe el -1 al final del archivo o el valor nulo
             entAct.lisIndSec.ElementAt(contIndSec).archSec.Close();
             using (BinaryWriter bw = new BinaryWriter(File.Open(entAct.lisIndSec.ElementAt(contIndSec).archSec.Name, FileMode.Open)))
             {
@@ -309,8 +290,6 @@ namespace PruebaProyecto
             
         }
 
-
-        /*Este metodo coloca en su cajon correspondientes las direccion de los regitros */
         public void colocaEnCajon(int dirCajon, int dirReg, int indArchSec)
         {
             r = 0;
@@ -391,8 +370,6 @@ namespace PruebaProyecto
             r = 0;
             while (indS != "-1" && char.IsLetterOrDigit(indS.ElementAt(0)))
             {
-                //entAct.lisIndSec.ElementAt(indArchSec).archSec.Close();
-                //entAct.archivoIndPri = File.Open(entAct.archivoIndPri.Name, FileMode.Open);
                 BinaryReader br2 = new BinaryReader(entAct.lisIndSec.ElementAt(indArchSec).archSec);
                 r = 0;
                 entAct.lisIndSec.ElementAt(indArchSec).archSec.Seek((pos + 1) * entAct.lisIndSec.ElementAt(indArchSec).longBloqSec, SeekOrigin.Begin);
@@ -405,7 +382,6 @@ namespace PruebaProyecto
 
                 pos++;
                 r = 0;
-                //entAct.archivoIndPri.Close();
             }
             r = 0;
             int posAreco = pos - posOrg;
@@ -413,8 +389,6 @@ namespace PruebaProyecto
 
             while (posAreco > 0)
             {
-                //entAct.archivoIndPri.Close();
-                //entAct.archivoIndPri = File.Open(entAct.archivoIndPri.Name, FileMode.Open);
                 entAct.lisIndSec.ElementAt(indArchSec).archSec.Close();
                 entAct.lisIndSec.ElementAt(indArchSec).archSec = File.Open(entAct.lisIndSec.ElementAt(indArchSec).archSec.Name, FileMode.Open);
                 BinaryReader br3 = new BinaryReader(entAct.lisIndSec.ElementAt(indArchSec).archSec);
@@ -433,24 +407,19 @@ namespace PruebaProyecto
                 entAct.lisIndSec.ElementAt(indArchSec).archSec.Close();
                 using (BinaryWriter bw = new BinaryWriter(File.Open(entAct.lisIndSec.ElementAt(indArchSec).archSec.Name, FileMode.Open)))
                 {
-                    //entAct.archivoIndPri = File.Open(entAct.archivoIndPri.Name, FileMode.Open);
                     bw.Seek(pos * entAct.lisIndSec.ElementAt(indArchSec).longBloqSec, SeekOrigin.Begin);
-                    //entAct.archivoIndPri.Seek(posIndP-entAct.longRegIndPri, SeekOrigin.Begin);
 
                     if (entAct.lisIndSec.ElementAt(indArchSec).tipo == 'E')
                         bw.Write(Int32.Parse(indS));
                     else
                         bw.Write(indS.ToCharArray());
-                    // bw.Write(indP);
 
                     bw.Write(dir);
                 }
                 r = 0;
 
-                //posOrg++;
                 posAreco--;
                 pos--;
-                //posOrg++;
             }
             entAct.lisIndSec.ElementAt(indArchSec).archSec.Close();
             r = 0;
@@ -516,7 +485,6 @@ namespace PruebaProyecto
                 {
                     valoACom = brCo.ReadInt32().ToString();
                 }
-                //r = 0;
                 posicion++;
                 posCom += entAct.lisIndSec.ElementAt(indArch).longBloqSec;
                 dirCom = brCo.ReadInt32();
@@ -552,8 +520,6 @@ namespace PruebaProyecto
             entAct.lisIndSec.ElementAt(indArch).archSec.Close();
 
             return dirCom;
-            //return posicion;
-
 
         }
 
@@ -576,7 +542,6 @@ namespace PruebaProyecto
 
 
                 entAct.archivoDat.Seek(a.posAtrSec + dirUltReg, SeekOrigin.Begin);
-                //entAct.archivoDat.Seek(entAct.posCvePrima + dirUltReg, SeekOrigin.Begin);
 
 
                 //Esta es una clase generica para guardar valores de estructuras de llaves
@@ -601,7 +566,6 @@ namespace PruebaProyecto
                 r = 0;
 
                 posAGuardReg = obtenPoscionAEscribirIDS(indP.clv_prim, a.contIndSec);
-                //indP.clv_prim = valorInd;
 
                 r = 0;
                 if (!bandCajonRep)
@@ -617,8 +581,6 @@ namespace PruebaProyecto
                     {
 
                         bw.Seek(posAGuardReg * a.longBloqSec, SeekOrigin.Begin);
-                        //bw.Seek(posAGuardReg , SeekOrigin.Begin);
-
                         r = 0;
                         if (a.tipo == 'C')
                         {
@@ -657,20 +619,14 @@ namespace PruebaProyecto
                         BinaryReader br2 = new BinaryReader(a.archSec);
                         a.archSec.Seek(a.longAtrSec, SeekOrigin.Begin);
 
-                        //string hola = new string(br2.ReadChars(a.longAtrSec));
                         posAGuardReg = br2.ReadInt32();
                         a.archSec.Close();
                         r = 0;
                     }
                     r = 0;
                     colocaEnCajon(posAGuardReg , dirUltReg, a.contIndSec);
-                    //colocaEnCajon((posAGuardReg+1) * 2048, dirUltReg, a.contIndSec);
                 }
                 
-                
-
-                //indP.dir_reg = dirUltReg;
-
                 r = 0;
      
                 entAct.archivoDat.Close();
@@ -696,24 +652,13 @@ namespace PruebaProyecto
 
                     }
 
-
-
-                    //break;
                 }
                 else
                 r = 0;
             }
             r = 0;
-            //if (bandPrimario == true)
-            //{
 
-                guardaArchivosIndSec();
-            //}
-            //else
-              //  leeIndPrim();
-
-            //entAct.archivoIndPri.Close();
-
+            guardaArchivosIndSec();
         }
         /*
          * TERMINAN METODOS DE INDICES SECUNDARIOS
@@ -759,18 +704,12 @@ namespace PruebaProyecto
 
             int dirSig = br.ReadInt32();
 
-            r = 0;
-
-            //entAct.archivoIndPri.Close();
-
             while (findEnd != "-1")
             {
                 entAct.archivoIndPri.Close();
                 using (BinaryWriter bw = new BinaryWriter(File.Open(entAct.archivoIndPri.Name, FileMode.Open)))
                 {
-                    //entAct.archivoIndPri = File.Open(entAct.archivoIndPri.Name, FileMode.Open);
                     bw.Seek(posIndP - entAct.longRegIndPri, SeekOrigin.Begin);
-                    //entAct.archivoIndPri.Seek(posIndP-entAct.longRegIndPri, SeekOrigin.Begin);
 
                     if (entAct.tipoCvePrima == 'E')
                         bw.Write(Int32.Parse(findEnd));
@@ -845,8 +784,7 @@ namespace PruebaProyecto
 
             while (comp.ToString() != "-1" && char.IsLetterOrDigit(comp.ToString().ElementAt(0)))
             {
-                //if (entAct.tipoCvePrima == 'C')
-                //{
+
                 IndicePrimario indP = new IndicePrimario();
 
                 entAct.archivoIndPri.Seek(posIni, SeekOrigin.Begin);
@@ -867,7 +805,6 @@ namespace PruebaProyecto
                 r = 0;
                 posIni = posIni + entAct.longRegIndPri;
 
-                //comp.ToString() = new string(br.ReadChars(entAct.longClvPrim).ToString().ToCharArray());
                 entAct.archivoIndPri.Seek(posIni, SeekOrigin.Begin);
                 r = 0;
                 if (entAct.tipoCvePrima == 'C')
@@ -880,7 +817,6 @@ namespace PruebaProyecto
                 }
 
                 r = 0;
-                //}
             }
 
             entAct.archivoIndPri.Close();
@@ -914,7 +850,6 @@ namespace PruebaProyecto
             entAct.archivoDat.Seek(entAct.posCvePrima + dirUltReg, SeekOrigin.Begin);
 
             r = 0;
-            //indP.clv_prim = br.ReadChars(entAct.longClvPrim).ToString();
 
             IndicePrimario indP = new IndicePrimario();
             int posAGuardReg = 0;
@@ -934,7 +869,6 @@ namespace PruebaProyecto
             r = 0;
 
             posAGuardReg = obtenPoscionAEscribirIDP(indP.clv_prim);
-            //indP.clv_prim = valorInd;
             reacomodaPorPosi(posAGuardReg);
 
             indP.dir_reg = dirUltReg;
@@ -948,12 +882,10 @@ namespace PruebaProyecto
             {
 
                 bw.Seek(posAGuardReg * entAct.longRegIndPri, SeekOrigin.Begin);
-                //a.dirIndi = 0;
-                //bw.Write();
+
                 r = 0;
                 if (entAct.tipoCvePrima == 'C')
                 {
-                    //string algo = indP.clv_prim.ToString().ToCharArray();
                     bw.Write(indP.clv_prim.ToString().ToCharArray());
                     int contChar = 0;
                     while (contChar < entAct.longClvPrim - indP.clv_prim.ToString().ToCharArray().Length)
@@ -970,8 +902,6 @@ namespace PruebaProyecto
                     r = 0;
                     bw.Write(algo);
                 }
-
-                //bw.Seek(posAGuardReg+entAct.longClvPrim, SeekOrigin.Begin);
                 bw.Write(indP.dir_reg);
                 r = 0;
 
@@ -1047,7 +977,7 @@ namespace PruebaProyecto
                     {
                         valoACom = brCo.ReadInt32().ToString();
                     }
-                    //r = 0;
+                    
                     posicion++;
                     posCom += entAct.longRegIndPri;
                     r = 0;
@@ -1112,7 +1042,6 @@ namespace PruebaProyecto
             string indP;
             int dir;
             int posOrg = pos;
-            //pos++;
 
             r = 0;
 
@@ -1128,15 +1057,6 @@ namespace PruebaProyecto
             else
                 indP = new string(br1.ReadChars(entAct.longClvPrim));
 
-
-
-
-            /*char al = indP.ElementAt(0);
-
-            r = 0;
-
-            bool es = char.IsLetterOrDigit(indP.ElementAt(0));*/
-            r = 0;
 
             while (indP != "-1" && char.IsLetterOrDigit(indP.ElementAt(0)))
             {
@@ -1156,9 +1076,9 @@ namespace PruebaProyecto
                 r = 0;
                 entAct.archivoIndPri.Close();
             }
-            r = 0;
+
             int posAreco = pos - posOrg;
-            r = 0;
+
 
             while (posAreco > 0)
             {
@@ -1180,37 +1100,58 @@ namespace PruebaProyecto
                 entAct.archivoIndPri.Close();
                 using (BinaryWriter bw = new BinaryWriter(File.Open(entAct.archivoIndPri.Name, FileMode.Open)))
                 {
-                    //entAct.archivoIndPri = File.Open(entAct.archivoIndPri.Name, FileMode.Open);
                     bw.Seek(pos * entAct.longRegIndPri, SeekOrigin.Begin);
-                    //entAct.archivoIndPri.Seek(posIndP-entAct.longRegIndPri, SeekOrigin.Begin);
 
                     if (entAct.tipoCvePrima == 'E')
                         bw.Write(Int32.Parse(indP));
                     else
                         bw.Write(indP.ToCharArray());
-                    // bw.Write(indP);
 
                     bw.Write(dir);
                 }
                 r = 0;
 
-                //posOrg++;
                 posAreco--;
                 pos--;
-                //posOrg++;
                 entAct.archivoIndPri.Close();
             }
             entAct.archivoIndPri.Close();
         }
 
+        public bool cohesionDatos()
+        {
+            bool bandInt = true;
 
-        
+            for(int i = 0; i < entAct.listAtrib.Count && bandInt;i++)
+            {
+                if (char.IsDigit(RegistroRellDataGrid.Rows[0].Cells[i].Value.ToString().ElementAt(0)))
+                    if (entAct.listAtrib.ElementAt(i).tipo != 'E')
+                        bandInt = false;
+
+                if (char.IsLetter(RegistroRellDataGrid.Rows[0].Cells[i].Value.ToString().ElementAt(0)))
+                    if (entAct.listAtrib.ElementAt(i).tipo != 'C')
+                        bandInt = false;
+            }
+
+            return bandInt;
+            
+        }
+
+
 
 
         private void GuardaRegistros_Click(object sender, EventArgs e)
         {
             string valor = "";
+            bool bandSigue;
 
+             bandSigue = cohesionDatos();
+
+            if (!bandSigue)
+            {
+                MessageBox.Show("Hay datos que no concuerdan");
+            }
+            else
             if (entAct != null)
             {
                 entAct.archivoDat = File.Open(entAct.archivoDat.Name, FileMode.Open);
@@ -1232,7 +1173,6 @@ namespace PruebaProyecto
                         r = 0;
                         bw.Seek((int)dirAuxElimReg, SeekOrigin.Begin);
                         bw.Write(dirAuxElimReg);
-                        //RegisInserdataGridView.Rows[RegisInserdataGridView.Rows.Count - 1].Cells[0].Value = (int)dirAuxElimReg;
 
                     }
                     else
@@ -1248,7 +1188,6 @@ namespace PruebaProyecto
                         Atributo act = entAct.listAtrib.ElementAt(col);
                         r = 0;
 
-                        //if (!bandModAtrBus)
                         RegisInserdataGridView.Rows[RegisInserdataGridView.Rows.Count - 1].Cells[col + 1].Value = RegistroRellDataGrid.Rows[0].Cells[col].Value.ToString();
 
                         valor = RegistroRellDataGrid.Rows[0].Cells[col].Value.ToString();
@@ -1360,7 +1299,6 @@ namespace PruebaProyecto
                 cad1 = "0" + cad1;
             }
             r = 0;
-            //List<string> lis = new List<string>();
             string[] arrStr = new string[2];
             arrStr[0] = cad1;
             arrStr[1] = cad2;
@@ -1447,17 +1385,6 @@ namespace PruebaProyecto
                         bw.Seek(posRegAct + entAct.longAtributos - 8, SeekOrigin.Begin);
                         bw.Write(posUltReg);
 
-                        //Ver si no altera
-                        /*if (bandUltModiAtr)
-                        {
-                            RegisInserdataGridView.Rows[posDataGrid + 1].Cells[entAct.listAtrib.Count + 1].Value = posUltReg;
-                            bw.Seek(posUltReg + entAct.longAtributos - 8, SeekOrigin.Begin);
-
-
-                            bw.Write(direSigReg);
-                            bandUltModiAtr = false;
-                        }*/
-
                         bandUlt = true;
 
                     }
@@ -1466,46 +1393,8 @@ namespace PruebaProyecto
                 }
                 else//Si no llega hasta el ultimo registro//No necesita confirmacion
                 {
-                    /*r = 0;
-                    if(bandModAtrBus && direSigReg == posUltReg)
-                    {
-                        r = 0;
-
-                        entAct.archivoDat.Close();
-                        using (BinaryWriter bw = new BinaryWriter(File.Open(entAct.archivoDat.Name, FileMode.Open)))
-                        {
-                            bw.Seek(Int32.Parse(RegisInserdataGridView.Rows[dataGridRen].Cells[0].Value.ToString()) + entAct.longAtributos - 8, SeekOrigin.Begin);
-                            bw.Write(Int32.Parse(RegisInserdataGridView.Rows[posDataGrid + 1].Cells[0].Value.ToString()));
-
-                            RegisInserdataGridView.Rows[dataGridRen].Cells[entAct.listAtrib.Count + 1].Value = RegisInserdataGridView.Rows[posDataGrid + 1].Cells[0].Value;
-                            //posUltReg =
-                        }
-
-                        entAct.archivoDat = File.Open(entAct.archivoDat.Name, FileMode.Open);
-                        br = new BinaryReader(entAct.archivoDat);
-                        direSigReg += entAct.longAtributos;
-
-                        bandUltModiAtr = true;
-
-                    }
-
                     r = 0;
                     entAct.archivoDat.Seek(direSigReg + entAct.posCveBus, SeekOrigin.Begin);
-                    if (entAct.tipoCveBus == 'C')
-                    {
-
-                        cadComp = new string(br.ReadChars(10));
-                        r = 0;
-                    }
-                    else
-                    {
-                        int cad = br.ReadInt32();
-                        cadComp = cad.ToString();
-                    }
-                    posRegCom = direSigReg;*/
-                    r = 0;
-                    entAct.archivoDat.Seek(direSigReg + entAct.posCveBus, SeekOrigin.Begin);
-                    //cadComp = new string(br.ReadChars(10));
                     if (entAct.tipoCveBus == 'C')
                     {
                         cadComp = new string(br.ReadChars(10));
@@ -1517,8 +1406,6 @@ namespace PruebaProyecto
                     }
                     posRegCom = direSigReg;
                     r = 0;
-
-
                 }
 
                 if (entAct.tipoCveBus == 'E')
@@ -1540,16 +1427,6 @@ namespace PruebaProyecto
                 {
                     bw.Seek(Int32.Parse(RegisInserdataGridView.Rows[dataGridRen - 1].Cells[0].Value.ToString()) + entAct.longAtributos - 8, SeekOrigin.Begin);
                     bw.Write(posUltReg);
-
-                    /*if (bandModAtrBus)
-                    {
-                        bw.Seek(Int32.Parse(RegisInserdataGridView.Rows[dataGridRen].Cells[0].Value.ToString()) + entAct.longAtributos - 8, SeekOrigin.Begin);
-                        bw.Write(Int32.Parse(RegisInserdataGridView.Rows[posDataGrid+1].Cells[0].Value.ToString()));
-
-                        RegisInserdataGridView.Rows[dataGridRen].Cells[entAct.listAtrib.Count + 1].Value = RegisInserdataGridView.Rows[posDataGrid+1].Cells[0].Value;
-
-                        bandModAtrBus = false;
-                    }*/
 
                     bw.Seek(posUltReg + entAct.longAtributos - 8, SeekOrigin.Begin);
                     bw.Write(posRegCom);
@@ -1578,14 +1455,6 @@ namespace PruebaProyecto
                 {
                     bw.Seek(Int32.Parse(RegisInserdataGridView.Rows[posDataGrid].Cells[0].Value.ToString()) + entAct.longAtributos - 8, SeekOrigin.Begin);
                     bw.Write(posRegCom);
-                    /*if (bandModAtrBus)
-                    {
-                        bw.Seek(Int32.Parse(RegisInserdataGridView.Rows[posDataGrid-1].Cells[0].Value.ToString()) + entAct.longAtributos - 8, SeekOrigin.Begin);
-                        bw.Write(Int32.Parse(RegisInserdataGridView.Rows[posDataGrid+1].Cells[0].Value.ToString()));
-                        RegisInserdataGridView.Rows[posDataGrid-1].Cells[entAct.listAtrib.Count + 1].Value = RegisInserdataGridView.Rows[posDataGrid].Cells[entAct.listAtrib.Count + 1].Value;
-                        bandModAtrBus = false;
-                    }*/
-
                 }
                 RegisInserdataGridView.Rows[posDataGrid].Cells[entAct.listAtrib.Count + 1].Value = posRegCom;
                 entAct.archivoDat = File.Open(entAct.archivoDat.Name, FileMode.Open);
@@ -1602,16 +1471,6 @@ namespace PruebaProyecto
                     bw.Write(posUltReg);
                     bw.Seek(posUltReg + entAct.longAtributos - 8, SeekOrigin.Begin);
                     bw.Write(posRegCom);
-                    /*if (bandModAtrBus)
-                    {
-                        //Este es cambio por modifiAtri
-                        bw.Seek(posRegCom + entAct.longAtributos - 8, SeekOrigin.Begin);
-                        bw.Write(Int32.Parse(RegisInserdataGridView.Rows[posDataGrid + 1].Cells[0].Value.ToString()));
-                        RegisInserdataGridView.Rows[dataGridRen].Cells[entAct.listAtrib.Count + 1].Value = Int32.Parse(RegisInserdataGridView.Rows[posDataGrid + 1].Cells[0].Value.ToString());
-                        bandModAtrBus = false;
-                    }*/
-
-
                     RegisInserdataGridView.Rows[dataGridRen - 1].Cells[entAct.listAtrib.Count + 1].Value = posUltReg;
                     RegisInserdataGridView.Rows[posDataGrid].Cells[entAct.listAtrib.Count + 1].Value = posRegCom;
                 }
@@ -1680,8 +1539,7 @@ namespace PruebaProyecto
             bandAtrBus = false;
             bandAtrPri = false;
             bandAtrSec = false;
-            //entAct.lisIndSec.Clear();
-            //entAct.lisIndSec = new List<IndiceSecundario>();
+
             if (!bandModAtrBus)
             {
                 limpiaGridRellReg();
@@ -1787,9 +1645,6 @@ namespace PruebaProyecto
                         //MessageBox.Show("El atributo Secundario es " + a.nombre);
                         bandAtrSec = true;
 
-                       
-
-
                         if (a.dirIndi == -1)
                         {
                             r = 0;
@@ -1800,9 +1655,6 @@ namespace PruebaProyecto
                         }
                         else
                         {
-                            /*string nomArchSec = BitConverter.ToString(a.id_atri) + ".idx";
-                            r = 0;
-                            FileStream fileStream;*/
                             r = 0;
                            
                             FileStream archSec = File.Open(BitConverter.ToString(a.id_atri) + ".idx", FileMode.Open);
@@ -1817,8 +1669,6 @@ namespace PruebaProyecto
 
                         posAtrSec += a.longitud;
                         entAct.contIndSec++;
-
-                        //lisPosAtrSec.Add(posAtrSec + 8);
 
                     }
                     else
@@ -1879,7 +1729,6 @@ namespace PruebaProyecto
                     r = 0;
                     //MessageBox.Show("Ya tiene datos");
                     agregaRegisExistentes(entReg);
-                    //RegisInserdataGridView.Sort(RegisInserdataGridView.Columns[posAtrBus], ListSortDirection.Ascending);
 
                 }
             }
@@ -1915,7 +1764,6 @@ namespace PruebaProyecto
             while (bandSigReg)
             {
                 r = 0;
-                //ent.archivoDat.Seek(dirReg, SeekOrigin.Begin);
                 RegisInserdataGridView.Rows.Add();
                 r = 0;
 
@@ -1923,9 +1771,6 @@ namespace PruebaProyecto
                     dirReg = (int)entAct.dirDat;
                 else
                     dirReg = br.ReadInt32();
-
-
-
 
                 dirRegAct = dirReg;
                 r = 0;
@@ -1936,7 +1781,6 @@ namespace PruebaProyecto
                 for (int i = 0; i < ent.listAtrib.Count; i++)
                 {
                     ent.archivoDat.Seek(dirReg, SeekOrigin.Begin);
-                    //com = br.ReadInt32();
                     r = 0;
                     Atributo atr = ent.listAtrib.ElementAt(i);
                     r = 0;
@@ -1951,7 +1795,6 @@ namespace PruebaProyecto
                                     r = 0;
                                 }
                             }
-                            //String prueba = RegisInserdataGridView.Rows[conRen].Cells[i + 1].Value.ToString();
                             r = 0;
                             break;
                         case 'E':
@@ -1970,20 +1813,15 @@ namespace PruebaProyecto
                     if (br.ReadInt32() == -1)
                     {
                         r = 0;
-                        //compruebaFinal(bw);
                         bandSigReg = false;
                     }
 
                 }
-                //dirReg = dirReg + 8;
                 ent.archivoDat.Seek(dirReg, SeekOrigin.Begin);
 
                 dirSigReg = br.ReadInt32();
                 RegisInserdataGridView.Rows[conRen].Cells[ent.listAtrib.Count + 1].Value = dirSigReg;
                 r = 0;
-
-
-                //ent.listReg.Add(new Registro(dirRegAct, dirSigReg));
 
                 if (bandSigReg)
                 {
@@ -1993,15 +1831,9 @@ namespace PruebaProyecto
 
                 r = 0;
                 conRen++;
-
-
             }
-            //
-
-
 
             ent.archivoDat.Close();
-            //RegisInserdataGridView.Sort(RegisInserdataGridView.Columns[posAtrBus], ListSortDirection.Ascending);
         }
 
         private void RegisInserdataGridView_SelectionChanged(object sender, EventArgs e)
@@ -2020,6 +1852,7 @@ namespace PruebaProyecto
         private void EliminarReg_Click(object sender, EventArgs e)
         {
             bandElim = true;
+            MessageBox.Show("Selecciona una celda del registro a eliminar");
         }
 
 
@@ -2030,13 +1863,9 @@ namespace PruebaProyecto
 
             if (bandElim == true)
             {
-                //MessageBox.Show("Voy a cambiar el valor de " + RegisInserdataGridView.Rows[algo - 1].Cells[entAct.listAtrib.Count + 1].Value+ " por "+RegisInserdataGridView.Rows[algo+1].Cells[0].Value);
-                //MessageBox.Show("Vas a eliminar el renglon " + algo+" valor: "+ RegisInserdataGridView.Rows[algo].Cells[1].Value);
 
                 indFilEli = RegisInserdataGridView.CurrentRow.Index;
 
-                //Prueba de direccion 
-                //int dir = entAct.leerDatoReg((int)RegisInserdataGridView.Rows[indFilEli - 1].Cells[entAct.listAtrib.Count + 1].Value - 8);
                 r = 0;
 
                 using (BinaryWriter bw = new BinaryWriter(File.Open(BitConverter.ToString(entAct.id_enti) + ".dat", FileMode.Open)))
@@ -2153,11 +1982,9 @@ namespace PruebaProyecto
                         bw.Seek(longAcumReg, SeekOrigin.Begin);
                         r = 0;
                         char[] valCad = RegistroRellDataGrid.Rows[0].Cells[i].Value.ToString().ToCharArray();
-                        //char[] valCad = RegisInserdataGridView.CurrentRow.Cells[i + 1].Value.ToString().ToCharArray();
                         r = 0;
                         bw.Write(valCad);
                         while (contChar < entAct.listAtrib.ElementAt(i).longitud - RegistroRellDataGrid.Rows[0].Cells[i].Value.ToString().Length)
-                        // while (contChar < entAct.listAtrib.ElementAt(i).longitud - RegisInserdataGridView.CurrentRow.Cells[i + 1].Value.ToString().Length)
                         {
                             bw.Write('-');
                             contChar++;
@@ -2171,11 +1998,9 @@ namespace PruebaProyecto
                     {
                         bw.Seek(longAcumReg, SeekOrigin.Begin);
                         
-                        //posI = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[i + 1].Value.ToString());
                         posI = Int32.Parse(RegistroRellDataGrid.Rows[0].Cells[i].Value.ToString());
                         r = 0;
                         bw.Write(Int32.Parse(RegistroRellDataGrid.Rows[0].Cells[i].Value.ToString()));
-                        //bw.Write(Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[i + 1].Value.ToString()));
 
                         longAcumReg += 4;
                         r = 0;
@@ -2183,13 +2008,9 @@ namespace PruebaProyecto
                     }
 
                     r = 0;
-                    //bw.Write((int)RegisInserdataGridView.CurrentRow.Cells[i+1].Value);
-                    //bw.Seek((int)RegisInserdataGridView.CurrentRow.Cells[i].Value+entAct.listAtrib.ElementAt(i).longitud,SeekOrigin.Begin);
 
-                    //RegisInserdataGridView.CurrentRow.Cells[i + 1].Value = RegistroRellDataGrid.Rows[0].Cells[i].Value;
                 }
                 longAcumReg = 0;
-                //RegisInserdataGridView.CurrentRow.Cells[i + 1].Value;
 
             }
 
@@ -2202,13 +2023,8 @@ namespace PruebaProyecto
                 dirAuxElimReg = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[0].Value.ToString());
                 dirSigAuxElimReg = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[entAct.listAtrib.Count + 1].Value.ToString());
                 r = 0;
-                //GuardaRegistros_Click(this, null);
                 EliminarReg_Click(this, null);//Elimina Registro
                 RegisInserdataGridView_CellClick(this, null);//Elimina Registro
-
-
-
-
 
                 CambiaEntiReg(this, null);//ayuda a inserta Reg
                 GuardaRegistros_Click(this, null);//ayuda a insertar Reg
