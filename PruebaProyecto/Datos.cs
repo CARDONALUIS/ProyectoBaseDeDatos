@@ -1319,7 +1319,7 @@ namespace PruebaProyecto
                     datosIndSec();
                 }
 
-                MessageBox.Show("Tu registros fueron guardados satisfactoriamente");
+                MessageBox.Show("Tu informacion fue guardada satisfactoriamente");
                 limpiaGridRellReg();
             }
             else
@@ -1708,7 +1708,7 @@ namespace PruebaProyecto
                     if (a.tipoIndi == 1)
                     {
                         r = 0;
-                        MessageBox.Show("El atributo de busqueda es " + a.nombre);
+                        //MessageBox.Show("El atributo de busqueda es " + a.nombre);
                         bandAtrBus = true;
                         entAct.tipoCveBus = a.tipo;
                         indColIndPri++;
@@ -1735,7 +1735,7 @@ namespace PruebaProyecto
                     if (a.tipoIndi == 2)
                     {
                         r = 0;
-                        MessageBox.Show("El atributo primario es " + a.nombre);
+                        //MessageBox.Show("El atributo primario es " + a.nombre);
                         bandAtrPri = true;
                         entAct.tipoCvePrima = a.tipo;
                         entAct.longClvPrim = a.longitud;
@@ -1784,7 +1784,7 @@ namespace PruebaProyecto
                     if (a.tipoIndi == 3)
                     {
                         r = 0;
-                        MessageBox.Show("El atributo Secundario es " + a.nombre);
+                        //MessageBox.Show("El atributo Secundario es " + a.nombre);
                         bandAtrSec = true;
 
                        
@@ -1877,7 +1877,7 @@ namespace PruebaProyecto
                 else
                 {
                     r = 0;
-                    MessageBox.Show("Ya tiene datos");
+                    //MessageBox.Show("Ya tiene datos");
                     agregaRegisExistentes(entReg);
                     //RegisInserdataGridView.Sort(RegisInserdataGridView.Columns[posAtrBus], ListSortDirection.Ascending);
 
@@ -2213,6 +2213,7 @@ namespace PruebaProyecto
                 CambiaEntiReg(this, null);//ayuda a inserta Reg
                 GuardaRegistros_Click(this, null);//ayuda a insertar Reg
                 bandModAtrBus = false;
+                
 
             }
             else
@@ -2220,6 +2221,8 @@ namespace PruebaProyecto
                 {
                     RegisInserdataGridView.CurrentRow.Cells[i + 1].Value = RegistroRellDataGrid.Rows[0].Cells[i].Value;
                 }
+
+            AplicaCambio.Visible = false;
         }
 
 
