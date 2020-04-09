@@ -30,12 +30,14 @@ namespace PruebaProyecto
         bool bandAtrSec = false;
         bool bandModAtrBus = false;
         bool bandUltModiAtr = false;
+        bool bandAtrArb = false;
         VentanaIndPrim vIP = new VentanaIndPrim();
         venIndiceSec vIS = new venIndiceSec();
         int indColIndPri = 0;
         long dirAuxElimReg = 0;
         long dirSigAuxElimReg = 0;
         bool bandCajonRep = false;
+        ArbolB_Primario arbol;
 
 
 
@@ -1258,6 +1260,17 @@ namespace PruebaProyecto
                     datosIndSec();
                 }
 
+                if(bandAtrArb)
+                {
+                    r = 0;
+                    arbol.setEntYDic(entAct, dic);
+                    arbol.ObtengRegistro();
+                    r = 0;
+                    //arbol.inserta();
+                    
+                }
+
+
                 MessageBox.Show("Tu informacion fue guardada satisfactoriamente");
                 limpiaGridRellReg();
             }
@@ -1265,6 +1278,7 @@ namespace PruebaProyecto
                 MessageBox.Show("Elige una entidad");
 
         }
+
 
         public string creaCadenaCorrecta(string cad)
         {
@@ -1675,11 +1689,45 @@ namespace PruebaProyecto
                         posAtrSec += a.longitud;
                 }
 
+                /*
+                 * Encuentra si hay un indice de arbol primario
+                 */
+
+                int posIndArb = 0;
+
+                foreach (Atributo a in entAct.listAtrib)
+                {
+                    if (a.tipoIndi == 4)
+                    {
+                        MessageBox.Show("Indice de arbol B+ " + a.nombre);
+                        bandAtrArb = true;
+                        
+
+                        if (a.dirIndi == -1)
+                        {
+                            r = 0;
+                            arbol = new ArbolB_Primario(new FileStream(BitConverter.ToString(a.id_atri) + ".idx", FileMode.Create), false, posIndArb+8);
+                            
+                            r = 0;
+                        }
+                        else
+                        {
+                            r = 0;
+                            FileStream archArb = File.Open(BitConverter.ToString(a.id_atri) + ".idx", FileMode.Open);
+                            arbol = new ArbolB_Primario(archArb, true, posIndArb+8);
+
+
+                            archArb.Close();
+                        }
+                    }
+                    else
+                        posIndArb += a.longitud;
+                }
 
 
                 /*
-                 * Obtiene la longitud de los registros
-                 * */
+                    * Obtiene la longitud de los registros
+                    * */
                 r = 0;
                 foreach (Atributo a in entReg.listAtrib)
                 {

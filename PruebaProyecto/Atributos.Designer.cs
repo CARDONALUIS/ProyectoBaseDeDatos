@@ -148,10 +148,11 @@
             "0-Sin indice",
             "1-Clave busqueda",
             "2-Llave Primaria",
-            "3-Llave Secundaria"});
+            "3-Llave Secundaria",
+            "4-Indice Primario Arbol B+"});
             this.comboBoxAtrTip_Ind.Location = new System.Drawing.Point(678, 122);
             this.comboBoxAtrTip_Ind.Name = "comboBoxAtrTip_Ind";
-            this.comboBoxAtrTip_Ind.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxAtrTip_Ind.Size = new System.Drawing.Size(144, 21);
             this.comboBoxAtrTip_Ind.TabIndex = 13;
             // 
             // label6
