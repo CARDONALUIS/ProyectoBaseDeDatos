@@ -11,7 +11,7 @@ namespace PruebaProyecto
         public List<int> K = new List<int>();
         public List<long> P = new List<long>();
         public char tipo { get; set; }
-        public long dirSigNod { get; set; }
+        //public long dirSigNod { get; set; }
         public long dirNodo { get; set; }
 
         public Nodo()
