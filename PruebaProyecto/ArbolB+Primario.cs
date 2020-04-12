@@ -43,6 +43,7 @@ namespace PruebaProyecto
         public Nodo hojaActual_L;
         public int n = 5;//Numero de grado del arbol
         public bool bandT = false;
+        public List<Nodo> lisNodPad;
          
         
         public void creaEspNodo(char tipo)
@@ -119,7 +120,7 @@ namespace PruebaProyecto
                 posAct += 9;
                 r = 0;
 
-                while (br.ReadInt64() != -1)
+                while (br.ReadInt64() != -1 && no.K.Count < n-1)
                 {
                     archArb.Seek(posAct, SeekOrigin.Begin);
 
@@ -149,12 +150,17 @@ namespace PruebaProyecto
 
                     r = 0;
 
-                    
+
 
                     if (br.ReadInt64() == -1)//No hay mas claves
+                    {
                         bandFinClv = false;
+                        r = 0;
+                    }
+
                     r = 0;
                     archArb.Seek(posAct, SeekOrigin.Begin);
+                    
 
                 }
                 r = 0;
@@ -320,7 +326,7 @@ namespace PruebaProyecto
                 r = 0;
                 //Crear Nodo LPrima
                 Nodo LPri = new Nodo();
-                creaNodoLPri(hojaActual_L, LPri);
+                creaNodoLPri(LPri);
                 Nodo T = new Nodo();
                 copiaValAT(hojaActual_L, T);
                 bandT = true;
@@ -465,10 +471,45 @@ namespace PruebaProyecto
                 return;
             }
 
+            Nodo Pad = buscaPadre(); 
+
             r = 0;
-            
+            if (Pad.P.Count < n)
+            {
+                int index = Pad.P.FindIndex(x => x == N.dirNodo);
+                Pad.K.Insert(index, KPri);
+                Pad.P.Insert(index + 1, NPri.dirNodo);
+                //Pad.K.Add(KPri);
+                //Pad.P.Add(NPri.dirNodo);
+                r = 0;
+                recorreDatos(Pad, index+1);
+                
+                r = 0;
 
+                using (BinaryWriter bw = new BinaryWriter(File.Open(archArb.Name, FileMode.Open)))
+                {
+                    bw.Seek(((int)Pad.dirNodo + 17) + ((index ) * 12), SeekOrigin.Begin);
+                    r = 0;
+                    bw.Write(KPri);
+                    bw.Write(NPri.dirNodo);
+                    r = 0;
+                }
+            }
+            else
+            {//dividi Padre
+                r = 0;
+            }
 
+            r = 0;
+
+        }
+
+        public Nodo buscaPadre()
+        {
+            Nodo padre = lisNodPad.ElementAt(lisNodPad.Count - 2);
+
+            r = 0;
+            return padre;
         }
 
         public void repartirValoresT(Nodo T, Nodo L, Nodo LPri)
@@ -492,12 +533,12 @@ namespace PruebaProyecto
 
 
 
-        public void creaNodoLPri(Nodo L, Nodo LPri)
+        public void creaNodoLPri(Nodo LPri)
         {
             creaEspNodo('H');
 
             LPri.tipo = 'H';
-            LPri.dirNodo = L.dirNodo + 65;
+            LPri.dirNodo = lisNodo.ElementAt(lisNodo.Count - 1).dirNodo + 65;
             using (BinaryWriter bw = new BinaryWriter(File.Open(archArb.Name, FileMode.Open)))
             {
                 bw.Seek((int)LPri.dirNodo, SeekOrigin.Begin);
@@ -552,8 +593,10 @@ namespace PruebaProyecto
             int valI = -1;
             long Pm = -1;
             int i = 0;
+            lisNodPad = new List<Nodo>();
             r = 0;
             Nodo C = lisNodo.Find(x => x.tipo == 'R');
+            lisNodPad.Add(C);
 
             r = 0;
             if (C.dirNodo == 0 && C.tipo == 'R')
@@ -585,6 +628,7 @@ namespace PruebaProyecto
                     r = 0;
                     Pm = C.P.ElementAt(C.P.Count - 1);
                     C = lisNodo.Find(x => x.dirNodo == Pm);
+                    r = 0;
                 }
                 else
                 {
@@ -601,6 +645,8 @@ namespace PruebaProyecto
                         r = 0;
                     }
                 }
+                
+                lisNodPad.Add(C);
                 r = 0;
 
             }
@@ -734,7 +780,13 @@ namespace PruebaProyecto
                 if(L.P.Count == n-1)
                 {
                     r = 0;
-                    L.P.Add(-1);
+                    archArb.Close();
+                    archArb = File.Open(archArb.Name, FileMode.Open);
+                    BinaryReader br = new BinaryReader(archArb);
+                    archArb.Seek((int)L.dirNodo + 57, SeekOrigin.Begin);
+                    L.P.Add(br.ReadInt64());
+                    archArb.Close();
+                    
                 }
                 r = 0;
             }
@@ -760,8 +812,13 @@ namespace PruebaProyecto
             while (longDir != -1 && indice != auxPos )
             {
                 r = 0;
-                archArb.Seek(((int)L.dirNodo + 9) + ((auxPos-1) * 12), SeekOrigin.Begin);
 
+                //archArb.Seek(((int)L.dirNodo + 9) + ((auxPos-1) * 12), SeekOrigin.Begin);
+
+                archArb.Close();
+                archArb = File.Open(archArb.Name, FileMode.Open);
+                br2 = new BinaryReader(archArb);
+                archArb.Seek(((int)L.dirNodo + 9) + ((auxPos - 1) * 12), SeekOrigin.Begin);
                 longDir = br2.ReadInt64();
                 clave = br2.ReadInt32();
 
@@ -785,6 +842,7 @@ namespace PruebaProyecto
                 longDir = br3.ReadInt64();
                 clave = br3.ReadInt32();
                 r = 0;
+                
                 
 
 
