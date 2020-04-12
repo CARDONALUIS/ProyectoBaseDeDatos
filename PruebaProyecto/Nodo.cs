@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PruebaProyecto
 {
-    class Nodo
+    public class Nodo
     {
         public List<int> K = new List<int>();
         public List<long> P = new List<long>();

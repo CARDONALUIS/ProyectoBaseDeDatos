@@ -39,6 +39,7 @@
             this.AplicaCambio = new System.Windows.Forms.Button();
             this.EventoIndPrim = new System.Windows.Forms.Button();
             this.eventoIndiSec = new System.Windows.Forms.Button();
+            this.venArbolPri = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.RegistroRellDataGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.RegisInserdataGridView)).BeginInit();
             this.SuspendLayout();
@@ -133,7 +134,7 @@
             // EventoIndPrim
             // 
             this.EventoIndPrim.AccessibleName = "EventoIndPrim";
-            this.EventoIndPrim.Location = new System.Drawing.Point(542, 52);
+            this.EventoIndPrim.Location = new System.Drawing.Point(537, 21);
             this.EventoIndPrim.Name = "EventoIndPrim";
             this.EventoIndPrim.Size = new System.Drawing.Size(86, 24);
             this.EventoIndPrim.TabIndex = 10;
@@ -143,7 +144,7 @@
             // 
             // eventoIndiSec
             // 
-            this.eventoIndiSec.Location = new System.Drawing.Point(653, 52);
+            this.eventoIndiSec.Location = new System.Drawing.Point(647, 21);
             this.eventoIndiSec.Name = "eventoIndiSec";
             this.eventoIndiSec.Size = new System.Drawing.Size(105, 24);
             this.eventoIndiSec.TabIndex = 11;
@@ -151,11 +152,22 @@
             this.eventoIndiSec.UseVisualStyleBackColor = true;
             this.eventoIndiSec.Click += new System.EventHandler(this.eventoIndiSec_Click);
             // 
+            // venArbolPri
+            // 
+            this.venArbolPri.Location = new System.Drawing.Point(537, 69);
+            this.venArbolPri.Name = "venArbolPri";
+            this.venArbolPri.Size = new System.Drawing.Size(86, 24);
+            this.venArbolPri.TabIndex = 12;
+            this.venArbolPri.Text = "ArbolPrimario";
+            this.venArbolPri.UseVisualStyleBackColor = true;
+            this.venArbolPri.Click += new System.EventHandler(this.venArbolPri_Click);
+            // 
             // Datos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(801, 491);
+            this.Controls.Add(this.venArbolPri);
             this.Controls.Add(this.eventoIndiSec);
             this.Controls.Add(this.EventoIndPrim);
             this.Controls.Add(this.AplicaCambio);
@@ -190,5 +202,6 @@
         private System.Windows.Forms.Button AplicaCambio;
         private System.Windows.Forms.Button EventoIndPrim;
         private System.Windows.Forms.Button eventoIndiSec;
+        private System.Windows.Forms.Button venArbolPri;
     }
 }

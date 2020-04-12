@@ -33,6 +33,7 @@ namespace PruebaProyecto
         bool bandAtrArb = false;
         VentanaIndPrim vIP = new VentanaIndPrim();
         venIndiceSec vIS = new venIndiceSec();
+        ventanaArbol vAR = new ventanaArbol();
         int indColIndPri = 0;
         long dirAuxElimReg = 0;
         long dirSigAuxElimReg = 0;
@@ -2096,6 +2097,21 @@ namespace PruebaProyecto
             r = 0;
         }
 
-        
+        private void venArbolPri_Click(object sender, EventArgs e)
+        {
+            vAR = new ventanaArbol();
+            if(entAct != null)
+            {
+                //arbol.actualizaListaNodo();
+                vAR.setListaNodo(arbol.lisNodo);
+                vAR.agregaValoresTabla();
+                vAR.Show();
+                
+                
+
+            }
+            //vAR.Show();
+
+        }
     }
 }
