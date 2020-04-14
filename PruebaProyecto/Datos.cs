@@ -2104,7 +2104,9 @@ namespace PruebaProyecto
             {
                 //arbol.actualizaListaNodo();
                 vAR.setListaNodo(arbol.lisNodo);
+                vAR.archArbol = arbol.archArb;
                 vAR.agregaValoresTabla();
+                
                 vAR.Show();
                 
                 

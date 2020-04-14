@@ -125,26 +125,36 @@ namespace PruebaProyecto
                     archArb.Seek(posAct, SeekOrigin.Begin);
 
                     dirPun = br.ReadInt64();
-                    clv = br.ReadInt32();
+                    
 
                     r = 0;
 
                     if (no.tipo == 'H' || no.dirNodo == 0)
                     {
-                        r = 0;
+                        //dirPun = br.ReadInt64();
+                        clv = br.ReadInt32();
+
                         no.K.Add(clv);
                         no.P.Add(dirPun);
                         posAct += 12;
+
                         r = 0;
                     }
                     else
                     {
+                        //clv = br.ReadInt32();
+                        //dirPun = br.ReadInt64();
+
                         r = 0;
+                        clv = br.ReadInt32();
+
+                        if (clv!= -1)
                         no.K.Add(clv);
+
                         no.P.Add(dirPun);
-                        dirPun = br.ReadInt64();
-                        no.P.Add(dirPun);
-                        posAct += 20;
+                        //dirPun = br.ReadInt64();
+                        //no.P.Add(dirPun);
+                        posAct += 12;
                         r = 0;
                     }
 
@@ -166,6 +176,12 @@ namespace PruebaProyecto
                 r = 0;
                
 
+                /*if(no.tipo == 'H')
+                {
+                    archArb.Seek(posIni + 57, SeekOrigin.Begin);
+                    int valFinal = br.ReadInt64()
+                    no.P.Add(br.ReadInt64());
+                }*/
                 if(no.P.Count == n-1)
                 {
                     r = 0;
@@ -465,6 +481,11 @@ namespace PruebaProyecto
                     r = 0;
 
                 }
+                else
+                {
+                    r = 0;
+                    //actualizo el anterior a un tipo intermedio
+                }
                 r = 0;
                 lisNodo.Add(R);
                 r = 0;
@@ -482,7 +503,7 @@ namespace PruebaProyecto
                 //Pad.K.Add(KPri);
                 //Pad.P.Add(NPri.dirNodo);
                 r = 0;
-                recorreDatos(Pad, index+1);
+                recorreDatosPad(Pad, index);
                 
                 r = 0;
 
@@ -498,6 +519,41 @@ namespace PruebaProyecto
             else
             {//dividi Padre
                 r = 0;
+                Nodo TP = new Nodo();
+                copiaValAT(Pad, TP);
+                r = 0;
+
+                int index = Pad.P.FindIndex(x => x == N.dirNodo);
+                TP.K.Insert(index, KPri);
+                TP.P.Insert(index + 1, NPri.dirNodo);
+
+                r = 0;
+
+                Pad.K.Clear();
+                Pad.P.Clear();
+
+                
+                r = 0;
+
+                Nodo PadPrim = new Nodo();
+                creaEspNodo('I');
+                r = 0;
+
+                repartirValoresT(TP, Pad, PadPrim);
+
+                r = 0;
+
+                int KPadPri = TP.K.ElementAt(((n + 1) / 2)-1);
+
+                r = 0;
+
+                insert_in_parent(Pad, KPadPri, PadPrim);
+
+                r = 0;
+
+                
+
+
             }
 
             r = 0;
@@ -795,15 +851,20 @@ namespace PruebaProyecto
         public void recorreDatos(Nodo L, int indice)
         {
             //entAct.archivoIndPri.Close();
-            int indLimitador = n - 1;
+
             r = 0;
             archArb = File.Open(archArb.Name, FileMode.Open);
             BinaryReader br2 = new BinaryReader(archArb);
 
             archArb.Seek(((int)L.dirNodo + 9) + (( indice) * 12), SeekOrigin.Begin);
 
-            long longDir = br2.ReadInt64();
-            int clave = br2.ReadInt32();
+            long longDir;
+            int clave;
+
+
+            longDir = br2.ReadInt64();
+            clave = br2.ReadInt32();
+
 
             int auxPos = L.K.Count-1;
 
@@ -814,7 +875,6 @@ namespace PruebaProyecto
                 r = 0;
 
                 //archArb.Seek(((int)L.dirNodo + 9) + ((auxPos-1) * 12), SeekOrigin.Begin);
-
                 archArb.Close();
                 archArb = File.Open(archArb.Name, FileMode.Open);
                 br2 = new BinaryReader(archArb);
@@ -840,7 +900,7 @@ namespace PruebaProyecto
 
                 archArb.Seek(((int)L.dirNodo + 9) + ((auxPos - 1) * 12), SeekOrigin.Begin);
                 longDir = br3.ReadInt64();
-                clave = br3.ReadInt32();
+                //clave = br3.ReadInt32();
                 r = 0;
                 
                 
@@ -850,5 +910,79 @@ namespace PruebaProyecto
             archArb.Close();
             r = 0;
         }
+
+        public void recorreDatosPad(Nodo L, int indice)
+        {
+            //entAct.archivoIndPri.Close();
+
+            r = 0;
+            archArb = File.Open(archArb.Name, FileMode.Open);
+            BinaryReader br2 = new BinaryReader(archArb);
+
+            archArb.Seek(((int)L.dirNodo + 9) + ((indice) * 12), SeekOrigin.Begin);
+
+            long longDir;
+            int clave;
+            bool hayClave = true;
+
+
+            longDir = br2.ReadInt64();
+
+
+
+            int auxPos = L.P.Count - 1;
+
+            r = 0;
+
+            while (longDir != -1 && indice != auxPos)
+            {
+                r = 0;
+
+                //archArb.Seek(((int)L.dirNodo + 9) + ((auxPos-1) * 12), SeekOrigin.Begin);
+                archArb.Close();
+                archArb = File.Open(archArb.Name, FileMode.Open);
+                br2 = new BinaryReader(archArb);
+                archArb.Seek(((int)L.dirNodo + 9) + ((auxPos-1)*12), SeekOrigin.Begin);
+                longDir = br2.ReadInt64();
+
+                clave = br2.ReadInt32();
+                r = 0;
+
+                if (clave == -1)
+                {
+                    hayClave = false;
+                }
+                r = 0;
+
+                archArb.Close();
+                using (BinaryWriter bw = new BinaryWriter(File.Open(archArb.Name, FileMode.Open)))
+                {
+                    bw.Seek(((int)L.dirNodo + 9) + ((auxPos) * 12), SeekOrigin.Begin);
+                    bw.Write(longDir);
+
+                    if (hayClave)
+                    {
+                        bw.Write(clave);
+                    }
+                    r = 0;
+                }
+
+                hayClave = true;
+                r = 0;
+                auxPos--;
+                r = 0;
+                archArb = File.Open(archArb.Name, FileMode.Open);
+                BinaryReader br3 = new BinaryReader(archArb);
+
+                archArb.Seek(((int)L.dirNodo + 9) + ((auxPos - 1) * 12), SeekOrigin.Begin);
+                longDir = br3.ReadInt64();
+
+                r = 0;
+
+            }
+            archArb.Close();
+            r = 0;
+        }
+
     }
 }

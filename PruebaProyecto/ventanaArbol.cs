@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,8 @@ namespace PruebaProyecto
     {
         List<Nodo> lisNodo = new List<Nodo>();
         int r = 0;
+        public FileStream archArbol;
+        int n = 5;//Grado
         public ventanaArbol()
         {
             InitializeComponent();
@@ -102,6 +105,8 @@ namespace PruebaProyecto
                         r = 0;
                     }
 
+
+
                     for (int j = 0; j < lisNodo.ElementAt(i).K.Count(); j++)
                     {
                         r = 0;
@@ -109,6 +114,34 @@ namespace PruebaProyecto
                         auxK += 2;
                         r = 0;
                     }
+
+
+                archArbol.Close();
+                archArbol = File.Open(archArbol.Name, FileMode.Open);
+                BinaryReader br = new BinaryReader(archArbol);
+                archArbol.Seek(lisNodo.ElementAt(i).dirNodo + 57, SeekOrigin.Begin);
+
+                long valFinPad;
+                int valFinHoja;
+
+                if (lisNodo.ElementAt(i).tipo == 'H')
+                {
+                    valFinHoja = br.ReadInt32();
+                    arbolGrid.Rows[i].Cells[10].Value = valFinHoja;
+                }
+                else
+                {
+                    valFinPad = br.ReadInt64();
+                    if (valFinPad != -1)
+                        arbolGrid.Rows[i].Cells[10].Value = valFinPad;
+
+
+                }
+
+
+
+
+                archArbol.Close();
 
                 auxK = 3;
                 auxP = 2;
