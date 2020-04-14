@@ -342,7 +342,7 @@ namespace PruebaProyecto
                 r = 0;
                 //Crear Nodo LPrima
                 Nodo LPri = new Nodo();
-                creaNodoLPri(LPri);
+                creaNodo(LPri, 'H');
                 Nodo T = new Nodo();
                 copiaValAT(hojaActual_L, T);
                 bandT = true;
@@ -358,7 +358,7 @@ namespace PruebaProyecto
                 hojaActual_L.K.Clear();
                 hojaActual_L.P.Clear();
                 r = 0;
-                repartirValoresT(T, hojaActual_L, LPri);
+                repartirValoresT(T, hojaActual_L, LPri,'H');
                 r = 0;
                 actulizarDivisionArchivo(hojaActual_L, LPri);
                 r = 0;
@@ -388,20 +388,55 @@ namespace PruebaProyecto
                 bw.Write(bloque);
                 r = 0;
 
-                bw.Seek((int)L.dirNodo + 9, SeekOrigin.Begin);
-                for (int i = 0; i < L.K.Count; i++)
+                if (L.tipo == 'H')
                 {
-                    bw.Write(L.P.ElementAt(i));
-                    bw.Write(L.K.ElementAt(i));
-                }
-                r = 0;
+                    bw.Seek((int)L.dirNodo + 9, SeekOrigin.Begin);
+                    for (int i = 0; i < L.K.Count; i++)
+                    {
+                        bw.Write(L.P.ElementAt(i));
+                        bw.Write(L.K.ElementAt(i));
+                    }
+                    r = 0;
 
-                bw.Seek((int)LPri.dirNodo + 9, SeekOrigin.Begin);
-                for (int i = 0; i < LPri.K.Count; i++)
-                {
-                    bw.Write(LPri.P.ElementAt(i));
-                    bw.Write(LPri.K.ElementAt(i));
+                    bw.Seek((int)LPri.dirNodo + 9, SeekOrigin.Begin);
+                    for (int i = 0; i < LPri.K.Count; i++)
+                    {
+                        bw.Write(LPri.P.ElementAt(i));
+                        bw.Write(LPri.K.ElementAt(i));
+                    }
                 }
+                else
+                {
+                    r = 0;
+
+                    bw.Seek((int)L.dirNodo + 9, SeekOrigin.Begin);
+                    for (int i = 0; i < L.P.Count; i++)
+                    {
+                        bw.Write(L.P.ElementAt(i));
+                        if (i != L.P.Count-1 )
+                        {
+                            r = 0;
+                            bw.Write(L.K.ElementAt(i));
+                        }
+                        r = 0;
+                    }
+                    r = 0;
+
+                    bw.Seek((int)LPri.dirNodo + 9, SeekOrigin.Begin);
+                    for (int i = 0; i < LPri.P.Count; i++)
+                    {
+                        bw.Write(LPri.P.ElementAt(i));
+                        if (i != L.P.Count - 1)
+                        {
+                            r = 0;
+                            bw.Write(LPri.K.ElementAt(i));
+                        }
+                        r = 0;
+                    }
+
+
+                }
+
                 r = 0;
             }
         }
@@ -484,7 +519,20 @@ namespace PruebaProyecto
                 else
                 {
                     r = 0;
+                    N.tipo = 'I';
+                    using (BinaryWriter bw = new BinaryWriter(File.Open(archArb.Name, FileMode.Open)))
+                    {
+                        bw.Seek((int)N.dirNodo+8,SeekOrigin.Begin);
+                        bw.Write(N.tipo.ToString().ToCharArray());
+                        bw.Seek((int)N.dirNodo + 57, SeekOrigin.Begin);
+                        bw.Write((long)-1);
+
+                    }
+                    r = 0;
+
+
                     //actualizo el anterior a un tipo intermedio
+
                 }
                 r = 0;
                 lisNodo.Add(R);
@@ -536,17 +584,17 @@ namespace PruebaProyecto
                 r = 0;
 
                 Nodo PadPrim = new Nodo();
-                creaEspNodo('I');
+                creaNodo(PadPrim, 'I');
                 r = 0;
 
-                repartirValoresT(TP, Pad, PadPrim);
-
+                repartirValoresT(TP, Pad, PadPrim,'P');
                 r = 0;
-
+                actulizarDivisionArchivo(Pad, PadPrim);
+                r = 0;
                 int KPadPri = TP.K.ElementAt(((n + 1) / 2)-1);
 
                 r = 0;
-
+                
                 insert_in_parent(Pad, KPadPri, PadPrim);
 
                 r = 0;
@@ -568,32 +616,63 @@ namespace PruebaProyecto
             return padre;
         }
 
-        public void repartirValoresT(Nodo T, Nodo L, Nodo LPri)
+        public void repartirValoresT(Nodo T, Nodo L, Nodo LPri,char tipo)
         {
             r = 0;
-            for(int i = 0; i < (T.K.Count()-1) - n/2;i++)
+            if (tipo == 'H')
             {
-                L.P.Add(T.P.ElementAt(i));
-                L.K.Add(T.K.ElementAt(i));
-            }
+                for (int i = 0; i < (T.K.Count() - 1) - n / 2; i++)
+                {
+                    L.P.Add(T.P.ElementAt(i));
+                    L.K.Add(T.K.ElementAt(i));
+                }
 
-            r = 0;
-            for (int i = n / 2 ; i <= T.K.Count()-1 ; i++)
-            {
-                LPri.P.Add(T.P.ElementAt(i));
-                LPri.K.Add(T.K.ElementAt(i));
+                r = 0;
+                for (int i = n / 2; i <= T.K.Count() - 1; i++)
+                {
+                    LPri.P.Add(T.P.ElementAt(i));
+                    LPri.K.Add(T.K.ElementAt(i));
+                }
+                r = 0;
             }
-            r = 0;
+            else
+            {
+                r = 0;
+                for (int i = 0; i < (T.P.Count()) - (n+1) / 2; i++)
+                {
+                    L.P.Add(T.P.ElementAt(i));
+                    L.K.Add(T.K.ElementAt(i));
+                    
+                }
+                L.K.RemoveAt(L.K.Count - 1);
+
+                r = 0;
+                for (int i = (n+1) / 2; i <= T.P.Count()-1; i++)
+                {
+                    LPri.P.Add(T.P.ElementAt(i));
+                    if(i != T.P.Count -1 )
+                    LPri.K.Add(T.K.ElementAt(i));
+                }
+                r = 0;
+            }
 
          }
 
 
 
-        public void creaNodoLPri(Nodo LPri)
+        public void creaNodo(Nodo LPri, char tipo)
         {
-            creaEspNodo('H');
+            if (tipo == 'H')
+            {
+                creaEspNodo('H');
+                LPri.tipo = 'H';
+            }
+            else
+            {
+                creaEspNodo('I');
+                LPri.tipo = 'I';
+            }
 
-            LPri.tipo = 'H';
             LPri.dirNodo = lisNodo.ElementAt(lisNodo.Count - 1).dirNodo + 65;
             using (BinaryWriter bw = new BinaryWriter(File.Open(archArb.Name, FileMode.Open)))
             {
