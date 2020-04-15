@@ -182,11 +182,20 @@ namespace PruebaProyecto
                     int valFinal = br.ReadInt64()
                     no.P.Add(br.ReadInt64());
                 }*/
-                if(no.P.Count == n-1)
+                if(no.P.Count == n-1 && no.tipo == 'H')
                 {
                     r = 0;
                     archArb.Seek(posIni + 57, SeekOrigin.Begin);
                     no.P.Add(br.ReadInt64());
+                    r = 0;
+                }
+
+                if(no.P.Count == n-1  && no.tipo != 'H')
+                {
+                    archArb.Seek(posIni + 57, SeekOrigin.Begin);
+                    long val = br.ReadInt64();
+                    if(val!= -1)
+                    no.P.Add(val);
                     r = 0;
                 }
 
@@ -540,7 +549,7 @@ namespace PruebaProyecto
                 return;
             }
 
-            Nodo Pad = buscaPadre(); 
+            Nodo Pad = buscaPadre(N); 
 
             r = 0;
             if (Pad.P.Count < n)
@@ -608,9 +617,11 @@ namespace PruebaProyecto
 
         }
 
-        public Nodo buscaPadre()
+        public Nodo buscaPadre(Nodo n)
         {
-            Nodo padre = lisNodPad.ElementAt(lisNodPad.Count - 2);
+
+            int index = lisNodPad.FindIndex(x => x.dirNodo == n.dirNodo);
+            Nodo padre = lisNodPad.ElementAt(index-1);
 
             r = 0;
             return padre;
@@ -746,7 +757,11 @@ namespace PruebaProyecto
             while (C.tipo != 'H') 
             {
                 r = 0;
-                for ( ; i < C.K.Count; i++)
+                i = 0;
+                valI = -1;
+                Pm = -1;
+
+                for (; i < C.K.Count; i++)
                 {
                     if (V <= C.K.ElementAt(i))
                     {
@@ -755,6 +770,12 @@ namespace PruebaProyecto
                         break;
                     }
                 }
+
+                r = 0;
+
+                if (C.tipo != 'H' && valI == -1 )
+                    i--;
+
                 r = 0;
 
 
