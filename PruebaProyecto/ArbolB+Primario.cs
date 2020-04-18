@@ -44,8 +44,357 @@ namespace PruebaProyecto
         public int n = 5;//Numero de grado del arbol
         public bool bandT = false;
         public List<Nodo> lisNodPad;
-         
-        
+        public int kPriBorrar;
+
+
+
+        public void actualizaEliArchHoja(Nodo N)
+        {
+            r = 0;
+            using (BinaryWriter bw = new BinaryWriter(File.Open(archArb.Name, FileMode.Open)))
+            {
+                bw.Seek((int)N.dirNodo, SeekOrigin.Begin);
+                Byte[] bloque = new Byte[57];
+                for (int i = 0; i < 57; i++)
+                {
+                    bloque[i] = 0xFF;
+                    bw.Write(bloque[i]);
+                }
+
+                r = 0;
+
+
+                bw.Seek((int)N.dirNodo, SeekOrigin.Begin);
+                bw.Write(N.dirNodo);
+                bw.Write(N.tipo);
+                for(int i = 0; i < N.K.Count;i++)
+                {
+                    bw.Write(N.P.ElementAt(i));
+                    bw.Write(N.K.ElementAt(i));
+                }
+
+                if (N.P.Count == n)
+                    bw.Write(N.P.ElementAt(N.P.Count - 1));
+            }
+        }
+
+        public void actualizaEliArchPadre(Nodo N)
+        {
+
+
+            using (BinaryWriter bw = new BinaryWriter(File.Open(archArb.Name, FileMode.Open)))
+            {
+
+
+                
+            }
+        }
+
+
+        public void borrar(int K, long P)
+        {
+
+            r = 0;
+            Nodo L = encuentraNodoHoja(K);
+            borrar_entrada(L, K, P);
+           
+
+        }
+
+        public void borrarValoresSelec(Nodo L, int K , long P)
+        {
+            r = 0;
+            int indexK = L.K.FindIndex(x => x == K);
+            int indexP = L.P.FindIndex(x => x == P);
+
+            r = 0;
+
+            L.K.RemoveAt(indexK);
+            L.P.RemoveAt(indexP);
+
+            r = 0;
+
+            //Remover del archivo;
+
+        }
+
+        public Nodo seleccionaHermano(Nodo N, int K, long P)
+        {
+            Nodo pad = buscaPadre(N);
+            Nodo hermano = null;
+            r = 0;
+            //int index = pad.K.FindIndex(x => x >= K && x < K);
+            for(int i = 0; i < pad.K.Count;i++)
+            {
+                r = 0;
+                if (i == 0 && K < pad.K.ElementAt(i))
+                {
+                    r = 0;
+                    kPriBorrar = pad.K.ElementAt(i);
+                    hermano = lisNodPad.Find(x => x.dirNodo == N.P.ElementAt(0));
+                    r = 0;
+                    break;
+                }
+                else
+                if (i == pad.K.Count - 1 && K > pad.K.ElementAt(i))
+                {
+                    r = 0;
+                    kPriBorrar = pad.K.ElementAt(i);
+                    hermano = lisNodPad.Find(x => x.dirNodo == N.P.ElementAt(N.K.Count));
+                    r = 0;
+                    break;
+                }
+                else
+                if (K > pad.K.ElementAt(i) && K <= pad.K.ElementAt(i + 1))
+                {
+                    r = 0;
+                    kPriBorrar = pad.K.ElementAt(i+1);
+                    hermano = lisNodo.Find(x => x.dirNodo == pad.P.ElementAt(i + 2));
+                    r = 0;
+                    if (hermano.K.Count <= n / 2)
+                    {
+                        r = 0;
+                        if ((lisNodo.Find(x => x.dirNodo == pad.P.ElementAt(i + 1)).K.Count > 2))
+                        {
+                            r = 0;
+                            hermano = lisNodo.Find(x => x.dirNodo == pad.P.ElementAt(i + 1));
+                        }
+
+                    }
+
+                    r = 0;
+                    break;
+                }
+
+            }
+
+            return hermano;
+            
+        }
+
+        public void concatenaPares(Nodo N, Nodo NPri)
+        {
+            for(int i = 0; i< N.K.Count; i++)
+            {
+                NPri.K.Add(N.K.ElementAt(i));
+            }
+
+
+            for(int j =0; j < N.P.Count;j++)
+            {
+                NPri.P.Add(N.P.ElementAt(j));
+            }
+
+
+        }
+
+        public void intercambiar_variables(Nodo N, Nodo Npri)
+        {
+            List<int> Kaux = new List<int>();
+            List<long> Paux = new List<long>();
+            char tipoAux;
+            long dirAux;
+
+            foreach(int a in N.K)
+            {
+                Kaux.Add(a);
+            }
+            foreach (int b in N.P)
+            {
+                Paux.Add(b);
+            }
+
+            tipoAux = N.tipo;
+            dirAux = N.dirNodo;
+
+            N.K.Clear();
+            N.P.Clear();
+
+            //cambiar valore de Npri a N
+            foreach (int a in Npri.K)
+            {
+                N.K.Add(a);
+            }
+            foreach (int b in Npri.P)
+            {
+                N.P.Add(b);
+            }
+            N.tipo = Npri.tipo;
+            N.dirNodo = Npri.dirNodo;
+
+            //Poner valores guardados de N a Npri
+            Npri.K.Clear();
+            Npri.P.Clear();
+
+            foreach (int a in Kaux)
+            {
+                Npri.K.Add(a);
+            }
+            foreach (int b in Paux)
+            {
+                Npri.P.Add(b);
+            }
+            Npri.tipo = tipoAux;
+            Npri.dirNodo = dirAux;
+
+
+        }
+
+        public void concatenarNoHoja(int K, Nodo N, Nodo Npri)
+        {
+            Npri.K.Add(K);
+
+            foreach(int a in N.K)
+            {
+                Npri.K.Add(a);
+            }
+            foreach(long b in N.P)
+            {
+                Npri.P.Add(b);
+            }
+        }
+
+
+        public void borrar_entrada(Nodo N, int K, long P)
+        {
+            r = 0;
+            borrarValoresSelec(N, K, P);
+            
+            if(N.tipo == 'R' && N.K.Count == 1)//Esta asignacion no esta muy entendible
+            {
+                r = 0;
+                Nodo nueRaiz = lisNodo.Find(x => x.dirNodo == N.P.ElementAt(0));
+                nueRaiz.tipo = 'R';
+                
+            }
+            else
+            {
+                r = 0;
+                if (N.K.Count < n / 2)//N tiene muy poco valores/punteros
+                {
+                    Nodo Npri = seleccionaHermano(N, K, P);//Encuentra un hermano 
+                    int kPri = kPriBorrar;
+
+                    r = 0;
+
+                    if (N.K.Count + Npri.K.Count < n - 2)//las entradas en N y N' caben en un solo nodo  FUSIONAR LOS NODOS
+                    {
+                        r = 0;
+                        if (N.K.Max() < Npri.K.Min())//N es predecesor de Npri
+                        {
+                            intercambiar_variables(N, Npri);
+                        }
+
+                        if (N.tipo != 'H')//No es una nodo hoja;
+                        {
+                            concatenarNoHoja(kPri, N, Npri);
+                        }
+                        else//Concatenar todos los pares(ki, pi) en N a N'
+                        {
+                            concatenaPares(N, Npri);
+                            //Leer el del archivo el ultimo enlaces N y pasarselo a N' 
+                        }
+                        //actualizaEliArch(N, Npri);
+                        borrar_entrada(buscaPadre(N), kPri, N.dirNodo);
+                    }
+                    else//REDISTRIBUCION: TOMAR PRESTADA UNA ENTRADA DE N'
+                    {
+                        r = 0;
+                        int mK;
+                        long mP;
+
+                        if (Npri.K.Max() < N.K.Min())//N es predecesor de Npri
+                        {
+                            r = 0;
+                            if (N.tipo == 'I')
+                            {
+                                mP = Npri.P.Last();
+                                Npri.K.RemoveAt(Npri.K.Count - 1);
+                                Npri.P.RemoveAt(Npri.P.Count - 1);
+                                N.P.Insert(0, mP);
+                                N.K.Insert(0, kPri);
+
+                                Nodo padre = buscaPadre(N);
+                                int indKPri = padre.K.FindIndex(x => x == kPri);
+                                padre.K.Insert(indKPri, kPri);
+
+                            }
+                            else
+                            {
+                                mK = Npri.K.Last();
+                                mP = Npri.P.Last();
+                                Npri.K.RemoveAt(Npri.K.Count - 1);
+                                Npri.P.RemoveAt(Npri.P.Count - 1);
+                                N.K.Insert(0, mK);
+                                N.P.Insert(0, mP);
+                                Nodo padre = buscaPadre(N);
+                                int indKPri = padre.K.FindIndex(x => x == kPri);
+                                padre.K.Insert(indKPri, mK);
+                            }
+
+                        }
+                        else//Npri es sucesor de N
+                        {
+                            r = 0;
+                            if (N.tipo == 'I')
+                            {
+                                r = 0;
+                                mP = Npri.P.ElementAt(0);
+                                Npri.K.RemoveAt(0);
+                                Npri.P.RemoveAt(0);
+                                N.P.Add(mP);
+                                N.K.Add(kPri);
+
+                                Nodo padre = buscaPadre(N);
+                                //int indKPri = padre.K.FindIndex(x => x == kPri);
+                                padre.K.Insert(0, kPri);
+                            }
+                            else
+                            {
+                                mK = Npri.K.ElementAt(0);
+                                mP = Npri.P.ElementAt(0);
+                                r = 0;
+                                Npri.K.RemoveAt(0);
+                                Npri.P.RemoveAt(0);
+                                r = 0;
+
+                                N.K.Add(mK);
+                                N.P.Add(mP);
+
+                                r = 0;
+                                mK = Npri.K.ElementAt(0);
+                                mP = Npri.P.ElementAt(0);
+                                //N.K.Insert(N.K.Count-1, mK);
+                                //N.P.Insert(N.P.Count - 1, mP);
+                                r = 0;
+
+                                Nodo padre = buscaPadre(N);
+                                int indKPri = padre.K.FindIndex(x => x == kPri);
+                                r = 0;
+                                padre.K.RemoveAt(indKPri);
+                                padre.K.Insert(indKPri, mK);
+                                r = 0;
+
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    r = 0;
+                    actualizaEliArchHoja(N);
+                    r = 0;
+                }
+
+            }
+            //L.P.Remove(L);
+        }
+
+        /*
+        DE AQUI PARA ARRIBA SON METODOS DE ELIMINACION
+        */
+
+
         public void creaEspNodo(char tipo)
         {
 
@@ -1083,6 +1432,10 @@ namespace PruebaProyecto
             archArb.Close();
             r = 0;
         }
+
+      
+
+
 
     }
 }

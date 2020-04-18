@@ -1980,6 +1980,11 @@ namespace PruebaProyecto
                     
                 }
 
+                if(bandAtrArb)
+                {
+                    arbol.borrar((int)RegisInserdataGridView.Rows[indFilEli].Cells[1].Value, (long)(int)RegisInserdataGridView.Rows[indFilEli].Cells[0].Value);
+                }
+
                 limpiaGridInsertadosReg();
 
                 bandElim = false;

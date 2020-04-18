@@ -17,6 +17,7 @@ namespace PruebaProyecto
         int r = 0;
         public FileStream archArbol;
         int n = 5;//Grado
+        bool bandElim = false;
         public ventanaArbol()
         {
             InitializeComponent();
