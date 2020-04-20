@@ -134,7 +134,8 @@ namespace PruebaProyecto
                 {
                     r = 0;
                     kPriBorrar = pad.K.ElementAt(i);
-                    hermano = lisNodo.Find(x => x.dirNodo == pad.P.ElementAt(N.K.Count-2));
+                    r = 0;
+                    hermano = lisNodo.Find(x => x.dirNodo == pad.P.ElementAt(N.K.Count-1));
                     r = 0;
                     break;
                 }
@@ -148,8 +149,6 @@ namespace PruebaProyecto
                     if (hermano.K.Count <= n / 2)
                     {
                         r = 0;
-                       
-                        r = 0;
                         if ((lisNodo.Find(x => x.dirNodo == pad.P.ElementAt(i)).K.Count > 2))
                         {
                             kPriBorrar = pad.K.ElementAt(i);
@@ -158,7 +157,7 @@ namespace PruebaProyecto
                             r = 0;
                         }
                         else
-                            r = 0;
+                        r = 0;
 
                     }
 
@@ -315,9 +314,33 @@ namespace PruebaProyecto
 
         }
 
+        public void borraNodo(Nodo N)
+        {
+            N.K.Clear();
+            N.P.Clear();
+
+            using (BinaryWriter bw = new BinaryWriter(File.Open(archArb.Name, FileMode.Open)))
+            {
+                bw.Seek((int)N.dirNodo+9, SeekOrigin.Begin);
+                Byte[] bloque = new Byte[56];//Elimina todo menos direccion y tipo en el archivo
+                for (int j = 0; j < 56; j++)
+                {
+                    bloque[j] = 0xFF;
+                    bw.Write(bloque[j]);
+                }
+
+            }
+            r = 0;
+
+
+         }
+
+
         public void concatenarNoHoja(int K, Nodo N, Nodo Npri)
         {
+            r = 0;
             Npri.K.Add(K);
+            r = 0; 
 
             foreach(int a in N.K)
             {
@@ -327,6 +350,7 @@ namespace PruebaProyecto
             {
                 Npri.P.Add(b);
             }
+            r = 0;
         }
 
 
@@ -335,12 +359,14 @@ namespace PruebaProyecto
             r = 0;
             borrarValoresSelec(N, K, P);
             
-            if(N.tipo == 'R' && N.K.Count == 1)//Esta asignacion no esta muy entendible
+            if(N.tipo == 'R' && N.P.Count == 1)//Esta asignacion no esta muy entendible
             {
                 r = 0;
                 Nodo nueRaiz = lisNodo.Find(x => x.dirNodo == N.P.ElementAt(0));
                 nueRaiz.tipo = 'R';
-                
+                r = 0;
+                actualizaEliArchNodo(N);
+                actualizaEliArchNodo(nueRaiz);
             }
             else
             {
@@ -366,7 +392,9 @@ namespace PruebaProyecto
                         r = 0;
                         if (N.tipo != 'H')//No es una nodo hoja;
                         {
+                            r = 0;
                             concatenarNoHoja(kPri, N, Npri);
+                            r = 0;
                         }
                         else//Concatenar todos los pares(ki, pi) en N a N'
                         {
@@ -379,9 +407,9 @@ namespace PruebaProyecto
                         borrar_entrada(buscaPadre(N), kPri, N.dirNodo);
                         r = 0;
 
-                        //borraNodo(N);//****FALTA DE PROGRMAR ESTE***************************************************************************
-                        //actualizaEliArch(N);
-                        //actualizaEliArch(Npri);
+                        borraNodo(N);
+                        actualizaEliArchNodo(Npri);
+                        
                     }
                     else//REDISTRIBUCION: TOMAR PRESTADA UNA ENTRADA DE N'
                     {
