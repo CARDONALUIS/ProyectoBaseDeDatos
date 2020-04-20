@@ -55,11 +55,26 @@ namespace PruebaProyecto
             {
                 bw.Seek((int)N.dirNodo, SeekOrigin.Begin);
                 Byte[] bloque = new Byte[57];
-                for (int j = 0; j < 57; j++)
+                Byte[] bloqueP = new Byte[65];
+
+
+                if (N.tipo == 'H')
                 {
-                    bloque[j] = 0xFF;
-                    bw.Write(bloque[j]);
+                    for (int j = 0; j < 57; j++)
+                    {
+                        bloque[j] = 0xFF;
+                        bw.Write(bloque[j]);
+                    }
                 }
+                else
+                {
+                    for (int k = 0; k < 65; k++)
+                    {
+                        bloqueP[k] = 0xFF;
+                        bw.Write(bloqueP[k]);
+                    }
+                }
+
 
                 r = 0;
 
@@ -73,8 +88,10 @@ namespace PruebaProyecto
                     bw.Write(N.P.ElementAt(i));
                     bw.Write(N.K.ElementAt(i));
                 }
-                if(N.tipo != 'H')
+
+                if(N.tipo != 'H' && N.K.Count != 0)
                 {
+                    r = 0;
                     bw.Write(N.P.ElementAt(i));
                 }
 
@@ -321,8 +338,9 @@ namespace PruebaProyecto
 
             using (BinaryWriter bw = new BinaryWriter(File.Open(archArb.Name, FileMode.Open)))
             {
-                bw.Seek((int)N.dirNodo+9, SeekOrigin.Begin);
+               
                 Byte[] bloque = new Byte[56];//Elimina todo menos direccion y tipo en el archivo
+                bw.Seek((int)N.dirNodo + 9, SeekOrigin.Begin);
                 for (int j = 0; j < 56; j++)
                 {
                     bloque[j] = 0xFF;
@@ -364,6 +382,7 @@ namespace PruebaProyecto
                 r = 0;
                 Nodo nueRaiz = lisNodo.Find(x => x.dirNodo == N.P.ElementAt(0));
                 nueRaiz.tipo = 'R';
+                N.P.Clear();
                 r = 0;
                 actualizaEliArchNodo(N);
                 actualizaEliArchNodo(nueRaiz);
@@ -400,6 +419,7 @@ namespace PruebaProyecto
                         {
                             r = 0;
                             concatenaPares(N, Npri, concatenarPrincipio);
+                            r = 0;
                             //Leer el del archivo el ultimo enlaces N y pasarselo a N' 
                         }
 
@@ -422,6 +442,7 @@ namespace PruebaProyecto
                             r = 0;
                             if (N.tipo == 'I')
                             {
+                                r = 0; //////////////////////////////////////////////////////////////////////////////
                                 mP = Npri.P.Last();
                                 Npri.K.RemoveAt(Npri.K.Count - 1);
                                 Npri.P.RemoveAt(Npri.P.Count - 1);
@@ -464,7 +485,7 @@ namespace PruebaProyecto
                             r = 0;
                             if (N.tipo == 'I')
                             {
-                                r = 0;
+                                r = 0;//////////////////////////////////////////////////////////////////////////
                                 mP = Npri.P.ElementAt(0);
                                 Npri.K.RemoveAt(0);
                                 Npri.P.RemoveAt(0);
@@ -625,6 +646,7 @@ namespace PruebaProyecto
                         r = 0;
                         clv = br.ReadInt32();
 
+                        r = 0;
                         if (clv!= -1)
                         no.K.Add(clv);
 
@@ -669,6 +691,7 @@ namespace PruebaProyecto
 
                 if(no.P.Count == n-1  && no.tipo != 'H')
                 {
+                    r = 0;
                     archArb.Seek(posIni + 57, SeekOrigin.Begin);
                     long val = br.ReadInt64();
                     if(val!= -1)

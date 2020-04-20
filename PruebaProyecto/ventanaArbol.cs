@@ -133,7 +133,8 @@ namespace PruebaProyecto
                 else
                 {
                     valFinPad = br.ReadInt64();
-                    if (valFinPad != -1)
+                    r = 0;
+                    if (valFinPad != -1 && n-1 == lisNodo.ElementAt(i).K.Count)
                         arbolGrid.Rows[i].Cells[10].Value = valFinPad;
 
 
