@@ -1286,7 +1286,7 @@ namespace PruebaProyecto
             string cadCorrecta = "";
             foreach (char a in cad)
             {
-                if (char.IsLetterOrDigit(a) || a == '-')
+                if (char.IsLetterOrDigit(a) || a == '-' || a == ' ')
                 {
                     cadCorrecta += a;
                 }
@@ -1838,7 +1838,7 @@ namespace PruebaProyecto
                         case 'C':
                             foreach (char a in br.ReadChars(atr.longitud))
                             {
-                                if (char.IsDigit(a) || char.IsLetter(a))
+                                if (char.IsDigit(a) || char.IsLetter(a) || a == ' ')
                                 {
                                     RegisInserdataGridView.Rows[conRen].Cells[i + 1].Value += a.ToString();
                                     r = 0;
@@ -1887,6 +1887,7 @@ namespace PruebaProyecto
 
         private void RegisInserdataGridView_SelectionChanged(object sender, EventArgs e)
         {
+            //PROBAR
             if (bandModi)
             {
                 for (int i = 0; i < entAct.listAtrib.Count; i++)

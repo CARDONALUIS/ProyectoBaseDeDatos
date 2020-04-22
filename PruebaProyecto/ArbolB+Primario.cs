@@ -540,7 +540,7 @@ namespace PruebaProyecto
         }
 
         /*
-        DE AQUI PARA ARRIBA SON METODOS DE ELIMINACION
+        DE AQUI PARA ARRIBA SON METODOS DE ELIMINACION//////////////////////////////////////////////////////////////////////////////////////////////////////
         */
 
 
@@ -681,6 +681,16 @@ namespace PruebaProyecto
                     int valFinal = br.ReadInt64()
                     no.P.Add(br.ReadInt64());
                 }*/
+
+                if(no.P.Count == n-1 && no.tipo == 'R' && no.dirNodo == 0)
+                {
+                    r = 0;
+                    archArb.Seek(posIni + 57, SeekOrigin.Begin);
+                    long val = br.ReadInt64();
+                    r = 0;                    
+                    no.P.Add(val);
+                }
+
                 if(no.P.Count == n-1 && no.tipo == 'H')
                 {
                     r = 0;
@@ -696,6 +706,8 @@ namespace PruebaProyecto
                     long val = br.ReadInt64();
                     if(val!= -1)
                     no.P.Add(val);
+                    
+
                     r = 0;
                 }
 
@@ -897,8 +909,9 @@ namespace PruebaProyecto
                 bw.Write(bloque);
                 r = 0;
 
-                if (L.tipo == 'H')
+                if (L.tipo == 'H' || L.dirNodo == 0 && L.tipo == 'R')
                 {
+                    r = 0;
                     bw.Seek((int)L.dirNodo + 9, SeekOrigin.Begin);
                     for (int i = 0; i < L.K.Count; i++)
                     {
@@ -1223,6 +1236,8 @@ namespace PruebaProyecto
 
                 bw.Seek((int)L.dirNodo + 57, SeekOrigin.Begin);
                 bw.Write(LPri.dirNodo);
+
+                
                 L.P.RemoveAt(n-1);
                 r = 0;
                 L.P.Add(LPri.dirNodo);
