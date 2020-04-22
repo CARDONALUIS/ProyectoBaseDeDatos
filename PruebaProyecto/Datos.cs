@@ -236,7 +236,7 @@ namespace PruebaProyecto
                 r = 0;
                 entAct.lisIndSec.ElementAt(contIndSec).archSec.Seek(pos+8, SeekOrigin.Begin);
 
-                dirCom = br1.ReadInt32();
+                dirCom = br1.ReadInt32();///ERROR/////////////////////////////////////////////////////////
 
                 pos += 8;
                 r = 0;
@@ -1229,6 +1229,14 @@ namespace PruebaProyecto
 
                         RegisInserdataGridView.Rows[RegisInserdataGridView.Rows.Count - 1].Cells[entAct.listAtrib.Count + 1].Value = -1;
                     }
+
+
+                    /*if(bandModAtrBus && !bandAtrArb)///ESTO RECIEN LO AGREGUE
+                    {
+                        bw.Write((long)dirSigAuxElimReg);
+                        r = 0;
+                        RegisInserdataGridView.Rows[RegisInserdataGridView.Rows.Count - 1].Cells[entAct.listAtrib.Count + 1].Value = dirSigAuxElimReg;
+                    }*/
                    
 
                     if (!bandAtrBus)
@@ -1252,6 +1260,7 @@ namespace PruebaProyecto
 
                 if (bandAtrPri)
                 {
+                    r = 0;
                     datosIndiPrim();
                 }
 
@@ -1971,6 +1980,8 @@ namespace PruebaProyecto
                     }
 
                     int j = 0;
+
+                    
                     foreach (IndiceSecundario a in entAct.lisIndSec)
                     {
                         r = 0;
@@ -2084,14 +2095,66 @@ namespace PruebaProyecto
                 CambiaEntiReg(this, null);//ayuda a inserta Reg
                 GuardaRegistros_Click(this, null);//ayuda a insertar Reg
                 bandModAtrBus = false;
-                
+
 
             }
             else
-                for (int i = 0; i < entAct.listAtrib.Count; i++)
+            {
+                
+                bandModAtrBus = true;
+                dirAuxElimReg = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[0].Value.ToString());
+                dirSigAuxElimReg = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[entAct.listAtrib.Count + 1].Value.ToString());
+                //r = 0;
+                //EliminarReg_Click(this, null);//Elimina Registro
+                
+
+
+                //RegisInserdataGridView_CellClick(this, null);//Elimina Registro
+                if (bandAtrPri)
                 {
-                    RegisInserdataGridView.CurrentRow.Cells[i + 1].Value = RegistroRellDataGrid.Rows[0].Cells[i].Value;
+                    eliminaRegClvPrim((int)dirAuxElimReg);
+                    guardaArchivosIndPri();
                 }
+
+                if (bandAtrSec)
+                {
+
+                    List<int> lisPosIndSec = new List<int>();
+                    for (int i = 0; i < entAct.listAtrib.Count; i++)
+                    {
+                        if (entAct.listAtrib.ElementAt(i).tipoIndi == 3)
+                        {
+                            lisPosIndSec.Add(i + 1);
+                        }
+                    }
+
+                    int j = 0;
+                    ////(string clavpri, int dirEli, int contIndSec)
+                    foreach (IndiceSecundario a in entAct.lisIndSec)
+                    {
+                        r = 0;
+                        //eliminaBloquSec(RegisInserdataGridView.CurrentRow.Cells[lisPosIndSec.ElementAt(j)].Value.ToString(), (int)RegisInserdataGridView.CurrentRow.Cells[0].Value, a.contIndSec);
+                        eliminaBloquSec(RegisInserdataGridView.CurrentRow.Cells[lisPosIndSec.ElementAt(j)].Value.ToString(), (int)RegisInserdataGridView.CurrentRow.Cells[0].Value, a.contIndSec);
+                        j++;
+                    }
+                    guardaArchivosIndSec();
+                    for (int i = 0; i < entAct.listAtrib.Count; i++)
+                    {
+                        RegisInserdataGridView.CurrentRow.Cells[i + 1].Value = RegistroRellDataGrid.Rows[0].Cells[i].Value;
+                    }
+
+
+                }
+                //if()BANDERA DE ARBOL POR SI CAMBIA Y NO TIENE CLAVE DE BUSQUEDA
+
+                    //CambiaEntiReg(this, null);//ayuda a inserta Reg
+                    //GuardaRegistros_Click(this, null);//ayuda a insertar Reg
+                    bandModAtrBus = false;
+
+
+
+                
+            }
 
             AplicaCambio.Visible = false;
         }
