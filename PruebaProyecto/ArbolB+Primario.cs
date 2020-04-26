@@ -48,6 +48,26 @@ namespace PruebaProyecto
 
 
 
+        public bool esraizOrigen(Nodo N)
+        {
+            int contValo = 0;
+            bool bandOrigen = true;
+
+            if (N.tipo == 'R')
+            {
+                if(N.K.Count != N.P.Count)
+                {
+                    bandOrigen = false;
+                }
+            }
+            else
+                bandOrigen = false;
+
+            r = 0;
+
+            return bandOrigen;
+        }
+
         public void actualizaEliArchNodo(Nodo N)
         {
             r = 0;
@@ -89,7 +109,8 @@ namespace PruebaProyecto
                     bw.Write(N.K.ElementAt(i));
                 }
 
-                if(N.tipo != 'H' && N.K.Count != 0)
+
+                if(N.tipo != 'H' && N.K.Count != 0 && !esraizOrigen(N))
                 {
                     r = 0;
                     bw.Write(N.P.ElementAt(i));
@@ -155,6 +176,18 @@ namespace PruebaProyecto
                     hermano = lisNodo.Find(x => x.dirNodo == pad.P.ElementAt(N.K.Count-1));
                     r = 0;
                     break;
+                }
+                else
+                if(pad.tipo == 'R' && pad.K.Count == 1 && pad.P.Count == 2)//Es el ultimo nodo raiz
+                {
+                    r = 0;
+                    kPriBorrar = pad.K.ElementAt(i);
+                    if (K >= pad.K.ElementAt(i))
+                        hermano = lisNodo.Find(x => x.dirNodo == pad.P.ElementAt(i));
+                    else
+                        hermano = lisNodo.Find(x => x.dirNodo == pad.P.ElementAt(i+1));
+
+                    r = 0;
                 }
                 else
                 if (K >= pad.K.ElementAt(i) && K < pad.K.ElementAt(i + 1))
@@ -376,7 +409,8 @@ namespace PruebaProyecto
         {
             r = 0;
             borrarValoresSelec(N, K, P);
-            
+            r = 0;
+
             if(N.tipo == 'R' && N.P.Count == 1)//Esta asignacion no esta muy entendible
             {
                 r = 0;
@@ -390,7 +424,7 @@ namespace PruebaProyecto
             else
             {
                 r = 0;
-                if (N.K.Count < n / 2)//N tiene muy poco valores/punteros
+                if (N.K.Count < n / 2 && N.tipo != 'R')//N tiene muy poco valores/punteros
                 {
                     Nodo Npri = seleccionaHermano(N, K, P);//Encuentra un hermano 
                     int kPri = kPriBorrar;
@@ -1141,7 +1175,7 @@ namespace PruebaProyecto
 
         public Nodo buscaPadre(Nodo n)
         {
-
+            r = 0;
             int index = lisNodPad.FindIndex(x => x.dirNodo == n.dirNodo);
             Nodo padre = lisNodPad.ElementAt(index-1);
 
