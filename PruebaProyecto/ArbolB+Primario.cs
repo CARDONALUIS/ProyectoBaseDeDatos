@@ -442,7 +442,7 @@ namespace PruebaProyecto
                             r = 0;
                             if (N.tipo == 'I')
                             {
-                                r = 0; //////////////////////////////////////////////////////////////////////////////
+                                r = 0; ///////////las///////////////////////////////////////////////////////////////////
                                 mP = Npri.P.Last();
                                 Npri.K.RemoveAt(Npri.K.Count - 1);
                                 Npri.P.RemoveAt(Npri.P.Count - 1);
@@ -452,6 +452,10 @@ namespace PruebaProyecto
                                 Nodo padre = buscaPadre(N);
                                 int indKPri = padre.K.FindIndex(x => x == kPri);
                                 padre.K.Insert(indKPri, kPri);
+
+                                actualizaEliArchNodo(N);
+                                actualizaEliArchNodo(Npri);
+                                actualizaEliArchNodo(padre);
 
                             }
                             else
@@ -477,6 +481,7 @@ namespace PruebaProyecto
                                 actualizaEliArchNodo(N);
                                 actualizaEliArchNodo(Npri);
                                 actualizaEliArchNodo(padre);
+                                
                             }
 
                         }
@@ -493,8 +498,12 @@ namespace PruebaProyecto
                                 N.K.Add(kPri);
 
                                 Nodo padre = buscaPadre(N);
-                                //int indKPri = padre.K.FindIndex(x => x == kPri);
-                                padre.K.Insert(0, kPri);
+                                int indKPri = padre.K.FindIndex(x => x == kPri);
+                                padre.K.Insert(indKPri, kPri);
+
+                                actualizaEliArchNodo(N);
+                                actualizaEliArchNodo(Npri);
+                                actualizaEliArchNodo(padre);
                             }
                             else
                             {
