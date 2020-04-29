@@ -31,6 +31,7 @@ namespace PruebaProyecto
         bool bandModAtrBus = false;
         bool bandUltModiAtr = false;
         bool bandAtrArb = false;
+        bool bandAtrHashEsta = false;
         VentanaIndPrim vIP = new VentanaIndPrim();
         venIndiceSec vIS = new venIndiceSec();
         ventanaArbol vAR = new ventanaArbol();
@@ -39,6 +40,7 @@ namespace PruebaProyecto
         long dirSigAuxElimReg = 0;
         bool bandCajonRep = false;
         ArbolB_Primario arbol;
+        HashEstatico hash;
 
 
 
@@ -1280,6 +1282,12 @@ namespace PruebaProyecto
                     
                 }
 
+                if(bandAtrHashEsta)
+                {
+                    hash.setEntYDic(entAct, dic);
+                    hash.ObtengRegistro();
+                }
+
 
                 MessageBox.Show("Tu informacion fue guardada satisfactoriamente");
                 limpiaGridRellReg();
@@ -1734,7 +1742,39 @@ namespace PruebaProyecto
                         posIndArb += a.longitud;
                 }
 
+                /*
+                 * Encuentra si hay un indice Hash
+                 * */
 
+               int posHashEsta = 0;
+
+                foreach (Atributo a in entAct.listAtrib)
+                {
+                    if (a.tipoIndi == 5)
+                    {
+                        MessageBox.Show("Indice de Hash Estatico" + a.nombre);
+                        bandAtrHashEsta = true;
+                        
+                        if (a.dirIndi == -1)
+                        {
+                            r = 0;
+                            hash = new HashEstatico(new FileStream(BitConverter.ToString(a.id_atri) + ".idx", FileMode.Create), posHashEsta+8, false);
+                            r = 0;
+                        }
+                        else
+                        {
+                            r = 0;
+                            FileStream archHash = File.Open(BitConverter.ToString(a.id_atri) + ".idx", FileMode.Open);
+                            hash = new HashEstatico(archHash, posHashEsta + 8, true);
+                            archHash.Close();
+                        }
+
+                    }
+                    else
+                        posHashEsta += a.longitud;
+                }
+
+                
                 /*
                     * Obtiene la longitud de los registros
                     * */
@@ -1755,7 +1795,6 @@ namespace PruebaProyecto
                         DataGridViewTextBoxColumn Columna2 = new DataGridViewTextBoxColumn();
                         Columna2.HeaderText = a.nombre;
                         RegistroRellDataGrid.Columns.Add(Columna2);
-
                     }
 
                     //Columnas del grid de registrosRellenados

@@ -40,6 +40,7 @@
             this.EventoIndPrim = new System.Windows.Forms.Button();
             this.eventoIndiSec = new System.Windows.Forms.Button();
             this.venArbolPri = new System.Windows.Forms.Button();
+            this.HashEstatico = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.RegistroRellDataGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.RegisInserdataGridView)).BeginInit();
             this.SuspendLayout();
@@ -162,11 +163,21 @@
             this.venArbolPri.UseVisualStyleBackColor = true;
             this.venArbolPri.Click += new System.EventHandler(this.venArbolPri_Click);
             // 
+            // HashEstatico
+            // 
+            this.HashEstatico.Location = new System.Drawing.Point(647, 69);
+            this.HashEstatico.Name = "HashEstatico";
+            this.HashEstatico.Size = new System.Drawing.Size(105, 24);
+            this.HashEstatico.TabIndex = 13;
+            this.HashEstatico.Text = "HashEstatico";
+            this.HashEstatico.UseVisualStyleBackColor = true;
+            // 
             // Datos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(801, 491);
+            this.Controls.Add(this.HashEstatico);
             this.Controls.Add(this.venArbolPri);
             this.Controls.Add(this.eventoIndiSec);
             this.Controls.Add(this.EventoIndPrim);
@@ -203,5 +214,6 @@
         private System.Windows.Forms.Button EventoIndPrim;
         private System.Windows.Forms.Button eventoIndiSec;
         private System.Windows.Forms.Button venArbolPri;
+        private System.Windows.Forms.Button HashEstatico;
     }
 }

@@ -55,6 +55,7 @@
     <Compile Include="Atributos.Designer.cs">
       <DependentUpon>Atributos.cs</DependentUpon>
     </Compile>
+    <Compile Include="CajonHash.cs" />
     <Compile Include="Datos.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -75,6 +76,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="HashEstatico.cs" />
     <Compile Include="IndicePrimario.cs" />
     <Compile Include="IndiceSecundario.cs" />
     <Compile Include="Nodo.cs" />

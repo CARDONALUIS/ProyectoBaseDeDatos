@@ -478,18 +478,26 @@ namespace PruebaProyecto
                             {
                                 r = 0; ///////////las///////////////////////////////////////////////////////////////////
                                 mP = Npri.P.Last();
+                                mK = Npri.K.Last();
+                                r = 0;
                                 Npri.K.RemoveAt(Npri.K.Count - 1);
                                 Npri.P.RemoveAt(Npri.P.Count - 1);
                                 N.P.Insert(0, mP);
                                 N.K.Insert(0, kPri);
+                                r = 0;
+
 
                                 Nodo padre = buscaPadre(N);
                                 int indKPri = padre.K.FindIndex(x => x == kPri);
-                                padre.K.Insert(indKPri, kPri);
+                                padre.K.RemoveAt(indKPri);
+                                padre.K.Insert(indKPri, mK);
+                                r = 0;
+
 
                                 actualizaEliArchNodo(N);
                                 actualizaEliArchNodo(Npri);
                                 actualizaEliArchNodo(padre);
+                                r = 0;
 
                             }
                             else
@@ -526,18 +534,26 @@ namespace PruebaProyecto
                             {
                                 r = 0;//////////////////////////////////////////////////////////////////////////
                                 mP = Npri.P.ElementAt(0);
+                                mK = Npri.K.ElementAt(0);
+                                r = 0;
+
                                 Npri.K.RemoveAt(0);
                                 Npri.P.RemoveAt(0);
+                                r = 0;
                                 N.P.Add(mP);
                                 N.K.Add(kPri);
+                                r = 0;
 
                                 Nodo padre = buscaPadre(N);
                                 int indKPri = padre.K.FindIndex(x => x == kPri);
-                                padre.K.Insert(indKPri, kPri);
+                                padre.K.RemoveAt(indKPri);
+                                padre.K.Insert(indKPri, mK);
+                                r = 0;
 
                                 actualizaEliArchNodo(N);
                                 actualizaEliArchNodo(Npri);
                                 actualizaEliArchNodo(padre);
+                                r = 0;
                             }
                             else
                             {
@@ -801,9 +817,7 @@ namespace PruebaProyecto
                 _archArb.Close();
                 archArb = File.Open(_archArb.Name, FileMode.Open);
                 actualizaListaNodo();
-                archArb.Close();
-                
-               
+                archArb.Close();              
             }
             else
             {
