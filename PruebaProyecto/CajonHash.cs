@@ -9,9 +9,8 @@ namespace PruebaProyecto
     class CajonHash
     {
         public int dirCajon { get; set; }
-        public int numCajon { get; set; }
-        public List<int> listClv = new List<int>();
-        public List<long> apunReg = new List<long>();
+        //public int numCajon { get; set; }
+        public List<campoCajonHash> listaCampoCajonHash = new List<campoCajonHash>();
 
 
     }
