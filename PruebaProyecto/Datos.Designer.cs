@@ -171,6 +171,7 @@
             this.HashEstatico.TabIndex = 13;
             this.HashEstatico.Text = "HashEstatico";
             this.HashEstatico.UseVisualStyleBackColor = true;
+            this.HashEstatico.Click += new System.EventHandler(this.HashEstatico_Click);
             // 
             // Datos
             // 

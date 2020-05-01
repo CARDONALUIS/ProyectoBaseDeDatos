@@ -114,7 +114,15 @@ namespace PruebaProyecto
                     camHas.apunReg = dirReg;
                     camHas.clave = clave;
                     DirectorioHash[i].listaCampoCajonHash.Add(camHas);
-                    DirectorioHash[i].listaCampoCajonHash.OrderBy(x => x.apunReg);
+
+                    List<campoCajonHash> lisOrd = DirectorioHash[i].listaCampoCajonHash;
+
+                    lisOrd = lisOrd.OrderBy(o => o.clave).ToList();
+
+                    DirectorioHash[i].listaCampoCajonHash = lisOrd;
+
+                    //DirectorioHash[i].listaCampoCajonHash = DirectorioHash[i].listaCampoCajonHash.OrderBy(x => x.apunReg).ToList();
+
                     long valoCajon;
                     r = 0;
                     if (DirectorioHash[i].dirCajon == 0)

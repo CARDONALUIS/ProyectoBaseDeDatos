@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PruebaProyecto
 {
-    class CajonHash
+    public class CajonHash
     {
         public int dirCajon { get; set; }
         //public int numCajon { get; set; }

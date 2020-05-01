@@ -35,6 +35,7 @@ namespace PruebaProyecto
         VentanaIndPrim vIP = new VentanaIndPrim();
         venIndiceSec vIS = new venIndiceSec();
         ventanaArbol vAR = new ventanaArbol();
+        ventanaHashEsta vHE = new ventanaHashEsta();
         int indColIndPri = 0;
         long dirAuxElimReg = 0;
         long dirSigAuxElimReg = 0;
@@ -2222,6 +2223,21 @@ namespace PruebaProyecto
             }
             //vAR.Show();
 
+        }
+
+        private void HashEstatico_Click(object sender, EventArgs e)
+        {
+
+            vHE = new ventanaHashEsta();
+            if (entAct != null)
+            {
+
+                r = 0;
+                vHE.setDirectorio(hash.DirectorioHash);
+                vHE.archHashEsta = hash.archivHash;
+                vHE.agregaValoresTabla();
+                vHE.Show();
+            }
         }
     }
 }

@@ -102,6 +102,12 @@
     <Compile Include="ventanaArbol.Designer.cs">
       <DependentUpon>ventanaArbol.cs</DependentUpon>
     </Compile>
+    <Compile Include="ventanaHashEsta.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ventanaHashEsta.Designer.cs">
+      <DependentUpon>ventanaHashEsta.cs</DependentUpon>
+    </Compile>
     <Compile Include="VentanaIndPrim.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -137,6 +143,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ventanaArbol.resx">
       <DependentUpon>ventanaArbol.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ventanaHashEsta.resx">
+      <DependentUpon>ventanaHashEsta.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="VentanaIndPrim.resx">
       <DependentUpon>VentanaIndPrim.cs</DependentUpon>

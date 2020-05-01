@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PruebaProyecto
 {
-    class campoCajonHash
+    public class campoCajonHash
     {
         public int clave;
         public long apunReg;
