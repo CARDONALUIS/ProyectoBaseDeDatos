@@ -1276,8 +1276,15 @@ namespace PruebaProyecto
                 if(bandAtrArb)
                 {
                     r = 0;
-                    arbol.setEntYDic(entAct, dic);
-                    arbol.ObtengRegistro();
+                    
+
+                    if (!bandModAtrBus)
+                    {
+                        arbol.setEntYDic(entAct, dic);
+                        arbol.ObtengRegistro();
+                    }
+                    else
+                        arbol.inserta(Int32.Parse(RegistroRellDataGrid.Rows[0].Cells[0].Value.ToString()), dirAuxElimReg);
                     r = 0;
                     //arbol.inserta();
                     
@@ -2066,11 +2073,8 @@ namespace PruebaProyecto
         private void AplicaCambio_Click(object sender, EventArgs e)
         {
             
-
             int posI = 0;
             int contChar = 0;
-
-
 
             using (BinaryWriter bw = new BinaryWriter(File.Open(BitConverter.ToString(entAct.id_enti) + ".dat", FileMode.Open)))
             {
@@ -2127,6 +2131,7 @@ namespace PruebaProyecto
                 r = 0;
                 bandModAtrBus = true;
                 dirAuxElimReg = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[0].Value.ToString());
+
                 dirSigAuxElimReg = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[entAct.listAtrib.Count + 1].Value.ToString());
                 r = 0;
                 EliminarReg_Click(this, null);//Elimina Registro
@@ -2177,19 +2182,28 @@ namespace PruebaProyecto
                         eliminaBloquSec(RegisInserdataGridView.CurrentRow.Cells[lisPosIndSec.ElementAt(j)].Value.ToString(), (int)RegisInserdataGridView.CurrentRow.Cells[0].Value, a.contIndSec);
                         j++;
                     }
-                    guardaArchivosIndSec();
-                    for (int i = 0; i < entAct.listAtrib.Count; i++)
-                    {
-                        RegisInserdataGridView.CurrentRow.Cells[i + 1].Value = RegistroRellDataGrid.Rows[0].Cells[i].Value;
-                    }
+                    guardaArchivosIndSec();                   
+                }
 
+
+                if(bandAtrArb)
+                {
+                    int claveArbol;
+
+                    claveArbol = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[1].Value.ToString());
+
+                    r = 0;                
+                    arbol.borrar(Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[1].Value.ToString()), (int)dirAuxElimReg );
+                    arbol.inserta(Int32.Parse(RegistroRellDataGrid.Rows[0].Cells[0].Value.ToString()), (int)dirAuxElimReg);
 
                 }
-                //if()BANDERA DE ARBOL POR SI CAMBIA Y NO TIENE CLAVE DE BUSQUEDA
 
-                    //CambiaEntiReg(this, null);//ayuda a inserta Reg
-                    //GuardaRegistros_Click(this, null);//ayuda a insertar Reg
-                    bandModAtrBus = false;
+                for (int i = 0; i < entAct.listAtrib.Count; i++)
+                {
+                    RegisInserdataGridView.CurrentRow.Cells[i + 1].Value = RegistroRellDataGrid.Rows[0].Cells[i].Value;
+                }
+
+                bandModAtrBus = false;
 
 
 
