@@ -305,6 +305,25 @@ namespace PruebaProyecto
             archivHash.Close();
         }
 
+        public bool hayClaveRepetida(int clave)
+        {
+            int cajon = clave % valorModu;
+            campoCajonHash prueb;
+
+
+            if (DirectorioHash[cajon].listaCampoCajonHash.Count != 0)
+                prueb = DirectorioHash[cajon].listaCampoCajonHash.Find(x => x.clave == clave);
+            else
+                return false;
+
+
+            if (prueb != null)
+                return true;
+            else
+                return false;
+
+        }
+
         public HashEstatico(FileStream _arcHash, int _archDirHash, bool tieneDatos)
         {
             archivHash = _arcHash;

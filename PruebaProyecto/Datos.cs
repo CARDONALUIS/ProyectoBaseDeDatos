@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -1143,6 +1144,61 @@ namespace PruebaProyecto
             
         }
 
+        public bool verifcaValorPrim()
+        {
+            int valorClave = Int32.Parse(RegistroRellDataGrid.Rows[0].Cells[0].Value.ToString());//Asmimilo que el valor primario siempre ira al principio
+
+            r = 0;
+            foreach(Atributo a in entAct.listAtrib)
+            {
+                if(a.tipoIndi == 4 || a.tipoIndi == 5)
+                {
+                    switch(a.tipoIndi)
+                    {                       
+                        case 4:
+
+                            if (arbol.lisNodo.Count != 0)
+                            {
+                                Nodo prueba = arbol.encuentraNodoHoja(valorClave);
+
+                                int ind = prueba.K.FindIndex(x => x == valorClave);
+
+                                r = 0;
+                                if (ind != -1)
+                                {
+                                    r = 0;
+                                    return true;
+                                }
+                                else
+                                {
+                                    r = 0;
+                                    return false;
+                                }
+                            }
+                            else
+                                return false;
+                                
+                        case 5:
+                            r = 0;
+                            if (hash.hayClaveRepetida(valorClave))
+                            {
+                                r = 0;
+                                return true;
+                            }
+                            else
+                            {
+                                r = 0;
+                                return false;
+                            }
+                    }
+                }
+
+            }
+
+
+            return true;
+        }
+
 
 
 
@@ -1150,16 +1206,25 @@ namespace PruebaProyecto
         {
             string valor = "";
             bool bandSigue;
+            bool bandRegValidoPrim;
 
-             bandSigue = cohesionDatos();
+            bandSigue = cohesionDatos();
+            bandRegValidoPrim = verifcaValorPrim();
 
-            if (!bandSigue)
+            r = 0;
+
+            if (!bandSigue || bandRegValidoPrim)
             {
+                r = 0;
+                if(!bandSigue)
                 MessageBox.Show("Hay datos que no concuerdan");
+                else
+                    MessageBox.Show("Estas ingresando un registro con valor primario repetido");
             }
             else
             if (entAct != null)
             {
+                r = 0;
                 entAct.archivoDat = File.Open(entAct.archivoDat.Name, FileMode.Open);
                 long lonArDat = entAct.archivoDat.Length;
 
@@ -1170,6 +1235,8 @@ namespace PruebaProyecto
                 else
                     RegisInserdataGridView.Rows[RegisInserdataGridView.Rows.Count - 1].Cells[0].Value = (int)dirAuxElimReg;
                 r = 0;
+
+
 
 
                 using (BinaryWriter bw = new BinaryWriter(File.Open(BitConverter.ToString(entAct.id_enti) + ".dat", FileMode.Open)))
