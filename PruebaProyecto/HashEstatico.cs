@@ -214,6 +214,50 @@ namespace PruebaProyecto
             return (int)modulo;
         }
 
+        public void actualizaEliminaArchivoCajon(int cajonEli)
+        {
+            int dirElimCajo = DirectorioHash[cajonEli].dirCajon;
+            r = 0;
+
+            using (BinaryWriter bw = new BinaryWriter(File.Open(archivHash.Name, FileMode.Open)))
+            {
+                bw.Seek(dirElimCajo, SeekOrigin.Begin);
+                Byte[] bloque = new Byte[12];
+                for (int j = 0; j < 12; j++)
+                {
+                    bloque[j] = 0xFF;
+                    bw.Write(bloque[j]);
+                }
+
+                foreach (campoCajonHash a in DirectorioHash[cajonEli].listaCampoCajonHash )
+                {
+                    bw.Write(bloque);
+                }
+
+                bw.Seek(dirElimCajo, SeekOrigin.Begin);
+                foreach (campoCajonHash a in DirectorioHash[cajonEli].listaCampoCajonHash)
+                {
+                    bw.Write(a.clave);
+                    bw.Write(a.apunReg);
+                }
+            }
+
+            r = 0;
+        }
+
+
+        public void elimina(int clave)
+        {
+            int cajon = obtenCajonModulo(clave);
+
+            int indElim = DirectorioHash[cajon].listaCampoCajonHash.FindIndex(x => x.clave == clave);
+            DirectorioHash[cajon].listaCampoCajonHash.RemoveAt(indElim);
+
+            r = 0;
+
+            actualizaEliminaArchivoCajon(cajon);
+        }
+
         public void creaDirectorioHash()
         {
             BinaryWriter bw = new BinaryWriter(archivHash);

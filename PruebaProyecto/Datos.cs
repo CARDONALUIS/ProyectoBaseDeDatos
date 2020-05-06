@@ -1359,8 +1359,16 @@ namespace PruebaProyecto
 
                 if(bandAtrHashEsta)
                 {
-                    hash.setEntYDic(entAct, dic);
-                    hash.ObtengRegistro();
+                    if (!bandModAtrBus)
+                    {
+                        hash.setEntYDic(entAct, dic);
+                        hash.ObtengRegistro();
+                    }
+                    else
+                    {
+                        hash.insertaEnCajon(hash.obtenCajonModulo(Int32.Parse(RegistroRellDataGrid.Rows[0].Cells[0].Value.ToString())),Int32.Parse(RegistroRellDataGrid.Rows[0].Cells[0].Value.ToString()), dirAuxElimReg);
+                    }
+                    
                 }
 
 
@@ -2111,6 +2119,12 @@ namespace PruebaProyecto
                     arbol.borrar((int)RegisInserdataGridView.Rows[indFilEli].Cells[1].Value, (long)(int)RegisInserdataGridView.Rows[indFilEli].Cells[0].Value);
                 }
 
+                if(bandAtrHashEsta)
+                {
+                    r = 0;
+                    hash.elimina((int)RegisInserdataGridView.Rows[indFilEli].Cells[1].Value);
+                }
+
                 limpiaGridInsertadosReg();
 
                 bandElim = false;
@@ -2193,7 +2207,7 @@ namespace PruebaProyecto
 
             r = 0;
 
-            if (bandAtrBus == true)
+            if (bandAtrBus == true)//Si hay clave de busqueda
             {
                 r = 0;
                 bandModAtrBus = true;
@@ -2210,7 +2224,7 @@ namespace PruebaProyecto
 
 
             }
-            else
+            else// Si no hay clave de busqueda
             {
                 
                 bandModAtrBus = true;
@@ -2254,16 +2268,21 @@ namespace PruebaProyecto
 
 
                 if(bandAtrArb)
-                {
-                    int claveArbol;
-
-                    claveArbol = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[1].Value.ToString());
-
+                {                   
                     r = 0;                
                     arbol.borrar(Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[1].Value.ToString()), (int)dirAuxElimReg );
                     arbol.inserta(Int32.Parse(RegistroRellDataGrid.Rows[0].Cells[0].Value.ToString()), (int)dirAuxElimReg);
-
                 }
+
+                if(bandAtrHashEsta)
+                {
+                    int cajon = hash.obtenCajonModulo(Int32.Parse(RegistroRellDataGrid.CurrentRow.Cells[0].Value.ToString()));
+
+                    r = 0;
+                    hash.elimina(Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[1].Value.ToString()));
+                    hash.insertaEnCajon(cajon, Int32.Parse(RegistroRellDataGrid.CurrentRow.Cells[0].Value.ToString()), (int)dirAuxElimReg);
+                }
+
 
                 for (int i = 0; i < entAct.listAtrib.Count; i++)
                 {
