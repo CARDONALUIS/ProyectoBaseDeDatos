@@ -1841,8 +1841,11 @@ namespace PruebaProyecto
                         if (a.dirIndi == -1)
                         {
                             r = 0;
+
+                            //hash.archivHash.Close();
                             hash = new HashEstatico(new FileStream(BitConverter.ToString(a.id_atri) + ".idx", FileMode.Create), posHashEsta+8, false);
                             r = 0;
+
                         }
                         else
                         {
@@ -2053,7 +2056,7 @@ namespace PruebaProyecto
                 {
                     r = 0;
 
-                    if ((int)RegisInserdataGridView.Rows[indFilEli].Cells[0].Value == entAct.dirDat)//Es el primer registro
+                    if ((int)RegisInserdataGridView.Rows[indFilEli].Cells[0].Value == entAct.dirDat)//Es el primer registro//Si es un unico registro va a mandar un mensaje
                     {
                         r = 0;
                         entAct.dirDat = (int)RegisInserdataGridView.Rows[indFilEli + 1].Cells[0].Value;

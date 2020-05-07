@@ -64,18 +64,22 @@ namespace PruebaProyecto
 
         public void actualizaListaHashCajonArchivo(int numCajon, long dirCajon)
         {
-            restablecerBloqueArchivo(512, (int)dirCajon);
-            r = 0;
-            using (BinaryWriter bw = new BinaryWriter(File.Open(archivHash.Name, FileMode.Open)))
-            {
-                bw.Seek((int)dirCajon, SeekOrigin.Begin);
-                foreach(campoCajonHash b in DirectorioHash[numCajon].listaCampoCajonHash)
+            //if (dirCajon != -1)
+            //{
+                restablecerBloqueArchivo(512, (int)dirCajon);
+                r = 0;
+
+                using (BinaryWriter bw = new BinaryWriter(File.Open(archivHash.Name, FileMode.Open)))
                 {
-                    bw.Write(b.clave);
-                    bw.Write(b.apunReg);
+                    bw.Seek((int)dirCajon, SeekOrigin.Begin);
+                    foreach (campoCajonHash b in DirectorioHash[numCajon].listaCampoCajonHash)
+                    {
+                        bw.Write(b.clave);
+                        bw.Write(b.apunReg);
+                    }
                 }
-            }
-            r = 0;
+                r = 0;
+            //}
 
         }
 
@@ -114,6 +118,7 @@ namespace PruebaProyecto
                     camHas.apunReg = dirReg;
                     camHas.clave = clave;
                     DirectorioHash[i].listaCampoCajonHash.Add(camHas);
+
 
                     List<campoCajonHash> lisOrd = DirectorioHash[i].listaCampoCajonHash;
 
@@ -189,6 +194,7 @@ namespace PruebaProyecto
 
             r = 0;
             dirUltReg = entAct.archivoDat.Length - entAct.longAtributos;
+            r = 0;
             entAct.archivoDat.Seek(dirUltReg + archDirDatHash, SeekOrigin.Begin);
 
             clavAct = br.ReadInt32();
@@ -253,31 +259,56 @@ namespace PruebaProyecto
             int indElim = DirectorioHash[cajon].listaCampoCajonHash.FindIndex(x => x.clave == clave);
             DirectorioHash[cajon].listaCampoCajonHash.RemoveAt(indElim);
 
-            r = 0;
-
             actualizaEliminaArchivoCajon(cajon);
+
+            if (DirectorioHash[cajon].listaCampoCajonHash.Count == 0)
+            {
+                r = 0;
+                
+
+                using (BinaryWriter bw = new BinaryWriter(File.Open(archivHash.Name, FileMode.Open)))
+                {
+                    bw.Seek(8 * cajon, SeekOrigin.Begin);
+                    Byte[] bloque = new Byte[8];
+                    for (int i = 0; i < 8; i++)
+                    {
+                        bloque[i] = 0xFF;
+                    }
+                    bw.Write(bloque);
+
+                }
+
+                DirectorioHash[cajon] = new CajonHash();
+            }
+            r = 0;
         }
 
         public void creaDirectorioHash()
         {
+            //archivHash.Close();
             BinaryWriter bw = new BinaryWriter(archivHash);
+           // using (BinaryWriter bw = new BinaryWriter(File.Open(archivHash.Name, FileMode.Open)))
+            //{
 
-            Byte[] bloque = new Byte[valorModu * 8];
-            for (int i = 0; i < valorModu * 8; i++)
-            {
-                bloque[i] = 0xFF;
-            }
-            bw.Write(bloque);
+                Byte[] bloque = new Byte[valorModu * 8];
+                for (int i = 0; i < valorModu * 8; i++)
+                {
+                    bloque[i] = 0xFF;
+                }
+                bw.Write(bloque);
 
+            //}
             
             DirectorioHash = new CajonHash[valorModu];
 
-            for(int i = 0; i < valorModu; i++)
+            for (int i = 0; i < valorModu; i++)
             {
                 DirectorioHash[i] = new CajonHash();
+                //DirectorioHash[i].dirCajon = -1;
                 //DirectorioHash[i].numCajon = i;
             }
             r = 0;
+            archivHash.Close();
         }
 
         public void actualizaDirectorioLogico()
@@ -285,7 +316,6 @@ namespace PruebaProyecto
             //Leer el direcorio hash
             r = 0;
             
-
             int contCajon = 0;
             DirectorioHash = new CajonHash[valorModu];
 
@@ -304,6 +334,7 @@ namespace PruebaProyecto
                 archivHash.Seek(contCajon * 8, SeekOrigin.Begin);
 
                 long valorDirCajon = br.ReadInt64();
+                if(contCajon == 3)
                 r = 0;
                 if (valorDirCajon != -1)
                 {
@@ -328,6 +359,7 @@ namespace PruebaProyecto
             BinaryReader br = new BinaryReader(archivHash);
             archivHash.Seek(dirCajon, SeekOrigin.Begin);
 
+            r = 0;
             int clvComp = br.ReadInt32();
             long dirReg = br.ReadInt64();
 

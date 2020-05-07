@@ -59,7 +59,10 @@ namespace PruebaProyecto
             {
                 directorioGrid.Rows.Add();
                 directorioGrid.Rows[i].Cells[0].Value = i;
-                directorioGrid.Rows[i].Cells[1].Value = DirectorioHash[i].dirCajon;
+                if (DirectorioHash[i].dirCajon == 0)
+                    directorioGrid.Rows[i].Cells[1].Value = -1;
+                else
+                    directorioGrid.Rows[i].Cells[1].Value = DirectorioHash[i].dirCajon;
             }
         }
 
