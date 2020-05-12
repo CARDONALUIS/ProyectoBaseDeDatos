@@ -1146,14 +1146,16 @@ namespace PruebaProyecto
 
         public bool verifcaValorPrim()
         {
-            int valorClave = Int32.Parse(RegistroRellDataGrid.Rows[0].Cells[0].Value.ToString());//Asmimilo que el valor primario siempre ira al principio
+            int valorClave;
 
             r = 0;
             foreach(Atributo a in entAct.listAtrib)
             {
                 if(a.tipoIndi == 4 || a.tipoIndi == 5)
                 {
-                    switch(a.tipoIndi)
+                    valorClave = Int32.Parse(RegistroRellDataGrid.Rows[0].Cells[0].Value.ToString());//Asmimilo que el valor primario siempre ira al principio
+                    
+                    switch (a.tipoIndi)
                     {                       
                         case 4:
 
@@ -1196,7 +1198,7 @@ namespace PruebaProyecto
             }
 
 
-            return true;
+            return false;
         }
 
 
