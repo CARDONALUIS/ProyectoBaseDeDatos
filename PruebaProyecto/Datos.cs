@@ -2160,146 +2160,152 @@ namespace PruebaProyecto
             int posI = 0;
             int contChar = 0;
 
-            using (BinaryWriter bw = new BinaryWriter(File.Open(BitConverter.ToString(entAct.id_enti) + ".dat", FileMode.Open)))
+            if (!verifcaValorPrim())
             {
 
-                int longAcumReg = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[0].Value.ToString()) + 8;
-                r = 0;
-                bw.Seek(longAcumReg, SeekOrigin.Begin);
-
-                r = 0;
-                for (int i = 0; i < entAct.listAtrib.Count; i++)
+                using (BinaryWriter bw = new BinaryWriter(File.Open(BitConverter.ToString(entAct.id_enti) + ".dat", FileMode.Open)))
                 {
+
+                    int longAcumReg = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[0].Value.ToString()) + 8;
                     r = 0;
-                    if (entAct.listAtrib.ElementAt(i).tipo == 'C')
-                    {
-                        bw.Seek(longAcumReg, SeekOrigin.Begin);
-                        r = 0;
-                        char[] valCad = RegistroRellDataGrid.Rows[0].Cells[i].Value.ToString().ToCharArray();
-                        r = 0;
-                        bw.Write(valCad);
-                        while (contChar < entAct.listAtrib.ElementAt(i).longitud - RegistroRellDataGrid.Rows[0].Cells[i].Value.ToString().Length)
-                        {
-                            bw.Write('-');
-                            contChar++;
-                            r = 0;
-                        }
-                        r = 0;
-                        contChar = 0;
-                        longAcumReg += entAct.listAtrib.ElementAt(i).longitud;
-                    }
-                    else
-                    {
-                        bw.Seek(longAcumReg, SeekOrigin.Begin);
-                        
-                        posI = Int32.Parse(RegistroRellDataGrid.Rows[0].Cells[i].Value.ToString());
-                        r = 0;
-                        bw.Write(Int32.Parse(RegistroRellDataGrid.Rows[0].Cells[i].Value.ToString()));
-
-                        longAcumReg += 4;
-                        r = 0;
-
-                    }
+                    bw.Seek(longAcumReg, SeekOrigin.Begin);
 
                     r = 0;
-
-                }
-                longAcumReg = 0;
-
-            }
-
-            r = 0;
-
-            if (bandAtrBus == true)//Si hay clave de busqueda
-            {
-                r = 0;
-                bandModAtrBus = true;
-                dirAuxElimReg = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[0].Value.ToString());
-
-                dirSigAuxElimReg = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[entAct.listAtrib.Count + 1].Value.ToString());
-                r = 0;
-                EliminarReg_Click(this, null);//Elimina Registro
-                RegisInserdataGridView_CellClick(this, null);//Elimina Registro
-
-                CambiaEntiReg(this, null);//ayuda a inserta Reg
-                GuardaRegistros_Click(this, null);//ayuda a insertar Reg
-                bandModAtrBus = false;
-
-
-            }
-            else// Si no hay clave de busqueda
-            {
-                
-                bandModAtrBus = true;
-                dirAuxElimReg = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[0].Value.ToString());
-                dirSigAuxElimReg = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[entAct.listAtrib.Count + 1].Value.ToString());
-                //r = 0;
-                //EliminarReg_Click(this, null);//Elimina Registro
-                
-
-
-                //RegisInserdataGridView_CellClick(this, null);//Elimina Registro
-                if (bandAtrPri)
-                {
-                    eliminaRegClvPrim((int)dirAuxElimReg);
-                    guardaArchivosIndPri();
-                }
-
-                if (bandAtrSec)
-                {
-
-                    List<int> lisPosIndSec = new List<int>();
                     for (int i = 0; i < entAct.listAtrib.Count; i++)
                     {
-                        if (entAct.listAtrib.ElementAt(i).tipoIndi == 3)
+                        r = 0;
+                        if (entAct.listAtrib.ElementAt(i).tipo == 'C')
                         {
-                            lisPosIndSec.Add(i + 1);
+                            bw.Seek(longAcumReg, SeekOrigin.Begin);
+                            r = 0;
+                            char[] valCad = RegistroRellDataGrid.Rows[0].Cells[i].Value.ToString().ToCharArray();
+                            r = 0;
+                            bw.Write(valCad);
+                            while (contChar < entAct.listAtrib.ElementAt(i).longitud - RegistroRellDataGrid.Rows[0].Cells[i].Value.ToString().Length)
+                            {
+                                bw.Write('-');
+                                contChar++;
+                                r = 0;
+                            }
+                            r = 0;
+                            contChar = 0;
+                            longAcumReg += entAct.listAtrib.ElementAt(i).longitud;
                         }
+                        else
+                        {
+                            bw.Seek(longAcumReg, SeekOrigin.Begin);
+
+                            posI = Int32.Parse(RegistroRellDataGrid.Rows[0].Cells[i].Value.ToString());
+                            r = 0;
+                            bw.Write(Int32.Parse(RegistroRellDataGrid.Rows[0].Cells[i].Value.ToString()));
+
+                            longAcumReg += 4;
+                            r = 0;
+
+                        }
+
+                        r = 0;
+
+                    }
+                    longAcumReg = 0;
+
+                }
+
+                r = 0;
+
+                if (bandAtrBus == true)//Si hay clave de busqueda
+                {
+                    r = 0;
+                    bandModAtrBus = true;
+                    dirAuxElimReg = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[0].Value.ToString());
+
+                    dirSigAuxElimReg = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[entAct.listAtrib.Count + 1].Value.ToString());
+                    r = 0;
+                    EliminarReg_Click(this, null);//Elimina Registro
+                    RegisInserdataGridView_CellClick(this, null);//Elimina Registro
+
+                    CambiaEntiReg(this, null);//ayuda a inserta Reg
+                    GuardaRegistros_Click(this, null);//ayuda a insertar Reg
+                    bandModAtrBus = false;
+
+
+                }
+                else// Si no hay clave de busqueda
+                {
+
+                    bandModAtrBus = true;
+                    dirAuxElimReg = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[0].Value.ToString());
+                    dirSigAuxElimReg = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[entAct.listAtrib.Count + 1].Value.ToString());
+                    //r = 0;
+                    //EliminarReg_Click(this, null);//Elimina Registro
+
+
+
+                    //RegisInserdataGridView_CellClick(this, null);//Elimina Registro
+                    if (bandAtrPri)
+                    {
+                        eliminaRegClvPrim((int)dirAuxElimReg);
+                        guardaArchivosIndPri();
                     }
 
-                    int j = 0;
-                    ////(string clavpri, int dirEli, int contIndSec)
-                    foreach (IndiceSecundario a in entAct.lisIndSec)
+                    if (bandAtrSec)
+                    {
+
+                        List<int> lisPosIndSec = new List<int>();
+                        for (int i = 0; i < entAct.listAtrib.Count; i++)
+                        {
+                            if (entAct.listAtrib.ElementAt(i).tipoIndi == 3)
+                            {
+                                lisPosIndSec.Add(i + 1);
+                            }
+                        }
+
+                        int j = 0;
+                        ////(string clavpri, int dirEli, int contIndSec)
+                        foreach (IndiceSecundario a in entAct.lisIndSec)
+                        {
+                            r = 0;
+                            //eliminaBloquSec(RegisInserdataGridView.CurrentRow.Cells[lisPosIndSec.ElementAt(j)].Value.ToString(), (int)RegisInserdataGridView.CurrentRow.Cells[0].Value, a.contIndSec);
+                            eliminaBloquSec(RegisInserdataGridView.CurrentRow.Cells[lisPosIndSec.ElementAt(j)].Value.ToString(), (int)RegisInserdataGridView.CurrentRow.Cells[0].Value, a.contIndSec);
+                            j++;
+                        }
+                        guardaArchivosIndSec();
+                    }
+
+
+                    if (bandAtrArb)
                     {
                         r = 0;
-                        //eliminaBloquSec(RegisInserdataGridView.CurrentRow.Cells[lisPosIndSec.ElementAt(j)].Value.ToString(), (int)RegisInserdataGridView.CurrentRow.Cells[0].Value, a.contIndSec);
-                        eliminaBloquSec(RegisInserdataGridView.CurrentRow.Cells[lisPosIndSec.ElementAt(j)].Value.ToString(), (int)RegisInserdataGridView.CurrentRow.Cells[0].Value, a.contIndSec);
-                        j++;
+                        arbol.borrar(Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[1].Value.ToString()), (int)dirAuxElimReg);
+                        arbol.inserta(Int32.Parse(RegistroRellDataGrid.Rows[0].Cells[0].Value.ToString()), (int)dirAuxElimReg);
                     }
-                    guardaArchivosIndSec();                   
+
+                    if (bandAtrHashEsta)
+                    {
+                        int cajon = hash.obtenCajonModulo(Int32.Parse(RegistroRellDataGrid.CurrentRow.Cells[0].Value.ToString()));
+
+                        r = 0;
+                        hash.elimina(Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[1].Value.ToString()));
+                        hash.insertaEnCajon(cajon, Int32.Parse(RegistroRellDataGrid.CurrentRow.Cells[0].Value.ToString()), (int)dirAuxElimReg);
+                    }
+
+
+                    for (int i = 0; i < entAct.listAtrib.Count; i++)
+                    {
+                        RegisInserdataGridView.CurrentRow.Cells[i + 1].Value = RegistroRellDataGrid.Rows[0].Cells[i].Value;
+                    }
+
+                    bandModAtrBus = false;
+
+
+
+
                 }
 
-
-                if(bandAtrArb)
-                {                   
-                    r = 0;                
-                    arbol.borrar(Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[1].Value.ToString()), (int)dirAuxElimReg );
-                    arbol.inserta(Int32.Parse(RegistroRellDataGrid.Rows[0].Cells[0].Value.ToString()), (int)dirAuxElimReg);
-                }
-
-                if(bandAtrHashEsta)
-                {
-                    int cajon = hash.obtenCajonModulo(Int32.Parse(RegistroRellDataGrid.CurrentRow.Cells[0].Value.ToString()));
-
-                    r = 0;
-                    hash.elimina(Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[1].Value.ToString()));
-                    hash.insertaEnCajon(cajon, Int32.Parse(RegistroRellDataGrid.CurrentRow.Cells[0].Value.ToString()), (int)dirAuxElimReg);
-                }
-
-
-                for (int i = 0; i < entAct.listAtrib.Count; i++)
-                {
-                    RegisInserdataGridView.CurrentRow.Cells[i + 1].Value = RegistroRellDataGrid.Rows[0].Cells[i].Value;
-                }
-
-                bandModAtrBus = false;
-
-
-
-                
+                AplicaCambio.Visible = false;
             }
-
-            AplicaCambio.Visible = false;
+            else
+                MessageBox.Show("Tu valor a modificar esta repetido\nVuelve a intentar");
         }
 
 
