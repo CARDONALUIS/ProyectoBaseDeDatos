@@ -2164,7 +2164,7 @@ namespace PruebaProyecto
 
             if (!verifcaValorPrim())
             {
-
+                r = 0;
                 using (BinaryWriter bw = new BinaryWriter(File.Open(BitConverter.ToString(entAct.id_enti) + ".dat", FileMode.Open)))
                 {
 

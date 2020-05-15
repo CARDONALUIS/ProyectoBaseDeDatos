@@ -159,7 +159,7 @@ namespace PruebaProyecto
             for(int i = 0; i < pad.K.Count;i++)
             {
                 r = 0;
-                if (i == 0 && K < pad.K.ElementAt(i))
+                if (i == 0 && K < pad.K.ElementAt(i))//Toma el de la derecha
                 {
                     r = 0;
                     kPriBorrar = pad.K.ElementAt(i);
@@ -168,12 +168,12 @@ namespace PruebaProyecto
                     break;
                 }
                 else
-                if (i == pad.K.Count - 1 && K > pad.K.ElementAt(i))
+                if (i == pad.K.Count - 1 && K > pad.K.ElementAt(i))//Toma el de la izquierda
                 {
                     r = 0;
                     kPriBorrar = pad.K.ElementAt(i);
                     r = 0;
-                    hermano = lisNodo.Find(x => x.dirNodo == pad.P.ElementAt(N.K.Count-1));
+                    hermano = lisNodo.Find(x => x.dirNodo == pad.P.ElementAt(N.K.Count));
                     r = 0;
                     break;
                 }
@@ -387,19 +387,39 @@ namespace PruebaProyecto
          }
 
 
-        public void concatenarNoHoja(int K, Nodo N, Nodo Npri)
+        public void concatenarNoHoja(int K, Nodo N, Nodo Npri, bool concatenarAlPrincipio)
         {
             r = 0;
-            Npri.K.Add(K);
-            r = 0; 
 
-            foreach(int a in N.K)
+            if (!concatenarAlPrincipio)
             {
-                Npri.K.Add(a);
+                Npri.K.Add(K);
+                foreach (int a in N.K)
+                {
+                    Npri.K.Add(a);
+                }
+                foreach (long b in N.P)
+                {
+                    Npri.P.Add(b);
+                }
             }
-            foreach(long b in N.P)
+            else
             {
-                Npri.P.Add(b);
+                r = 0;
+                Npri.K.Insert(0, K);
+                r = 0;
+
+                for (int i = N.K.Count - 1; i >= 0; i--)
+                {
+                    Npri.K.Insert(0, N.K.ElementAt(i));
+                }
+                for (int i = N.P.Count - 1; i >= 0; i--)
+                {
+                    Npri.P.Insert(0, N.P.ElementAt(i));
+                }
+
+                r = 0;
+
             }
             r = 0;
         }
@@ -440,14 +460,19 @@ namespace PruebaProyecto
                             r = 0;
                             intercambiar_variables(N, Npri);
                             concatenarPrincipio = true;
+                            r = 0;
                             
                         }
                         r = 0;
                         if (N.tipo != 'H')//No es una nodo hoja;
                         {
                             r = 0;
-                            concatenarNoHoja(kPri, N, Npri);
+                            concatenarNoHoja(kPri, N, Npri, concatenarPrincipio);
                             r = 0;
+                            /*if(concatenaPares(N)
+                                concatenaPares(N, Npri, concatenarPrincipio);*/
+
+
                         }
                         else//Concatenar todos los pares(ki, pi) en N a N'
                         {
