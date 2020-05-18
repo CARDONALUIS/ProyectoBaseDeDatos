@@ -154,12 +154,14 @@ namespace PruebaProyecto
         {
             Nodo pad = buscaPadre(N);
             Nodo hermano = null;
+
+            if(N.tipo != 'H')
             r = 0;
             //int index = pad.K.FindIndex(x => x >= K && x < K);
             for(int i = 0; i < pad.K.Count;i++)
             {
                 r = 0;
-                if (i == 0 && K < pad.K.ElementAt(i))//Toma el de la derecha
+                if (i == 0 && K < pad.K.ElementAt(i) && N.tipo == 'H' && pad.tipo != 'R')//Toma el de la derecha
                 {
                     r = 0;
                     kPriBorrar = pad.K.ElementAt(i);
@@ -168,7 +170,7 @@ namespace PruebaProyecto
                     break;
                 }
                 else
-                if (i == pad.K.Count - 1 && K > pad.K.ElementAt(i))//Toma el de la izquierda
+                if (i == pad.K.Count - 1 && K >= pad.K.ElementAt(i) && N.tipo == 'H' && pad.tipo != 'R')//Toma el de la izquierda//PROFE
                 {
                     r = 0;
                     kPriBorrar = pad.K.ElementAt(i);
@@ -190,7 +192,7 @@ namespace PruebaProyecto
                     r = 0;
                 }
                 else
-                if (K >= pad.K.ElementAt(i) && K < pad.K.ElementAt(i + 1))
+                if (K >= pad.K.ElementAt(i) && K < pad.K.ElementAt(i + 1))//MIO
                 {
                     r = 0;
                     kPriBorrar = pad.K.ElementAt(i+1);
