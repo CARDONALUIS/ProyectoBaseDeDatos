@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -158,19 +159,21 @@ namespace PruebaProyecto
             if(N.tipo != 'H')
             r = 0;
             //int index = pad.K.FindIndex(x => x >= K && x < K);
+            r = 0;
             for(int i = 0; i < pad.K.Count;i++)
             {
                 r = 0;
-                if (i == 0 && K < pad.K.ElementAt(i) && N.tipo == 'H' && pad.tipo != 'R')//Toma el de la derecha
+
+                if (i == 0 && K < pad.K.ElementAt(i) && N.tipo == 'H')//Toma el de la derecha
                 {
                     r = 0;
                     kPriBorrar = pad.K.ElementAt(i);
-                    hermano = lisNodo.Find(x => x.dirNodo == pad.P.ElementAt(i+1));
+                    hermano = lisNodo.Find(x => x.dirNodo == pad.P.ElementAt(i + 1));
                     r = 0;
                     break;
                 }
                 else
-                if (i == pad.K.Count - 1 && K >= pad.K.ElementAt(i) && N.tipo == 'H' && pad.tipo != 'R')//Toma el de la izquierda//PROFE
+                if (i == pad.K.Count - 1 && K >= pad.K.ElementAt(i) && N.tipo == 'H')//Toma el de la izquierda//PROFE
                 {
                     r = 0;
                     kPriBorrar = pad.K.ElementAt(i);
@@ -180,45 +183,49 @@ namespace PruebaProyecto
                     break;
                 }
                 else
-                if(pad.tipo == 'R' && pad.K.Count == 1 && pad.P.Count == 2)//Es el ultimo nodo raiz
+                if (pad.tipo == 'R' && pad.K.Count == 1 && pad.P.Count == 2)//Es el ultimo nodo raiz
                 {
                     r = 0;
                     kPriBorrar = pad.K.ElementAt(i);
                     if (K >= pad.K.ElementAt(i))
                         hermano = lisNodo.Find(x => x.dirNodo == pad.P.ElementAt(i));
                     else
-                        hermano = lisNodo.Find(x => x.dirNodo == pad.P.ElementAt(i+1));
+                        hermano = lisNodo.Find(x => x.dirNodo == pad.P.ElementAt(i + 1));
 
                     r = 0;
                 }
                 else
-                if (K >= pad.K.ElementAt(i) && K < pad.K.ElementAt(i + 1))//MIO
                 {
                     r = 0;
-                    kPriBorrar = pad.K.ElementAt(i+1);
-                    hermano = lisNodo.Find(x => x.dirNodo == pad.P.ElementAt(i + 2));
-                    r = 0;
-                    if (hermano.K.Count <= n / 2)
+                    if (K >= pad.K.ElementAt(i) && K < pad.K.ElementAt(i + 1))//MIO
                     {
                         r = 0;
-                        if ((lisNodo.Find(x => x.dirNodo == pad.P.ElementAt(i)).K.Count > 2))
-                        {
-                            kPriBorrar = pad.K.ElementAt(i);
-                            r = 0;
-                            hermano = lisNodo.Find(x => x.dirNodo == pad.P.ElementAt(i));
-                            r = 0;
-                        }
-                        else
+                        kPriBorrar = pad.K.ElementAt(i + 1);
+                        hermano = lisNodo.Find(x => x.dirNodo == pad.P.ElementAt(i + 2));
                         r = 0;
+                        if (hermano.K.Count <= n / 2)
+                        {
+                            r = 0;
+                            if ((lisNodo.Find(x => x.dirNodo == pad.P.ElementAt(i)).K.Count > 2))
+                            {
+                                kPriBorrar = pad.K.ElementAt(i);
+                                r = 0;
+                                hermano = lisNodo.Find(x => x.dirNodo == pad.P.ElementAt(i));
+                                r = 0;
+                            }
+                            else
+                                r = 0;
 
+                        }
+
+                        r = 0;
+                        break;
                     }
-
                     r = 0;
-                    break;
                 }
 
             }
-
+            r = 0;
             return hermano;
             
         }
@@ -1340,7 +1347,8 @@ namespace PruebaProyecto
             int i = 0;
             lisNodPad = new List<Nodo>();
             r = 0;
-            Nodo C = lisNodo.Find(x => x.tipo == 'R');
+            Nodo C = lisNodo.Find(x => x.tipo == 'R' && x.K.Count!= 0);
+
             lisNodPad.Add(C);
 
             r = 0;
