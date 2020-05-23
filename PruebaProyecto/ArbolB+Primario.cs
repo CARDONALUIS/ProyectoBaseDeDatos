@@ -168,7 +168,7 @@ namespace PruebaProyecto
                 {
                     r = 0;
                     kPriBorrar = pad.K.ElementAt(i);
-                    hermano = lisNodo.Find(x => x.dirNodo == pad.P.ElementAt(i + 1));
+                    hermano = lisNodo.Find(x => x.dirNodo == pad.P.ElementAt(i+1));
                     r = 0;
                     break;
                 }
@@ -178,7 +178,8 @@ namespace PruebaProyecto
                     r = 0;
                     kPriBorrar = pad.K.ElementAt(i);
                     r = 0;
-                    hermano = lisNodo.Find(x => x.dirNodo == pad.P.ElementAt(N.K.Count));
+                    
+                    hermano = lisNodo.Find(x => x.dirNodo == pad.P.ElementAt(pad.P.Count-2));
                     r = 0;
                     break;
                 }
