@@ -12,6 +12,9 @@ using System.Windows.Forms;
 
 namespace PruebaProyecto
 {
+    /*
+     Clase que se encarga de la manipulacion de los registros
+     */
     public partial class Datos : Form
     {
         Diccionario dic;
@@ -47,7 +50,7 @@ namespace PruebaProyecto
 
 
 
-
+        //Metodo constructor de la clases se utiliza para inicialisar una lista y un control
         public Datos()
         {
             InitializeComponent();
@@ -55,6 +58,8 @@ namespace PruebaProyecto
             AplicaCambio.Visible = false;
         }
 
+
+        //Este metodo permite que el comboBox se atualize con las diferentes entidades que cuenta el diccionario
         public void actualizaDicc(Diccionario d)
         {
             int r = 0;
@@ -66,6 +71,8 @@ namespace PruebaProyecto
             }
         }
 
+
+        //Este metodo crea el archivo que representa todos los registros
         public void creaArchivosDat(Entidad ent)
         {
             ent.archivoDat = (new FileStream(BitConverter.ToString(ent.id_enti) + ".dat", FileMode.Create));
@@ -73,15 +80,14 @@ namespace PruebaProyecto
         }
 
 
-        /* 
-        AQUI EMPIEZAN METDOS DE INDICES SECUNDARIOS     
-        */
 
+        #region indiceSecundario
         /*
          Elimina en indices secundarios
-             */
+        */
 
-        public void cajonVacio(int dirCajon, int contIndSec)//Elimina la referencia a ese cajon en el bloque principla del archivo secundario
+        //Elimina la referencia a ese cajon en el bloque principla del archivo secundario, haciendo que ya no se puedan insertar registro en ese cajon
+        public void cajonVacio(int dirCajon, int contIndSec)
         {
             r = 0;
             entAct.lisIndSec.ElementAt(contIndSec).archSec = File.Open(entAct.lisIndSec.ElementAt(contIndSec).archSec.Name, FileMode.Open);
@@ -186,6 +192,8 @@ namespace PruebaProyecto
         }
 
 
+
+        //Metodo que elimina el indice y su direccion del correspondiente cajon
         public void eliminaBloquSec(string clavpri, int dirEli, int contIndSec)
         {
             entAct.lisIndSec.ElementAt(contIndSec).archSec = File.Open(entAct.lisIndSec.ElementAt(contIndSec).archSec.Name, FileMode.Open);
@@ -240,8 +248,7 @@ namespace PruebaProyecto
                 r = 0;
                 entAct.lisIndSec.ElementAt(contIndSec).archSec.Seek(pos+8, SeekOrigin.Begin);
 
-                dirCom = br1.ReadInt32();///ERROR/////////////////////////////////////////////////////////
-
+                dirCom = br1.ReadInt32();
                 pos += 8;
                 r = 0;
             }
@@ -297,6 +304,8 @@ namespace PruebaProyecto
             
         }
 
+
+        //Metodo que se encarga de acomodar en el cajon correspondiente la clave de indice y su direccion en el cajon correspondiente cajon
         public void colocaEnCajon(int dirCajon, int dirReg, int indArchSec)
         {
             r = 0;
@@ -338,6 +347,7 @@ namespace PruebaProyecto
             bandCajonRep = false;
         }
         
+
         /*Evento para el llamdo a la ventana de IndiSecundario*/
         private void eventoIndiSec_Click(object sender, EventArgs e)
         {
@@ -641,7 +651,7 @@ namespace PruebaProyecto
             }
         }
 
-
+        //Metodo que solo se utilisa para saber si es el primer registro y asignarle el primer registro al archivo del diccionario y si no guardar el regsitro con los pasos normales
         public void datosIndSec()
         {
 
@@ -667,6 +677,8 @@ namespace PruebaProyecto
 
             guardaArchivosIndSec();
         }
+
+#endregion
         /*
          * TERMINAN METODOS DE INDICES SECUNDARIOS
          */
@@ -674,6 +686,8 @@ namespace PruebaProyecto
 
 
         #region  MetodosindPrim
+
+        //Metodo para borrar un bloque que representa tanto la clave primaria como el de la direccion del registro que se elimina
         public void eliminaRegClvPrim(int dirEli)
         {
             r = 0;
@@ -763,6 +777,7 @@ namespace PruebaProyecto
         }
 
 
+        //Metodo que me crea una lista de las claves y las guarda para el evento que manda llamar y muestra la ventana de indices 
         private void EventoIndPrim_Click(object sender, EventArgs e)
         {
 
@@ -831,17 +846,20 @@ namespace PruebaProyecto
             vIP.ShowDialog();
             vIP.dataGridIndPrim.Rows.Clear();
             listIndPri.Clear();
-
-
-
         }
 
+
+        //Metodo que manda llamar otro metodo para poder empezar a guardar datos primarios
         public void leeIndPrim()
         {
             r = 0;
             guardaArchivosIndPri();
         }
 
+
+        /* Metodo que se encarga de escribir en el archivo de indice primario su corresopondiente bloque primario que es la clave y la direccion
+         * tambien manda llamar metodos para el reacomodo de todas las claves dada la posicion del que ingreso
+         * */
         public void guardaArchivosIndPri()
         {
             entAct.archivoDat.Close();
@@ -882,9 +900,7 @@ namespace PruebaProyecto
             entAct.contIndPrims++;
 
             entAct.archivoIndPri.Close();
-            r = 0;
-            r = 0;
-            r = 0;
+
             using (BinaryWriter bw = new BinaryWriter(File.Open(entAct.archivoIndPri.Name, FileMode.Open)))
             {
 
@@ -918,7 +934,7 @@ namespace PruebaProyecto
             r = 0;
         }
 
-
+        //Metodo que se utilisa para saber que posicion dentro de todas las claves primarias le corresponde a la clave primaria que se manda como parametro
         public int obtenPoscionAEscribirIDP(Object clvPrim)
         {
             r = 0;
@@ -1009,6 +1025,10 @@ namespace PruebaProyecto
 
 
 
+        /*
+         * Metodo que se utiliza para establecer el campo del atributo de indice primario en el diccionario si es la primera
+         * vez si no se guarda el indice como comunmente pasa
+         */
         public void datosIndiPrim()
         {
             bool bandPrimario = false;
@@ -1044,6 +1064,9 @@ namespace PruebaProyecto
 
         #endregion
 
+        /*
+         * Este metodo desplaza todas las claves primarias y sus respectivas direcciones segun el numero que recibe como parametro
+         */
         public void reacomodaPorPosi(int pos)
         {
             string indP;
@@ -1125,6 +1148,7 @@ namespace PruebaProyecto
             entAct.archivoIndPri.Close();
         }
 
+        //Este metodo sirve para verificar si el dato que se ingresa concuerda con el tipo de dato que se establecio para ese metadato
         public bool cohesionDatos()
         {
             bool bandInt = true;
@@ -1144,6 +1168,7 @@ namespace PruebaProyecto
             
         }
 
+        //Metodo para verificar que no haya claves primarias repetidas tanto de arbol como de hasEstatico
         public bool verifcaValorPrim()
         {
             int valorClave;
@@ -1204,6 +1229,7 @@ namespace PruebaProyecto
 
 
 
+        //Metodo que guarda un registro en el archivo de datos, el cual tambien manda llamar el llenado de su correspondientes metodos de llamados de tipos de inidices 
         private void GuardaRegistros_Click(object sender, EventArgs e)
         {
             string valor = "";
@@ -1302,13 +1328,6 @@ namespace PruebaProyecto
                         RegisInserdataGridView.Rows[RegisInserdataGridView.Rows.Count - 1].Cells[entAct.listAtrib.Count + 1].Value = -1;
                     }
 
-
-                    /*if(bandModAtrBus && !bandAtrArb)///ESTO RECIEN LO AGREGUE
-                    {
-                        bw.Write((long)dirSigAuxElimReg);
-                        r = 0;
-                        RegisInserdataGridView.Rows[RegisInserdataGridView.Rows.Count - 1].Cells[entAct.listAtrib.Count + 1].Value = dirSigAuxElimReg;
-                    }*/
                    
 
                     if (!bandAtrBus)
@@ -1383,6 +1402,7 @@ namespace PruebaProyecto
         }
 
 
+        //Este metodo lo utilisaba ya que en ocaciones habia basura de simbolos en el archivo
         public string creaCadenaCorrecta(string cad)
         {
             string cadCorrecta = "";
@@ -1398,6 +1418,7 @@ namespace PruebaProyecto
 
 
 
+        //Este metodo sirve para comparar dos cadenas de numeros y poder adaptarlos a sus correpondientes numero de digitos
         public string[] adaptNumero(string cad1, string cad2)
         {
 
@@ -1424,6 +1445,8 @@ namespace PruebaProyecto
         }
 
 
+
+        //Metodo que se encarga de la organizacion en los registros en base a una clave de busqueda
         public void ordenaPorClv(int posUltReg, int posDataGrid)
         {
             string cadCveAct;
@@ -1599,6 +1622,8 @@ namespace PruebaProyecto
             entAct.archivoDat.Close();
         }
 
+
+        //Este metodo solo se manda llamar para actulizar la direccion del diccionario a la cual apunta al primer registro.
         public void actualizaPrimerRegEnt(Entidad entAct)
         {
             entAct.archivoDat = File.Open(BitConverter.ToString(entAct.id_enti) + ".dat", FileMode.Open);
@@ -1621,7 +1646,7 @@ namespace PruebaProyecto
         }
 
 
-
+        //Este metodo se encarga de escribir en el registro el valor nulo(-1) en el ultimo registro
         public void compruebaFinal(BinaryWriter bw)
         {
             for (int i = 1; i < RegisInserdataGridView.Rows.Count; i++)
@@ -1638,18 +1663,24 @@ namespace PruebaProyecto
             r = 0;
         }
 
+
+        //Este metodo se utiliza para limpiar los dataGrid
         public void limpiaGridRellReg()
         {
             RegistroRellDataGrid.Rows.Clear();
             RegistroRellDataGrid.Columns.Clear();
         }
 
+        //Este metodo se utiliza para limpiar los dataGrid
         public void limpiaGridInsertadosReg()
         {
             RegisInserdataGridView.Rows.Clear();
             RegisInserdataGridView.Columns.Clear();
         }
 
+
+
+        //Evento que se encarga de actualizar toda la infromacion necesaria para el rellenado de la entidad que se selecciona en el comboBox
         private void CambiaEntiReg(object sender, EventArgs e)
         {
 
@@ -1924,6 +1955,7 @@ namespace PruebaProyecto
         }
 
 
+        //Este metodo se utliza cuando ya tenga datos de regitros la entidad seleccionada pueda verlos y hacer la correspondiente accion en ellos
         public void agregaRegisExistentes(Entidad ent)
         {
             r = 0;
@@ -2021,6 +2053,8 @@ namespace PruebaProyecto
             ent.archivoDat.Close();
         }
 
+
+        //Este metodo se encarga de poner los datos de un registro a modificar dentro del grid de rellenado para actualizar sus valores
         private void RegisInserdataGridView_SelectionChanged(object sender, EventArgs e)
         {
             //PROBAR
@@ -2035,6 +2069,8 @@ namespace PruebaProyecto
             bandModi = false;
         }
 
+
+        //Evento que da notificacion de que se quiere elimnar un registro
         private void EliminarReg_Click(object sender, EventArgs e)
         {
             bandElim = true;
@@ -2043,6 +2079,7 @@ namespace PruebaProyecto
 
 
 
+        //Metodo que elimina un registo y manda llamar sus pertinetes metodo para actualizar en los diferentes tipos de indices
         private void RegisInserdataGridView_CellClick(object sender, DataGridViewCellEventArgs e)//Elimina Registro
         {
             int indFilEli;
@@ -2139,6 +2176,8 @@ namespace PruebaProyecto
             r = 0;
         }
 
+
+        //Metodo que se encarga de llamar metodos para cuando se cierre la ventana se puedan utilizar nuevamente a la siguiente vez
         private void Datos_FormClosing(object sender, FormClosingEventArgs e)
         {
             lonRegisAct = 0;
@@ -2148,6 +2187,8 @@ namespace PruebaProyecto
             comboBoxEntiDatos.Items.Clear();
         }
 
+
+        //Evento que notifica que se quiere modificar un registro
         private void ModificaRegistro_Click(object sender, EventArgs e)
         {
             bandModi = true;
@@ -2156,6 +2197,8 @@ namespace PruebaProyecto
 
         }
 
+
+        //Evento que aplica los cambios que realizo el usuario a un registro llamando los metodo pertinentes para la accion 
         private void AplicaCambio_Click(object sender, EventArgs e)
         {
             
@@ -2238,12 +2281,7 @@ namespace PruebaProyecto
                     bandModAtrBus = true;
                     dirAuxElimReg = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[0].Value.ToString());
                     dirSigAuxElimReg = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[entAct.listAtrib.Count + 1].Value.ToString());
-                    //r = 0;
-                    //EliminarReg_Click(this, null);//Elimina Registro
 
-
-
-                    //RegisInserdataGridView_CellClick(this, null);//Elimina Registro
                     if (bandAtrPri)
                     {
                         eliminaRegClvPrim((int)dirAuxElimReg);
@@ -2263,11 +2301,10 @@ namespace PruebaProyecto
                         }
 
                         int j = 0;
-                        ////(string clavpri, int dirEli, int contIndSec)
+
                         foreach (IndiceSecundario a in entAct.lisIndSec)
                         {
                             r = 0;
-                            //eliminaBloquSec(RegisInserdataGridView.CurrentRow.Cells[lisPosIndSec.ElementAt(j)].Value.ToString(), (int)RegisInserdataGridView.CurrentRow.Cells[0].Value, a.contIndSec);
                             eliminaBloquSec(RegisInserdataGridView.CurrentRow.Cells[lisPosIndSec.ElementAt(j)].Value.ToString(), (int)RegisInserdataGridView.CurrentRow.Cells[0].Value, a.contIndSec);
                             j++;
                         }
@@ -2317,25 +2354,26 @@ namespace PruebaProyecto
             r = 0;
         }
 
+
+        //Evento que manda llamar la ventana del arbol para verificar valores del arbol
         private void venArbolPri_Click(object sender, EventArgs e)
         {
             vAR = new ventanaArbol();
             if(entAct != null)
             {
-                //arbol.actualizaListaNodo();
                 vAR.setListaNodo(arbol.lisNodo);
                 vAR.archArbol = arbol.archArb;
                 vAR.agregaValoresTabla();
                 
                 vAR.Show();
-                
-                
 
             }
-            //vAR.Show();
+
 
         }
 
+
+        //Evento que manda llamar la ventana del hashEstatico para verificar valores de hash estatico
         private void HashEstatico_Click(object sender, EventArgs e)
         {
 

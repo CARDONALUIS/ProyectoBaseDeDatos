@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace PruebaProyecto
 {
+    /*
+     Clase que ayuda a establecer una el indice secundario en los archivos
+     */
     public class IndiceSecundario
     {
         public char tipo;
@@ -18,7 +21,7 @@ namespace PruebaProyecto
         public int posAtrSec;
 
         
-
+        //Constructo de la clase que ayuda a inisializar ciertos valores de la clase
         public IndiceSecundario(char _tipo, int _longAtrSec, FileStream _archSec, int _capacidadTotBloq, int _longBloqSec, int _contIndSec, int tipoOpArch, int _posAtrSec)
         {
             tipo = _tipo;
@@ -51,6 +54,7 @@ namespace PruebaProyecto
 
         }
 
+        //Metodo que crea un cajon nulo para empezar a guardar las claves primarias
         public void creaCajon(int dirDeCajon)
         {           
             BinaryWriter bw = new BinaryWriter(archSec);

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace PruebaProyecto
 {
+    /*
+     * Clase para crear objetos de la clase nodo los cuales permiten una mejor manipulacion del arbol
+     */
     public class Nodo
     {
         public List<int> K = new List<int>();

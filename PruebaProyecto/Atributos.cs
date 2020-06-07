@@ -9,6 +9,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
+/*
+ * Esta clase sirve para la ventan de vista para la presentacion de los atributos de una entidad
+ */
 namespace PruebaProyecto
 {
     public partial class Atributos : Form
@@ -17,6 +21,8 @@ namespace PruebaProyecto
         int r = 0;
         public int contAtributo = 0;
         Entidad ent;
+
+        //Metodo constructor se utiliza para inicializar algunas tablas y poner no visibles algunos controles
         public Atributos(Diccionario dic)
         {
             InitializeComponent();
@@ -26,6 +32,7 @@ namespace PruebaProyecto
             buttonEliAtri.Visible = false;
         }
 
+        //Este metodo asigna las diferentes entidades al combo
         public void actualizaDicc(Diccionario d)
         {
             dic = d;
@@ -39,9 +46,11 @@ namespace PruebaProyecto
             }
         }
 
+
+        //Este metodo se encarga de guardar un atributo en su correspondiente entidad llamando los metodo pertinentes
         private void ActualizarAtributo(object sender, EventArgs e)
         {
-            //Obtenemos la entidad actual
+            
             
             int entSel = comboBoxEntidades.SelectedIndex;
 
@@ -89,6 +98,8 @@ namespace PruebaProyecto
                 MessageBox.Show("Selecciona una entidad\nSi no tienes entidades crea una");
         }
 
+
+        //Este metodo escribe en el archivo el atributo
         public void escribeAtrib(Atributo atr, Entidad ent)
         {
             using (BinaryWriter bw = new BinaryWriter(File.Open(dic.nomArchivo, FileMode.Open)))
@@ -129,6 +140,7 @@ namespace PruebaProyecto
             } 
         }
 
+        //Este metodo actualiza de forma grafica en la tabla los atributos de cierta entidad que recibe
         public void actualizaGridAtri(Entidad ent)
         {
             GridAtributos.Columns.Clear();
@@ -155,6 +167,7 @@ namespace PruebaProyecto
             r = 0;
         }
 
+        //Este metodo solo asigna a la ultima entidad su correspondiente ultimo valor el apuntador siguiente
         public void actualizaUltima(Entidad ent)
         {
             for (int i = 0; i < ent.listAtrib.Count; i++)
@@ -170,6 +183,7 @@ namespace PruebaProyecto
             }
         }
 
+        //Metodo que sirve dejar como si fuera un principio los controles de la ventana
         private void Atributos_FormClosing(object sender, FormClosingEventArgs e)
         {
             GridAtributos.Columns.Clear();
@@ -181,6 +195,7 @@ namespace PruebaProyecto
             comboBoxModAtri.Text = "";
         }
 
+        //Metodo que se utiliza para inicializar las columnas del dataGrid
         public void inisializaColumnas()
         {
             dic = dic;
@@ -218,6 +233,8 @@ namespace PruebaProyecto
             GridAtributos.Columns.Add(Columna8);
         }
 
+
+        //Metodo para ver los atributos actuales de una entidad
         private void VerActualesAtri(object sender, EventArgs e)
         {
             GridAtributos.Columns.Clear();
@@ -248,6 +265,8 @@ namespace PruebaProyecto
                 MessageBox.Show("Selecciona un entidad");
         }
 
+
+        //Metodo que solo prepar de modo grafico la modificacione estableciendo los diferentes controles e items en la ventana
         private void ModificarEnti(object sender, EventArgs e)
         {
             VerActualesAtri(this, null);
@@ -273,6 +292,8 @@ namespace PruebaProyecto
                 MessageBox.Show("Elige una entidad y asegurate de que tenga atributos por modificar, si no crealos");
         }
 
+
+        //Este metodo ya permite que se guarden en el archivo las modificaciones de un atributo
         private void cambiaAtributo(object sender, EventArgs e)
         {
             int inAM = comboBoxModAtri.SelectedIndex;
@@ -321,6 +342,8 @@ namespace PruebaProyecto
 
         }
 
+
+        //Metodo que elimina un atributo de una entidad seleccionada
         private void eliminaAtri(object sender, EventArgs e)
         {
             int inAM = comboBoxModAtri.SelectedIndex;
@@ -387,6 +410,8 @@ namespace PruebaProyecto
             r = 0;
         }
 
+
+        //Metodo solo para mandar llamar los atributos actuales
         private void CambioIndiceAtri(object sender, EventArgs e)
         {
             VerActualesAtri(this, null);

@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace PruebaProyecto
 {
+
+    /*
+     Clase con fines de prueba no la llegue a utilizar
+     */
     [Serializable]
     public class Registro
     {

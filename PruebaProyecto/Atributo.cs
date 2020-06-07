@@ -4,6 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/*
+ * Clase que se utiliza para definir solo atributos de objetos creados para esta clase y utilizados
+ * en otras clases 
+ * */
+
+
 namespace PruebaProyecto
 {
     [Serializable]
@@ -33,6 +39,7 @@ namespace PruebaProyecto
         private long DIRSIGATRI;
         public long dirSigAtri { get { return DIRSIGATRI; } set { DIRSIGATRI = value; } }
 
+        //Constuctor que sirve para setear valores para la utilizacion de los objetos de creados de la clase
         public Atributo(Byte[] _idAtr, string _nom, char _tipoDa, int _long, int _dirAtr, int _tipIn, int _dirInd, int _dirSigAtr)
         {
             ID_ATRI = _idAtr;

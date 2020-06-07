@@ -7,29 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 /*
- *
- *  +++leer archivo
- *  
-*   archArb.Close();
-    archArb = File.Open(archArb.Name, FileMode.Open);
-    BinaryReader br = new BinaryReader(archArb);
-    .
-    .
-    .
-    archArb.Close();
-
-    +++Escribir archivo
-
-
-    using (BinaryWriter bw = new BinaryWriter(File.Open(archArb.Name, FileMode.Open)))
-    {
-    .
-    .
-    .
-    }
-
-
- * */
+ Clase que contiene todo el codigo relacionado a la creacion del arbol primario 
+     */
 
 namespace PruebaProyecto
 {
@@ -42,13 +21,13 @@ namespace PruebaProyecto
         public Diccionario dic;
         public List<Nodo> lisNodo  = new List<Nodo>();
         public Nodo hojaActual_L;
-        public int n = 5;//Numero de grado del arbol
+        public int n = 5;
         public bool bandT = false;
         public List<Nodo> lisNodPad;
         public int kPriBorrar;
 
 
-
+        //Metodo para detectar que cuando llegue al punto de tener solo un nodo padre 
         public bool esraizOrigen(Nodo N)
         {
             int contValo = 0;
@@ -69,6 +48,7 @@ namespace PruebaProyecto
             return bandOrigen;
         }
 
+        //Metodo para actualizar valores de un nodo cuando se eliminan valores en un nodo del archivo  
         public void actualizaEliArchNodo(Nodo N)
         {
             r = 0;
@@ -96,10 +76,6 @@ namespace PruebaProyecto
                     }
                 }
 
-
-                r = 0;
-
-
                 bw.Seek((int)N.dirNodo, SeekOrigin.Begin);
                 bw.Write(N.dirNodo);
                 bw.Write(N.tipo);
@@ -124,33 +100,29 @@ namespace PruebaProyecto
         }
 
 
+        //Metodo que encuentra primero el nodo al que pertenece la clave a borrar y despues ejecuta el metodo que lo elimina de forma general 
         public void borrar(int K, long P)
         {
-
             r = 0;
             Nodo L = encuentraNodoHoja(K);
             borrar_entrada(L, K, P);
-           
 
         }
 
+        //Borra los valores especificados del nodo especificado
         public void borrarValoresSelec(Nodo L, int K , long P)
         {
             r = 0;
             int indexK = L.K.FindIndex(x => x == K);
             int indexP = L.P.FindIndex(x => x == P);
-
-            r = 0;
-
             L.K.RemoveAt(indexK);
             L.P.RemoveAt(indexP);
 
             r = 0;
-
-            //Remover del archivo;
-
         }
 
+
+        //Metodo que ayuda a seleccionar que nodo pedir prestado para una posible eliminacion
         public Nodo seleccionaHermano(Nodo N, int K, long P)
         {
             Nodo pad = buscaPadre(N);
@@ -231,9 +203,10 @@ namespace PruebaProyecto
             
         }
 
+
+        //Metodo que se encarga de acomodar valores entre dos nodos en base a la bandera espsificada
         public void concatenaPares(Nodo N, Nodo NPri, bool concatenarPrincipio)
         {
-
             if (concatenarPrincipio)
             {
                 for(int i = N.K.Count-1; i>= 0;i--)
@@ -279,41 +252,11 @@ namespace PruebaProyecto
             r = 0;
         }
 
+
+        //Metodo que se encarga de cambiar todos las claves y apuntadores entre dos nodos exepto los apuntadores de esos nodos
         public void intercambiar_variables(Nodo N, Nodo Npri)
         {
             r = 0;
-            /*
-            long dirAuxPN;
-            long dirAuxPNpri;
-
-            //Ultimos apuntadores
-            archArb.Close();
-            archArb = File.Open(archArb.Name, FileMode.Open);
-            BinaryReader br = new BinaryReader(archArb);
-
-            archArb.Seek((int)N.dirNodo + 57, SeekOrigin.Begin);
-
-            dirAuxPN = br.ReadInt64();
-
-            archArb.Seek((int)Npri.dirNodo + 57, SeekOrigin.Begin);
-
-            dirAuxPNpri = br.ReadInt64();
-
-            archArb.Close();
-            r = 0;
-
-            using (BinaryWriter bw = new BinaryWriter(File.Open(archArb.Name, FileMode.Open)))
-            {
-                bw.Seek((int)N.dirNodo + 57, SeekOrigin.Begin);
-                bw.Write(dirAuxPNpri);
-                bw.Seek((int)Npri.dirNodo + 57, SeekOrigin.Begin);
-                bw.Write(dirAuxPN);
-
-            }
-            r = 0;
-            */
-
-
             long dirAux;
 
             dirAux = N.dirNodo;
@@ -322,58 +265,10 @@ namespace PruebaProyecto
             N.dirNodo = Npri.dirNodo;
             Npri.dirNodo = dirAux;
 
-            r = 0;
-           
-
-
-
-
-            /*
-            foreach(int a in N.K)
-            {
-                Kaux.Add(a);
-            }
-            foreach (int b in N.P)
-            {
-                Paux.Add(b);
-            }
-
-            tipoAux = N.tipo;
-            dirAux = N.dirNodo;
-
-            N.K.Clear();
-            N.P.Clear();
-
-            //cambiar valore de Npri a N
-            foreach (int a in Npri.K)
-            {
-                N.K.Add(a);
-            }
-            foreach (int b in Npri.P)
-            {
-                N.P.Add(b);
-            }
-            N.tipo = Npri.tipo;
-            N.dirNodo = Npri.dirNodo;
-
-            //Poner valores guardados de N a Npri
-            Npri.K.Clear();
-            Npri.P.Clear();
-
-            foreach (int a in Kaux)
-            {
-                Npri.K.Add(a);
-            }
-            foreach (int b in Paux)
-            {
-                Npri.P.Add(b);
-            }
-            Npri.tipo = tipoAux;
-            Npri.dirNodo = dirAux;*/
-
-
         }
 
+
+        //Este metodo borra un nodo de forma fisica en el archivo
         public void borraNodo(Nodo N)
         {
             N.K.Clear();
@@ -397,10 +292,10 @@ namespace PruebaProyecto
          }
 
 
+
+        //Metodo que se encarga de concatenar valores entre un nodo y otro espesificando una bander pero solo es para nodos que no son hojas
         public void concatenarNoHoja(int K, Nodo N, Nodo Npri, bool concatenarAlPrincipio)
         {
-            r = 0;
-
             if (!concatenarAlPrincipio)
             {
                 Npri.K.Add(K);
@@ -434,7 +329,11 @@ namespace PruebaProyecto
             r = 0;
         }
 
-
+        /*
+        Nodo que se encarga de forma general de borrar en el nodo y llamar 
+        el pertinente metodo dadas las condiciones del nodo una vez sido borrado cabe mensionar que este
+        metoodo es recursivo 
+        */
         public void borrar_entrada(Nodo N, int K, long P)
         {
             r = 0;
@@ -479,17 +378,13 @@ namespace PruebaProyecto
                             r = 0;
                             concatenarNoHoja(kPri, N, Npri, concatenarPrincipio);
                             r = 0;
-                            /*if(concatenaPares(N)
-                                concatenaPares(N, Npri, concatenarPrincipio);*/
-
-
+                            
                         }
                         else//Concatenar todos los pares(ki, pi) en N a N'
                         {
                             r = 0;
                             concatenaPares(N, Npri, concatenarPrincipio);
-                            r = 0;
-                            //Leer el del archivo el ultimo enlaces N y pasarselo a N' 
+
                         }
 
                         r = 0;
@@ -630,7 +525,7 @@ namespace PruebaProyecto
                 }
 
             }
-            //L.P.Remove(L);
+
         }
 
         /*
@@ -638,6 +533,7 @@ namespace PruebaProyecto
         */
 
 
+        //Metodo que se encarga de crear un espacio en el archivo que represente el tamaño de un nodo
         public void creaEspNodo(char tipo)
         {
 
@@ -648,8 +544,6 @@ namespace PruebaProyecto
             archArb.Close();
             using (BinaryWriter bw = new BinaryWriter(File.Open(archArb.Name, FileMode.Open)))
             {
-
-
                 bw.Seek((int)finArchivo, SeekOrigin.Begin);
 
                 Byte[] bloque = new Byte[57];
@@ -679,6 +573,7 @@ namespace PruebaProyecto
         }
         
 
+        //Metodo que se encarga de leer el archivo para actualizar de manera logica la lista de nodos
         public void actualizaListaNodo()
         {
             BinaryReader br = new BinaryReader(archArb);
@@ -694,7 +589,6 @@ namespace PruebaProyecto
             int posIni = 0;
             bool masNodos = true;
 
-            //archArb.Seek(posAct, SeekOrigin.Begin);
             
 
             while (true)
@@ -717,13 +611,11 @@ namespace PruebaProyecto
                     archArb.Seek(posAct, SeekOrigin.Begin);
 
                     dirPun = br.ReadInt64();
-                    
-
                     r = 0;
 
                     if (no.tipo == 'H' || no.dirNodo == 0)
                     {
-                        //dirPun = br.ReadInt64();
+
                         clv = br.ReadInt32();
 
                         no.K.Add(clv);
@@ -734,26 +626,18 @@ namespace PruebaProyecto
                     }
                     else
                     {
-                        //clv = br.ReadInt32();
-                        //dirPun = br.ReadInt64();
-
                         r = 0;
                         clv = br.ReadInt32();
 
                         r = 0;
                         if (clv!= -1)
                         no.K.Add(clv);
-
                         no.P.Add(dirPun);
-                        //dirPun = br.ReadInt64();
-                        //no.P.Add(dirPun);
                         posAct += 12;
                         r = 0;
                     }
 
                     r = 0;
-
-
 
                     if (br.ReadInt64() == -1)//No hay mas claves
                     {
@@ -763,18 +647,10 @@ namespace PruebaProyecto
 
                     r = 0;
                     archArb.Seek(posAct, SeekOrigin.Begin);
-                    
 
                 }
                 r = 0;
                
-
-                /*if(no.tipo == 'H')
-                {
-                    archArb.Seek(posIni + 57, SeekOrigin.Begin);
-                    int valFinal = br.ReadInt64()
-                    no.P.Add(br.ReadInt64());
-                }*/
 
                 if(no.P.Count == n-1 && no.tipo == 'R' && no.dirNodo == 0)
                 {
@@ -814,11 +690,10 @@ namespace PruebaProyecto
                 }
 
                 r = 0;
-                //archArb.Seek(posIni+57, SeekOrigin.Begin);
-                //if (!bandFinClv && br.ReadInt64() == -1 && !masNodos )//llego al final y ya no tiene mas campos que agregar
+               
                 if (!masNodos)//llego al final y ya no tiene mas campos que agregar
                 {
-                    //no.dirSigNod = -1;
+
                     lisNodo.Add(no);
                     masNodos = true;
                     break;
@@ -826,22 +701,17 @@ namespace PruebaProyecto
                 }
                 else
                 {
-                    //no.dirSigNod = -1;
+
                     lisNodo.Add(no);
                     posIni += 65;
-                }
-
-                
-                    
-
-                posAct = posIni;
-
-                
+                }             
+                posAct = posIni;                
             }
             r = 0;
-
         }
         
+
+        //Constructor de la clase para establecer ciertos valores de la clase
         public ArbolB_Primario(FileStream _archArb, bool recInf, int _dirArchDatArb)//El archivo, y si lo abrieron con informacion ya almacenada
         {
             archArb = _archArb;
@@ -860,16 +730,16 @@ namespace PruebaProyecto
             }
         }
 
+
+        //Metodo seter de la entidad y el diccionario para tener esos valores en esta clase
         public void setEntYDic(Entidad _ent, Diccionario _dic)
         {
             entAct = _ent;
-            dic = _dic;
-            
+            dic = _dic;            
             r = 0;
-
         }
 
-
+        //Obtiene el valor de la clave primaria y su direccion del ultimo registro que se guardo
         public void ObtengRegistro()
         {
             
@@ -891,12 +761,7 @@ namespace PruebaProyecto
                 else
                     r = 0;
             }
-            r = 0;
 
-
-            //creaNodoArb();
-
-            r = 0;
             entAct.archivoDat.Close();
             entAct.archivoDat = File.Open(entAct.archivoDat.Name, FileMode.Open);
             BinaryReader br = new BinaryReader(entAct.archivoDat);
@@ -918,6 +783,11 @@ namespace PruebaProyecto
 
         }
 
+
+        /*
+         * Metodo que de forma general inserta la clave primaria y su apuntador
+         * y llamando a los metodos pertinentes dado el caso de la tipo de insericion que debe de ser
+         */
         public void inserta(int K, long P)
         {
             r = 0;
@@ -930,8 +800,6 @@ namespace PruebaProyecto
                 hoja.dirNodo = P;
                 lisNodo.Add(hoja);
                 hojaActual_L = hoja;
-
-                
                 r = 0;
             }
           else//Encontrar el nodo hoja en  que debera contener el valor de llave K
@@ -985,6 +853,7 @@ namespace PruebaProyecto
             
         }
 
+        //Metodo que actualiza en el archivo los dos nodos que se repartieron valores
         public void actulizarDivisionArchivo(Nodo L, Nodo LPri)
         {
             Byte[] bloque = new Byte[48];
@@ -996,7 +865,6 @@ namespace PruebaProyecto
             r = 0;
             using (BinaryWriter bw = new BinaryWriter(File.Open(archArb.Name, FileMode.Open)))
             {   
-                //Vaciamos los dos nodos
                 bw.Seek((int)L.dirNodo+9, SeekOrigin.Begin);
                 bw.Write(bloque);
                 r = 0;
@@ -1055,6 +923,7 @@ namespace PruebaProyecto
             }
         }
 
+        //Este metodo sirve para guardar los valores que tiene un nodo en otro nodo llamado T para usarlo como respaldo
         public void copiaValAT(Nodo L, Nodo T)
         {
             foreach (int a in L.K)
@@ -1063,29 +932,11 @@ namespace PruebaProyecto
                 T.P.Add(b);
         }
 
+
+        //Este metodo sirve solo para actualizar valores en el archivo pero del nodo raiz
         public void actualizaNodoRaizArchivo(Nodo n)
         {
-            /*long valorCom;
-            int pos;
-
-            archArb.Close();
-            archArb = File.Open(archArb.Name, FileMode.Open);
-            BinaryReader br = new BinaryReader(archArb);
-
-            pos = (int)n.dirNodo + 9;
-            archArb.Seek(pos, SeekOrigin.Begin);
-            valorCom = br.ReadInt64();
-
-            while(valorCom != -1)
-            {
-                pos += 12;
-
-            }*/
-
-            /*
-            valorComp = br.ReadInt64();
-            archArb.Close();
-            */
+            
             r = 0;
             using (BinaryWriter bw = new BinaryWriter(File.Open(archArb.Name, FileMode.Open)))
             {
@@ -1101,6 +952,11 @@ namespace PruebaProyecto
 
         }
 
+
+        /* 
+         * Este metodo se manda llamar cuando se tiene que crear un nodo padre , pero tomando en 
+         * cuenta los metodo pertinentes dada las condiciones del arbol en ese momento
+         */
         public void insert_in_parent(Nodo N,int KPri, Nodo NPri)
         {
             r = 0;
@@ -1222,6 +1078,7 @@ namespace PruebaProyecto
 
         }
 
+        //Metodo que busca el nodo padre dado un nodo espesificado
         public Nodo buscaPadre(Nodo n)
         {
             r = 0;
@@ -1232,6 +1089,8 @@ namespace PruebaProyecto
             return padre;
         }
 
+
+        //Este metodo ayuda a repartir los valores entre el nodo respaldo que es T y los demas nodos que son L  y LPri
         public void repartirValoresT(Nodo T, Nodo L, Nodo LPri,char tipo)
         {
             r = 0;
@@ -1275,7 +1134,7 @@ namespace PruebaProyecto
          }
 
 
-
+        //Este metodo crea de forma general un nodo dado los paramatros recibidos
         public void creaNodo(Nodo LPri, char tipo)
         {
             if (tipo == 'H')
@@ -1318,7 +1177,6 @@ namespace PruebaProyecto
             long LPn = br.ReadInt64();
 
             r = 0;
-            //archArb.Seek(LPri.dirNodo + 57, SeekOrigin.Begin);
             archArb.Close();
             using (BinaryWriter bw = new BinaryWriter(File.Open(archArb.Name, FileMode.Open)))
             {
@@ -1340,6 +1198,8 @@ namespace PruebaProyecto
             archArb.Close();
         }
 
+
+        //Metodo que encuentra un nodo en el arbol dada la clave resibida
         public Nodo encuentraNodoHoja(int V)
         {
             Nodo a = new Nodo();
@@ -1417,64 +1277,12 @@ namespace PruebaProyecto
             r = 0;
 
             return C;
-            /*
-            //Esto es para el findValor
-            foreach (int b in C.K)
-            {
-                if (b == V)
-                {
-                    r = 0;
-                    return C;
-                }
-            }
-
-            r = 0;
-            return null;
-            */
-
-            //Nodo noHoj = lisNodo.Find(x => x.K.ElementAt(x) == 8); 
-            //Nodo noHoja = lisNodo.Find(x =>  == K && x.P.ElementAt(0) == 5);
-            
-
-            /*foreach (Nodo b in lisNodo)
-            {
-                r = 0;
-
-
-                if (b.tipo == 'H')
-                {
-                    r = 0;
-                    valMax = b.K.Max();
-                    r = 0;
-                    if (K <= valMax)
-                    {
-                        r = 0;
-                        break;
-                    }
-                }
-                else
-                if (b.dirNodo == 0 && b.tipo == 'R')
-                {
-                    r = 0;
-                    break;
-                }
-                else
-                {
-                    r = 0;
-                    index++;
-                }
-            }
-
-            a = lisNodo.ElementAt(index);
-
-            r = 0;
-            //a = lisNodo.Max(x => x.K);
-
-            return a;*/
         }
 
 
 
+
+        //Metodo que inserta clave y direccion en el nodo especificado en las posiciones especificadas
         public void inset_in_leaf(Nodo L, int K, long P)
         {
             r = 0;
@@ -1484,7 +1292,6 @@ namespace PruebaProyecto
                 L.P.Insert(0, P);
                 L.K.Insert(0, K);
                 r = 0;
-                //archArb.Close();
                 using (BinaryWriter bw = new BinaryWriter(File.Open(archArb.Name, FileMode.Open)))
                 {
                     bw.Seek((int)L.dirNodo, SeekOrigin.Begin);
@@ -1556,9 +1363,9 @@ namespace PruebaProyecto
             }
         }
 
+        //Metodo que recorre valores de forma fisica en el nodo para que asi queden en la adecuada posicion
         public void recorreDatos(Nodo L, int indice)
         {
-            //entAct.archivoIndPri.Close();
 
             r = 0;
             archArb = File.Open(archArb.Name, FileMode.Open);
@@ -1582,7 +1389,6 @@ namespace PruebaProyecto
             {
                 r = 0;
 
-                //archArb.Seek(((int)L.dirNodo + 9) + ((auxPos-1) * 12), SeekOrigin.Begin);
                 archArb.Close();
                 archArb = File.Open(archArb.Name, FileMode.Open);
                 br2 = new BinaryReader(archArb);
@@ -1608,7 +1414,7 @@ namespace PruebaProyecto
 
                 archArb.Seek(((int)L.dirNodo + 9) + ((auxPos - 1) * 12), SeekOrigin.Begin);
                 longDir = br3.ReadInt64();
-                //clave = br3.ReadInt32();
+
                 r = 0;
                 
                 
@@ -1619,9 +1425,10 @@ namespace PruebaProyecto
             r = 0;
         }
 
+        
+        //Metodo que igual recorre datos de forma fisica pero en un nodo padre
         public void recorreDatosPad(Nodo L, int indice)
         {
-            //entAct.archivoIndPri.Close();
 
             r = 0;
             archArb = File.Open(archArb.Name, FileMode.Open);
@@ -1646,7 +1453,6 @@ namespace PruebaProyecto
             {
                 r = 0;
 
-                //archArb.Seek(((int)L.dirNodo + 9) + ((auxPos-1) * 12), SeekOrigin.Begin);
                 archArb.Close();
                 archArb = File.Open(archArb.Name, FileMode.Open);
                 br2 = new BinaryReader(archArb);

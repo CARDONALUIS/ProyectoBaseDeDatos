@@ -10,45 +10,49 @@ using System.Windows.Forms;
 
 namespace PruebaProyecto
 {
+    /*
+     Clase que solo la utilize con fines de prueba pero no se usa en el proyecto
+     */
     public partial class VenEntidades : Form
     {
         Diccionario dic;
         int r = 0;
         
-
+        //Metodo constructor
         public VenEntidades()
         {
             InitializeComponent();
         }
 
+        //Metodo que sireve para instanciar el objeto de la clases diccionario
         private void VenEntidades_Load(object sender, EventArgs e)
         {
             dic = new Diccionario();
         }
 
+
+        //Metodo con fines de prueba
         private void Button1_Click(object sender, EventArgs e)//Botono de agregar Entidad
         {
             String nomEntid = "";
 
-            //dic.vaActEnt = dic.vaActEnt + dic.tamEntidad;
             dic.cab = dic.vaActEnt;
             nomEntid = textEntid.Text;
             Entidad en;
 
             if (dic.listEntidad.Count == 0)
             {
-                //en = new Entidad(2568589, nomEntid, dic.vaActEnt, dic.vaActEnt + dic.tamEntidad, -1, -1);
             }
             else
             {
-                //en = new Entidad(2568589, nomEntid, dic.vaActEnt, dic.vaActEnt + dic.tamEntidad, -1, -1);
             }
             r = 0;
-            //dic.listEntidad.Add(en);
             
 
         }
 
+
+        
         private void AgregarAtri_Click(object sender, EventArgs e)
         {
             if (textNomAtri.Text != "")

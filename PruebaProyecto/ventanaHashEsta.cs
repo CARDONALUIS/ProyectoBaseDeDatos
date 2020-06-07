@@ -11,6 +11,9 @@ using System.Windows.Forms;
 
 namespace PruebaProyecto
 {
+    /*
+     * Clase que permite visualiar en forma de ventana como se organizan los datos en la organzacion HashEstatica
+     */
     public partial class ventanaHashEsta : Form
     {
         CajonHash[] DirectorioHash;
@@ -18,6 +21,7 @@ namespace PruebaProyecto
         int r = 0;
 
 
+        //Metodo constructor
         public ventanaHashEsta()
         {
             InitializeComponent();
@@ -25,6 +29,7 @@ namespace PruebaProyecto
             
         }
 
+        //Metodo para agregar las columnas correspondientes tanto al grid del directorio como al de los cajones
         public void agregaColumnas()
         {
             DataGridViewTextBoxColumn Columna1 = new DataGridViewTextBoxColumn();
@@ -44,11 +49,14 @@ namespace PruebaProyecto
             cajonGrid.Columns.Add(Columna4);
         }
 
+
+        //Metodo seter para que la clase conosca el directorio
         public void setDirectorio(CajonHash[] Direc)
         {
             DirectorioHash = Direc;
         }
 
+        //Metodo que inserta en el grid los diferentes valores a mostrar en el dataGrid
         public void agregaValoresTabla()
         {
             agregaColumnas();
@@ -66,12 +74,16 @@ namespace PruebaProyecto
             }
         }
 
+
+        //Metodo para cuando se cierra la ventan, pueda inisalizarse de la mejor forma
         private void ventanaHashEsta_FormClosing(object sender, FormClosingEventArgs e)
         {
             directorioGrid.Rows.Clear();
             cajonGrid.Rows.Clear();
         }
 
+
+        //Evento que detecta cuando se le da clik a un indice en el directorio y asi pueda mostrar sus valores en el cajon que corresponde
         private void eventoCajonVer(object sender, DataGridViewCellEventArgs e)
         {
             r = 0;

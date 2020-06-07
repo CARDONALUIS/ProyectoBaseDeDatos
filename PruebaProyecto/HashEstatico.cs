@@ -8,33 +8,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-/*
- *
- *  +++leer archivo
- *  
-*   archivHash.Close();
-    archivHash = File.Open(archivHash.Name, FileMode.Open);
-    BinaryReader br = new BinaryReader(archivHash);
-    .
-    .
-    .
-    archivHash.Close();
-
-    +++Escribir archivo
-
-
-    using (BinaryWriter bw = new BinaryWriter(File.Open(archivHash.Name, FileMode.Open)))
-    {
-    .
-    .
-    .
-    }
-
-
- * */
-
 namespace PruebaProyecto
 {
+
+    /*
+     * Clase que se encarga de realizar las acciones que se encomiendan hacer en el hashEstaticos
+     * */
     class HashEstatico
     {
         public FileStream archivHash;
@@ -46,6 +25,8 @@ namespace PruebaProyecto
         int r = 0;
 
 
+
+        //Metodo que se encarga de poner en nulo los valores de un bloque Hash de cierta direccion y con cierto tamaño en el archivo
         public void restablecerBloqueArchivo(int tama, int dir)
         {
             using (BinaryWriter bw = new BinaryWriter(File.Open(archivHash.Name, FileMode.Open)))
@@ -62,6 +43,8 @@ namespace PruebaProyecto
             }
         }
 
+
+        //Este metodo actualiza un cajon hash despues de haber desarrollado un cambio
         public void actualizaListaHashCajonArchivo(int numCajon, long dirCajon)
         {
             //if (dirCajon != -1)
@@ -83,6 +66,7 @@ namespace PruebaProyecto
 
         }
 
+        //Actualiza el valor a donde apunta cierto cajon y lo inisializa desde con valores nulo la direccion que le corresponde en el cajon
         public void actualizaDirectorioArchivo(int numCajon, long valor)
         {
             using (BinaryWriter bw = new BinaryWriter(File.Open(archivHash.Name, FileMode.Open)))
@@ -105,6 +89,7 @@ namespace PruebaProyecto
         }
 
 
+        //Este metodo realiza la insersion de una clave y su direccion en su correspondiente cajon de manera logica
         public void insertaEnCajon(int cajon, int clave,long dirReg)
         {
             
@@ -126,7 +111,6 @@ namespace PruebaProyecto
 
                     DirectorioHash[i].listaCampoCajonHash = lisOrd;
 
-                    //DirectorioHash[i].listaCampoCajonHash = DirectorioHash[i].listaCampoCajonHash.OrderBy(x => x.apunReg).ToList();
 
                     long valoCajon;
                     r = 0;
@@ -155,6 +139,8 @@ namespace PruebaProyecto
             r = 0;
         }
 
+
+        //Metodo seter para tener en la clase los variable entidad y la variable diccionario
         public void setEntYDic(Entidad _ent, Diccionario _dic)
         {
             entAct = _ent;
@@ -162,6 +148,7 @@ namespace PruebaProyecto
         }
 
 
+        //Metodo para obtener el ultimo registro que se ingreso con su clave hash y su direccion para la insercion que corresponde
         public void ObtengRegistro()
         {
             foreach (Atributo a in entAct.listAtrib)
@@ -213,6 +200,8 @@ namespace PruebaProyecto
 
         }
 
+
+        //Este metodo obtiene el valor hash de la clave que resibe como parametro
         public int obtenCajonModulo(int clave)
         {
             double modulo = clave % valorModu;
@@ -220,6 +209,8 @@ namespace PruebaProyecto
             return (int)modulo;
         }
 
+
+        //Metodo que se encarga de realizar la eliminar toda la informacion de un cajon pero en forma fisica que es dentro del archivo
         public void actualizaEliminaArchivoCajon(int cajonEli)
         {
             int dirElimCajo = DirectorioHash[cajonEli].dirCajon;
@@ -251,7 +242,7 @@ namespace PruebaProyecto
             r = 0;
         }
 
-
+        //Metodo que establece todos lo metodos para la eliminacion, este metodo de forma general elimina todo lo que implica eliminar una clave
         public void elimina(int clave)
         {
             int cajon = obtenCajonModulo(clave);
@@ -283,37 +274,31 @@ namespace PruebaProyecto
             r = 0;
         }
 
+
+        //Este metodo inizialisa el directorio de cajones
         public void creaDirectorioHash()
         {
-            //archivHash.Close();
             BinaryWriter bw = new BinaryWriter(archivHash);
-           // using (BinaryWriter bw = new BinaryWriter(File.Open(archivHash.Name, FileMode.Open)))
-            //{
-
                 Byte[] bloque = new Byte[valorModu * 8];
                 for (int i = 0; i < valorModu * 8; i++)
                 {
                     bloque[i] = 0xFF;
                 }
                 bw.Write(bloque);
-
-            //}
-            
             DirectorioHash = new CajonHash[valorModu];
 
             for (int i = 0; i < valorModu; i++)
             {
                 DirectorioHash[i] = new CajonHash();
-                //DirectorioHash[i].dirCajon = -1;
-                //DirectorioHash[i].numCajon = i;
             }
             r = 0;
             archivHash.Close();
         }
 
+
+        //Este metodo actualiza de forma logica que es en memoria el directorio actual
         public void actualizaDirectorioLogico()
         {
-            //Leer el direcorio hash
             r = 0;
             
             int contCajon = 0;
@@ -322,7 +307,6 @@ namespace PruebaProyecto
             for (int i = 0; i < valorModu; i++)
             {
                 DirectorioHash[i] = new CajonHash();
-                //DirectorioHash[i].numCajon = i;
             }
 
             while (contCajon < valorModu)
@@ -352,6 +336,8 @@ namespace PruebaProyecto
             r = 0;
         }
 
+
+        //Metodo que actualiza de forma logica la lista de claves y directorio hash 
         public void actualizaListaHash(int dirCajon, int numCajon)
         {
             archivHash.Close();
@@ -381,6 +367,8 @@ namespace PruebaProyecto
             archivHash.Close();
         }
 
+
+        //Metodo que ayuda a verificar si hay claves que ya estan contenidas en los cajon y se quiera insertar una repetida
         public bool hayClaveRepetida(int clave)
         {
             int cajon = clave % valorModu;
@@ -400,6 +388,7 @@ namespace PruebaProyecto
 
         }
 
+        //Metodo constructor que inisializa variables y archivo para la clase
         public HashEstatico(FileStream _arcHash, int _archDirHash, bool tieneDatos)
         {
             archivHash = _arcHash;

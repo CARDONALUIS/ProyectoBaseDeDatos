@@ -11,12 +11,17 @@ using System.Windows.Forms;
 
 namespace PruebaProyecto
 {
+    /*
+     * Clase que se utiliza para la visualizacion de forma grafica el indice secundario 
+     */
     public partial class venIndiceSec : Form
     {
         int r = 0;
         public Entidad entAct;
         IndiceSecundario indActGlob;
 
+
+        //Metodo constructor que se utiliza para inicializar algunas columnas en forma grafica
         public venIndiceSec()
         {
             InitializeComponent();
@@ -35,6 +40,8 @@ namespace PruebaProyecto
 
         }
 
+
+        //Metodo que agrega las diferntes llaves secundarias de la entidad en las combobox
         public void asignaValores()
         {
             foreach (Atributo a in entAct.listAtrib)
@@ -48,6 +55,8 @@ namespace PruebaProyecto
 
         }
 
+
+        //Evento que actualiza las claves secundarias dado que selccion una en el comboBox y las muestra en los dataGrids
         private void cambAtrSec(object sender, EventArgs e)
         {
 
@@ -55,7 +64,6 @@ namespace PruebaProyecto
 
             int atrSel = atriLlavSec.SelectedIndex;
 
-            //Atributo atrMost = entAct.listAtrib.Find(x => x.nombre == atrSel);
             IndiceSecundario indAct = entAct.lisIndSec.Find(x => x.contIndSec == atrSel);
             indActGlob = indAct;
 
@@ -83,10 +91,7 @@ namespace PruebaProyecto
             
             while (comp.ToString() != "-1" && char.IsLetterOrDigit(comp.ToString().ElementAt(0)))
             {
-                //if (entAct.tipoCvePrima == 'C')
-                //{
 
-                //Objeto para guardar datos genericos
                 IndicePrimario indP = new IndicePrimario();
 
                 indAct.archSec.Seek(posIni, SeekOrigin.Begin);
@@ -106,12 +111,10 @@ namespace PruebaProyecto
                 llaveSecGrid.Rows[fila].Cells[0].Value = indP.clv_prim;
                 llaveSecGrid.Rows[fila].Cells[1].Value = indP.dir_reg;
 
-                //listIndPri.Add(indP);
 
                 r = 0;
                 posIni = posIni + indAct.longBloqSec;
 
-                //comp.ToString() = new string(br.ReadChars(entAct.longClvPrim).ToString().ToCharArray());
                 indAct.archSec.Seek(posIni, SeekOrigin.Begin);
                 r = 0;
                 if (indAct.tipo == 'C')
@@ -125,19 +128,20 @@ namespace PruebaProyecto
 
                 r = 0;
                 fila++;
-                //}
             }
 
             indAct.archSec.Close();
-            //int inEM = comboBoxModEnt.SelectedIndex;
         }
 
-        //evento para dar click en la llave para agregar marcos
+
+        //Evento para dar click en la llave para agregar marcos//Es con fines de prueba
         private void agregaMarcos_evento(object sender, EventArgs e)
         {
             r = 0;
         }
 
+
+        //Evento para mostrar el cajon que se quiere ver dado el click del renglon o fila de la llave secundaria
         private void agregaMarcosGrid_click(object sender, DataGridViewCellEventArgs e)
         {
             r = 0;

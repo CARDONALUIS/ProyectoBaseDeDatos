@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace PruebaProyecto
 {
+
+    /*
+     * Clase utilizada para tener variables de tipo diccionario para la mejor manipuacion de datos
+     */
     [Serializable]
     public class Diccionario
     {
@@ -20,13 +24,14 @@ namespace PruebaProyecto
         public string nomArchivo;
 
 
-
+        //Metodo constructor que se encarga de inicialisar una lista
         public Diccionario()
         {
             listEntidad = new List<Entidad>();
 
         }
 
+        //Metodo que se limpia el diccionario completo junto con sus entidades y sus respectivos atributos
         public void borraDic()
         {
             foreach(Entidad a in listEntidad)
@@ -37,12 +42,12 @@ namespace PruebaProyecto
         }
         
 
+        //Metodo que se encarga de actualizar el diccionario una vez que se halla cerrado o que se necesite vericar valores
         public void actualizaDiccionario(FileStream archivolleg)
         {
             borraDic();
             
             int r = 0;
-            //Variables de entidad
             Byte[] idEnti;
             char[] nombreEnti;
             int dirEnt;
@@ -66,7 +71,7 @@ namespace PruebaProyecto
 
 
             this.archivo = File.Open(nomArchivo, FileMode.Open, FileAccess.Read);
-            // archivo.Seek(8,SeekOrigin.Begin);
+
             BinaryReader br = new BinaryReader(this.archivo);
 
 

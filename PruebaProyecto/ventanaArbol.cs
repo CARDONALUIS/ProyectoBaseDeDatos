@@ -11,6 +11,9 @@ using System.Windows.Forms;
 
 namespace PruebaProyecto
 {
+    /*
+     * Clase que se encarga de mostrar en forma grafica con una ventana el archivo del arbol
+     * */
     public partial class ventanaArbol : Form
     {
         List<Nodo> lisNodo = new List<Nodo>();
@@ -18,15 +21,15 @@ namespace PruebaProyecto
         public FileStream archArbol;
         int n = 5;//Grado
         bool bandElim = false;
+
+
+        //Constructo de la clase 
         public ventanaArbol()
         {
-            InitializeComponent();
-
-           
-            
-
+            InitializeComponent();           
         }
 
+        //Metodo que se utiliza para agregar las columnas del dataGrid
         public void agregaColumnas()
         {
             DataGridViewTextBoxColumn Columna1 = new DataGridViewTextBoxColumn();
@@ -74,12 +77,15 @@ namespace PruebaProyecto
             arbolGrid.Columns.Add(Columna11);
         }
 
+        //Metodo para setear la lista de nodos y la conosca la clase
         public void setListaNodo(List<Nodo> _lisNodo)
         {
             lisNodo = _lisNodo;
 
         }
 
+
+        //Metodo que agrega los valores a la tabla para la visualisacion de estos
         public void agregaValoresTabla()
         {
             agregaColumnas();
@@ -93,8 +99,7 @@ namespace PruebaProyecto
                 arbolGrid.Rows[i].Cells[0].Value = lisNodo.ElementAt(i).dirNodo;
                 arbolGrid.Rows[i].Cells[1].Value = lisNodo.ElementAt(i).tipo;
 
-               // if (lisNodo.ElementAt(i).tipo == 'H' || lisNodo.ElementAt(i).dirNodo == 0)
-                //{
+
                     r = 0;
 
 
@@ -149,23 +154,12 @@ namespace PruebaProyecto
                 auxP = 2;
                 r = 0;
 
-                /*}
-                else
-                {
-                    
-                    for (int j = 2; j < lisNodo.ElementAt(i).P.Count() + 2; i++)
-                    {
-                        arbolGrid.Rows[i].Cells[j].Value = lisNodo.ElementAt(j - 2).K;                   
-                        arbolGrid.Rows[i].Cells[j + 1].Value = lisNodo.ElementAt(j - 2).P;
-                        arbolGrid.Rows[i].Cells[j].Value = lisNodo.ElementAt(j - 1).K;
-                    }
-                    
-
-                }*/
 
             }
         }
 
+
+        //Metodo para cuando se cierre la pantalla se borren los filas y cuando se vuelva abrir se creen denuevo
         private void ventanaArbol_FormClosing(object sender, FormClosingEventArgs e)
         {
             arbolGrid.Rows.Clear();

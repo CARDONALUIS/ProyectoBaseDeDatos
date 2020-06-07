@@ -12,14 +12,17 @@ using System.Windows.Forms;
 
 namespace PruebaProyecto
 {
-
+    /*
+     Clase que se encarga de representar en una ventan las entidades con sus respectivos controles
+     */
     public partial class Entidades : Form 
     {
         int r = 0;
         public Diccionario dic;
         public int contEntidad = 0;
         
-
+        
+        //metodo constructor que la utilizo para inicializar algunas columnas que se muestran en un dataGrid e inicialiso controles y variable
         public Entidades(Diccionario dic2)
         {
             InitializeComponent();
@@ -59,6 +62,8 @@ namespace PruebaProyecto
 
         }
 
+
+        //Evento
         private void botonActualizar(object sender, EventArgs e)
         {
             String nomEnti = "";

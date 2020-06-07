@@ -11,22 +11,25 @@ using System.Windows.Forms;
 
 namespace PruebaProyecto
 {
+
+    /*
+     * Clase que se encarga de mostrar la pantalla principal con sus respectivos controles
+     * */
+
     public partial class Form1 : Form
     {
         
         Entidades vEnti;
         Atributos vAtri;
         Datos vDatos;
-      
-        
-        
+           
         Diccionario dic;
 
         int r = 0;
         string nomArchivo;
 
 
-
+        //Contructor de la clase instancia el objeto de la clase diccionario
         public Form1()
         {
             InitializeComponent();  
@@ -37,6 +40,7 @@ namespace PruebaProyecto
         
 
         
+        //Metodo que se encarga de abrir el archivo del diccionario que se desea usar
         private void AbrirToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string nomArchivo;
@@ -64,7 +68,7 @@ namespace PruebaProyecto
         
 
 
-
+        //Metodo que se encarga de guardar en variables del diccionario y guardarlos en estructuras necesarias para su uso en el programa
         public void actualizaDiccionario(FileStream archivo)
         {
             r = 0;
@@ -212,11 +216,15 @@ namespace PruebaProyecto
         }
 
 
+
+        //Metodo que se usaba con fines de prueba
         private void DiccionarioToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //vDic.ShowDialog();
         }
 
+
+        //Metodo para inicialisar las ventanas de entidades atributos y datos
         private void Form1_Load(object sender, EventArgs e)
         {
             //vDic = new VenEntidades();
@@ -225,23 +233,28 @@ namespace PruebaProyecto
             vDatos = new Datos();
         }
 
+
+        //Evento con fines de prueba
         private void Button1_Click(object sender, EventArgs e)
         {
 
         }
 
-
+        //Evento con fines de prueba
         private void VerDiccionario(object sender, EventArgs e)
         {
 
         }
 
+        //Evento para mostrar la ventana de entidades
         private void ventanaEntidades(object sender, EventArgs e)
         { 
             vEnti.actualizaDicc(dic);
             vEnti.ShowDialog();
         }
 
+
+        //Evento para mostrar la ventana de atributos
         private void VentanaAtributos_Click(object sender, EventArgs e)
         {
             vAtri.actualizaDicc(dic);
@@ -250,10 +263,10 @@ namespace PruebaProyecto
 
         
 
+        //Metodo para crear un nuevo archivo
         private void NuevoArchivo(object sender, EventArgs e)
         {
-            //"GUARDAR UN ARCHIVO"
-            //Abrir "Guardar como"
+
             SaveFileDialog saveDialog = new SaveFileDialog();
             if(saveDialog.ShowDialog() == DialogResult.OK)
             {
@@ -286,21 +299,21 @@ namespace PruebaProyecto
 
         }
 
+
+        //Evento con fines de prueba
         private void Guardar_Archivo(object sender, EventArgs e)
         {
 
-            
         }
 
+        //Evento con fines de prueba
         private void InsertarRegistrosToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            r = 0;
-            
+            r = 0;           
         }
 
 
-        /*Metodos del archvio de datos*/
-
+        /*Metodos del archvio de datos, este era con fines de prueba*/
         private void AbrirDatosToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string nomArchivoDatos;
@@ -312,9 +325,9 @@ namespace PruebaProyecto
                 //Guarda el nombre del archivo
                 nomArchivoDatos = abrir.FileName;
 
-                label2.Text = "";
+                 label2.Text = "";
 
-                label2.Text = "Archivo Datos:" + nomArchivoDatos;
+                //label2.Text = "Archivo Datos:" + nomArchivoDatos;
                 //Abre el archivo
 
                 vDatos.archivoDatos = File.Open(nomArchivoDatos, FileMode.Open, FileAccess.Read);
@@ -326,12 +339,15 @@ namespace PruebaProyecto
             }
         }
 
+
+        //Evento para mostrar la ventana de los registros
         private void RegistroToolStripMenuItem_Click(object sender, EventArgs e)
         {
             vDatos.actualizaDicc(dic);
             vDatos.ShowDialog();
         }
 
+        //Evento para cerrar el archivo actual
         private void CerrarDiccionarioToolStripMenuItem_Click(object sender, EventArgs e)
         {
             dic.cab = -1;

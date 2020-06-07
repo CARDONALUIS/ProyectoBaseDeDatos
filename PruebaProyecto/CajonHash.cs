@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace PruebaProyecto
 {
+
+    /*
+     Clase que se encarga de solo establecer ciertos atributos que se utlizan en otras clases
+         */
+
     public class CajonHash
     {
         public int dirCajon { get; set; }

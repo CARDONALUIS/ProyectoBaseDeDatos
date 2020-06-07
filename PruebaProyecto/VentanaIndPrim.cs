@@ -10,15 +10,18 @@ using System.Windows.Forms;
 
 namespace PruebaProyecto
 {
+    /*
+     * Clase que se utiliza para visualizar los indices primarios
+     */
     public partial class VentanaIndPrim : Form
     {
         List<IndicePrimario> listIndPrim = new List<IndicePrimario>();
+
+
+       //Constructor de la clase lo utilizo para agregar columnas a los Datagrid
         public VentanaIndPrim()
         {
             InitializeComponent();
-
-            
-
 
             DataGridViewTextBoxColumn Columna1 = new DataGridViewTextBoxColumn();
             Columna1.HeaderText = "Clave Primaria";
@@ -31,13 +34,12 @@ namespace PruebaProyecto
             
         }
 
+
+        //Metodo que agrega a los dataGrid la correspondiente informacion para su mejor visualizacion
         public void agregaIndTabla()
         {
             
             int r = 0;
-            //List<IndicePrimario> orde = new List<IndicePrimario>();
-            //orde = listIndPrim;
-            //orde = orde.OrderBy(x => x.clv_prim).ToList();
             r = 0;
             
 
@@ -50,6 +52,7 @@ namespace PruebaProyecto
             r = 0;
         }
 
+        //Metodo para que la clase consoca la lista de indices y empieze a agregar los valores
         public void asignaListInd(List<IndicePrimario> LIP)
         {
             listIndPrim = LIP;

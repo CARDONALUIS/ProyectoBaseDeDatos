@@ -7,6 +7,9 @@ using System.IO;
 
 namespace PruebaProyecto
 {
+    /*
+      Clase que se encarga de contener variables para la manipulacion de objetos de esta clase con sus atributos 
+     */
     [Serializable]
     public class Entidad
     {
@@ -52,6 +55,7 @@ namespace PruebaProyecto
         public List<IndiceSecundario> lisIndSec = new List<IndiceSecundario>();
 
 
+        //Metodo constructor para inisializar variables de esta clase 
         public Entidad(Byte[] _id_enti, String _nomb, int _dirEnt, int _dirAtr, int _dirDat, int _dirSigEnti)
         {
             ID_ENTI = _id_enti;
@@ -65,6 +69,8 @@ namespace PruebaProyecto
 
         }
 
+
+        //Metodo que no se utiliza porque era para fines de prueba
         public int leerDatoReg(int pos)
         {
             this.archivoDat = File.Open(this.nombre + ".dat", FileMode.Open);
