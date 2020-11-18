@@ -92,7 +92,7 @@ namespace PruebaProyecto
                     actualizaGridAtri(ent);
                     escribeAtrib(atributo, ent);
 
-                    r = 0;
+                    r = 0; ;
                 }
                 else
                     MessageBox.Show("Rellena todo los campos");
