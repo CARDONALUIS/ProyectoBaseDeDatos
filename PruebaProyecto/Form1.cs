@@ -14,6 +14,7 @@ namespace PruebaProyecto
 
     /*
      * Clase que se encarga de mostrar la pantalla principal con sus respectivos controles
+    * HOLA PROYECTO ESTOY DENUEVO AQUI 
      * */
 
     public partial class Form1 : Form
