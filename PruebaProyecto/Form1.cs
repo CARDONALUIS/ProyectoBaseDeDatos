@@ -21,10 +21,8 @@ namespace PruebaProyecto
         
         Entidades vEnti;
         Atributos vAtri;
-        Datos vDatos;
-           
+        Datos vDatos;   
         Diccionario dic;
-
         int r = 0;
         string nomArchivo;
 
@@ -55,7 +53,6 @@ namespace PruebaProyecto
                 label1.Text = "";
 
                 label1.Text = "Archivo Diccionario:" + nomArchivo;
-                //Abre el archivo
                 
                 dic.archivo = File.Open(nomArchivo, FileMode.Open, FileAccess.Read);
                 dic.nomArchivo = nomArchivo;
@@ -108,7 +105,6 @@ namespace PruebaProyecto
                     r = 0;
                     dire += 5;
                     archivo.Seek(dire, SeekOrigin.Begin);
-                    //BinaryReader br = new BinaryReader(archivo);
                     nombreEnti = br.ReadChars(30);
                     r = 0;
                     dire += 30;
@@ -266,37 +262,21 @@ namespace PruebaProyecto
         //Metodo para crear un nuevo archivo
         private void NuevoArchivo(object sender, EventArgs e)
         {
+            MessageBox.Show("No olvides agregar extencion .dd a tu diccionario");
 
             SaveFileDialog saveDialog = new SaveFileDialog();
             if(saveDialog.ShowDialog() == DialogResult.OK)
             {
-                //Guardar el nombre seleccionado del cuadro de dialogo
-                //nomArchivo = saveDialog.FileName;
-                dic.nomArchivo = saveDialog.FileName;
-
-                //Crear el nuevo archivo, asignado el nombre elegido
-                
+                dic.nomArchivo = saveDialog.FileName;                
                 dic.archivo = new FileStream(dic.nomArchivo, FileMode.Create);
-
-
                 dic.archivo.Close();
-
                 label1.Text = "";
-
                 label1.Text = "Archivo Diccionario:" + dic.nomArchivo;
-
-
                 using (BinaryWriter bw = new BinaryWriter(File.Open(dic.nomArchivo, FileMode.Open)))
                 {
                     bw.Write(dic.cab);
                 }
-
-
-
             }
-
-
-
         }
 
 
@@ -324,17 +304,9 @@ namespace PruebaProyecto
             {
                 //Guarda el nombre del archivo
                 nomArchivoDatos = abrir.FileName;
-
-                 label2.Text = "";
-
-                //label2.Text = "Archivo Datos:" + nomArchivoDatos;
-                //Abre el archivo
-
+                label2.Text = "";
                 vDatos.archivoDatos = File.Open(nomArchivoDatos, FileMode.Open, FileAccess.Read);
                 vDatos.nomArchivoDatos = nomArchivoDatos;
-
-                //actualizaDiccionario(dic.archivo);
-
                 vDatos.archivoDatos.Close();
             }
         }

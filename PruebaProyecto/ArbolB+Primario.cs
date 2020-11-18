@@ -6,12 +6,13 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-/*
- Clase que contiene todo el codigo relacionado a la creacion del arbol primario 
-     */
+
 
 namespace PruebaProyecto
 {
+    /*
+    Clase que contiene todo el codigo relacionado a la creacion del arbol primario 
+     */
     class ArbolB_Primario
     {
         int r = 0;
@@ -86,13 +87,11 @@ namespace PruebaProyecto
                     bw.Write(N.K.ElementAt(i));
                 }
 
-
                 if(N.tipo != 'H' && N.K.Count != 0 && !esraizOrigen(N))
                 {
                     r = 0;
                     bw.Write(N.P.ElementAt(i));
                 }
-
 
                 if (N.tipo == 'H' && N.P.Count == n)
                     bw.Write(N.P.ElementAt(N.P.Count - 1));
@@ -106,7 +105,6 @@ namespace PruebaProyecto
             r = 0;
             Nodo L = encuentraNodoHoja(K);
             borrar_entrada(L, K, P);
-
         }
 
         //Borra los valores especificados del nodo especificado
@@ -117,7 +115,6 @@ namespace PruebaProyecto
             int indexP = L.P.FindIndex(x => x == P);
             L.K.RemoveAt(indexK);
             L.P.RemoveAt(indexP);
-
             r = 0;
         }
 
@@ -135,7 +132,6 @@ namespace PruebaProyecto
             for(int i = 0; i < pad.K.Count;i++)
             {
                 r = 0;
-
                 if (i == 0 && K < pad.K.ElementAt(i) && N.tipo == 'H')//Toma el de la derecha
                 {
                     r = 0;
@@ -149,8 +145,7 @@ namespace PruebaProyecto
                 {
                     r = 0;
                     kPriBorrar = pad.K.ElementAt(i);
-                    r = 0;
-                    
+                    r = 0;                   
                     hermano = lisNodo.Find(x => x.dirNodo == pad.P.ElementAt(pad.P.Count-2));
                     r = 0;
                     break;
@@ -164,7 +159,6 @@ namespace PruebaProyecto
                         hermano = lisNodo.Find(x => x.dirNodo == pad.P.ElementAt(i));
                     else
                         hermano = lisNodo.Find(x => x.dirNodo == pad.P.ElementAt(i + 1));
-
                     r = 0;
                 }
                 else
@@ -230,19 +224,13 @@ namespace PruebaProyecto
                 }
             }
             r = 0;
-
             archArb.Close();
             archArb = File.Open(archArb.Name, FileMode.Open);
             BinaryReader br = new BinaryReader(archArb);
-
             archArb.Seek((int)N.dirNodo + 57, SeekOrigin.Begin);
-
             long apSigN = br.ReadInt64();
-
             archArb.Close();
-
             r = 0;
-         
             using (BinaryWriter bw = new BinaryWriter(File.Open(archArb.Name, FileMode.Open)))
             {
                 bw.Seek((int)NPri.dirNodo + 57, SeekOrigin.Begin);
@@ -258,9 +246,7 @@ namespace PruebaProyecto
         {
             r = 0;
             long dirAux;
-
-            dirAux = N.dirNodo;
-            
+            dirAux = N.dirNodo;            
             //Primeros apuntadores
             N.dirNodo = Npri.dirNodo;
             Npri.dirNodo = dirAux;
@@ -287,8 +273,6 @@ namespace PruebaProyecto
 
             }
             r = 0;
-
-
          }
 
 
@@ -313,7 +297,6 @@ namespace PruebaProyecto
                 r = 0;
                 Npri.K.Insert(0, K);
                 r = 0;
-
                 for (int i = N.K.Count - 1; i >= 0; i--)
                 {
                     Npri.K.Insert(0, N.K.ElementAt(i));
@@ -322,7 +305,6 @@ namespace PruebaProyecto
                 {
                     Npri.P.Insert(0, N.P.ElementAt(i));
                 }
-
                 r = 0;
 
             }
@@ -358,9 +340,7 @@ namespace PruebaProyecto
                     Nodo Npri = seleccionaHermano(N, K, P);//Encuentra un hermano 
                     int kPri = kPriBorrar;
                     bool concatenarPrincipio = false;
-
                     r = 0;
-
                     if (N.K.Count + Npri.K.Count <= n - 2)//las entradas en N y N' caben en un solo nodo  FUSIONAR LOS NODOS
                     {
                         r = 0;
@@ -369,28 +349,23 @@ namespace PruebaProyecto
                             r = 0;
                             intercambiar_variables(N, Npri);
                             concatenarPrincipio = true;
-                            r = 0;
-                            
+                            r = 0;                           
                         }
                         r = 0;
                         if (N.tipo != 'H')//No es una nodo hoja;
                         {
                             r = 0;
                             concatenarNoHoja(kPri, N, Npri, concatenarPrincipio);
-                            r = 0;
-                            
+                            r = 0;                           
                         }
                         else//Concatenar todos los pares(ki, pi) en N a N'
                         {
                             r = 0;
                             concatenaPares(N, Npri, concatenarPrincipio);
-
                         }
-
                         r = 0;
                         borrar_entrada(buscaPadre(N), kPri, N.dirNodo);
                         r = 0;
-
                         borraNodo(N);
                         actualizaEliArchNodo(Npri);
                         
@@ -415,20 +390,15 @@ namespace PruebaProyecto
                                 N.P.Insert(0, mP);
                                 N.K.Insert(0, kPri);
                                 r = 0;
-
-
                                 Nodo padre = buscaPadre(N);
                                 int indKPri = padre.K.FindIndex(x => x == kPri);
                                 padre.K.RemoveAt(indKPri);
                                 padre.K.Insert(indKPri, mK);
                                 r = 0;
-
-
                                 actualizaEliArchNodo(N);
                                 actualizaEliArchNodo(Npri);
                                 actualizaEliArchNodo(padre);
                                 r = 0;
-
                             }
                             else
                             {
@@ -443,19 +413,15 @@ namespace PruebaProyecto
                                 N.P.Insert(0, mP);
                                 r = 0;
                                 Nodo padre = buscaPadre(N);
-
                                 r = 0;
                                 int indKPri = padre.K.FindIndex(x => x == kPri);
                                 padre.K.RemoveAt(indKPri);
                                 padre.K.Insert(indKPri, mK);
                                 r = 0;
-
                                 actualizaEliArchNodo(N);
                                 actualizaEliArchNodo(Npri);
-                                actualizaEliArchNodo(padre);
-                                
+                                actualizaEliArchNodo(padre);                               
                             }
-
                         }
                         else//Npri es sucesor de N
                         {
@@ -466,20 +432,17 @@ namespace PruebaProyecto
                                 mP = Npri.P.ElementAt(0);
                                 mK = Npri.K.ElementAt(0);
                                 r = 0;
-
                                 Npri.K.RemoveAt(0);
                                 Npri.P.RemoveAt(0);
                                 r = 0;
                                 N.P.Add(mP);
                                 N.K.Add(kPri);
                                 r = 0;
-
                                 Nodo padre = buscaPadre(N);
                                 int indKPri = padre.K.FindIndex(x => x == kPri);
                                 padre.K.RemoveAt(indKPri);
                                 padre.K.Insert(indKPri, mK);
                                 r = 0;
-
                                 actualizaEliArchNodo(N);
                                 actualizaEliArchNodo(Npri);
                                 actualizaEliArchNodo(padre);
@@ -493,17 +456,12 @@ namespace PruebaProyecto
                                 Npri.K.RemoveAt(0);
                                 Npri.P.RemoveAt(0);
                                 r = 0;
-
                                 N.K.Add(mK);
                                 N.P.Add(mP);
-
                                 r = 0;
                                 mK = Npri.K.ElementAt(0);
                                 mP = Npri.P.ElementAt(0);
-                                //N.K.Insert(N.K.Count-1, mK);
-                                //N.P.Insert(N.P.Count - 1, mP);
                                 r = 0;
-
                                 Nodo padre = buscaPadre(N);
                                 int indKPri = padre.K.FindIndex(x => x == kPri);
                                 r = 0;
@@ -536,7 +494,6 @@ namespace PruebaProyecto
         //Metodo que se encarga de crear un espacio en el archivo que represente el tamaño de un nodo
         public void creaEspNodo(char tipo)
         {
-
             r = 0;
             archArb.Close();
             archArb = File.Open(archArb.Name, FileMode.Open);
@@ -551,7 +508,6 @@ namespace PruebaProyecto
                 {
                     bloque[i] = 0xFF;
                 }
-                //bw.Seek((int)finArchivo, SeekOrigin.Begin);
                 r = 0;
                 bw.Write(bloque);
                 if(tipo == 'H')
@@ -567,8 +523,6 @@ namespace PruebaProyecto
                     }
                     bw.Write(bloque2);
                 }
-
-
             }
         }
         
@@ -582,53 +536,39 @@ namespace PruebaProyecto
             long dirPun;
             int clv;
             bool bandFinClv = true;
-
-
             r = 0;
             int posAct = 0;
             int posIni = 0;
             bool masNodos = true;
-
-            
-
             while (true)
             {
                 archArb.Seek((int)posIni, SeekOrigin.Begin);
                 posIni = posAct;
                 r = 0;
                 Nodo no = new Nodo();
-
                 dicNod = br.ReadInt64();
                 Tipo = br.ReadChars(1);
-
                 no.dirNodo = dicNod;
                 no.tipo = Tipo.ElementAt(0);
                 posAct += 9;
                 r = 0;
-
                 while (br.ReadInt64() != -1 && no.K.Count < n-1)
                 {
                     archArb.Seek(posAct, SeekOrigin.Begin);
-
                     dirPun = br.ReadInt64();
                     r = 0;
-
                     if (no.tipo == 'H' || no.dirNodo == 0)
                     {
-
                         clv = br.ReadInt32();
-
                         no.K.Add(clv);
                         no.P.Add(dirPun);
                         posAct += 12;
-
                         r = 0;
                     }
                     else
                     {
                         r = 0;
                         clv = br.ReadInt32();
-
                         r = 0;
                         if (clv!= -1)
                         no.K.Add(clv);
@@ -636,22 +576,16 @@ namespace PruebaProyecto
                         posAct += 12;
                         r = 0;
                     }
-
                     r = 0;
-
                     if (br.ReadInt64() == -1)//No hay mas claves
                     {
                         bandFinClv = false;
                         r = 0;
                     }
-
                     r = 0;
                     archArb.Seek(posAct, SeekOrigin.Begin);
-
                 }
-                r = 0;
-               
-
+                r = 0;             
                 if(no.P.Count == n-1 && no.tipo == 'R' && no.dirNodo == 0)
                 {
                     r = 0;
@@ -676,8 +610,6 @@ namespace PruebaProyecto
                     long val = br.ReadInt64();
                     if(val!= -1)
                     no.P.Add(val);
-                    
-
                     r = 0;
                 }
 

@@ -351,15 +351,30 @@ namespace PruebaProyecto
         /*Evento para el llamdo a la ventana de IndiSecundario*/
         private void eventoIndiSec_Click(object sender, EventArgs e)
         {
-            vIS = new venIndiceSec(); 
-            if (entAct != null)
+            bool bandIndiAceptar = false;
+
+            foreach (Atributo a in entAct.listAtrib)
             {
-                vIS.entAct = entAct;
-                vIS.asignaValores();
-                vIS.Show();
+                if (a.tipoIndi == 3)
+                    bandIndiAceptar = true;
+            }
+
+            if (bandIndiAceptar)
+            {
+                vIS = new venIndiceSec();
+                if (entAct != null)
+                {
+                    vIS.entAct = entAct;
+                    vIS.asignaValores();
+                    vIS.Show();
+                }
+                else
+                    MessageBox.Show("Selecciona una entidad");
             }
             else
-                MessageBox.Show("Selecciona una entidad");
+            {
+                MessageBox.Show("Tu entidad no posee atributo con este indice");
+            }
            
         }
 
@@ -780,55 +795,26 @@ namespace PruebaProyecto
         //Metodo que me crea una lista de las claves y las guarda para el evento que manda llamar y muestra la ventana de indices 
         private void EventoIndPrim_Click(object sender, EventArgs e)
         {
+            bool bandIndiAceptar = false;
 
-            string al = entAct.archivoIndPri.Name;
-            r = 0;
-            entAct.archivoIndPri.Close();
-            entAct.archivoIndPri = File.Open(entAct.archivoIndPri.Name, FileMode.Open);
-            BinaryReader br = new BinaryReader(entAct.archivoIndPri);
-            Object comp;
-
-            entAct.archivoIndPri.Seek(0, SeekOrigin.Begin);
-
-            if (entAct.tipoCvePrima == 'C')
+            foreach (Atributo a in entAct.listAtrib)
             {
-                comp = new string(br.ReadChars(entAct.longClvPrim));
-            }
-            else
-            {
-                comp = br.ReadInt32();
+                if (a.tipoIndi == 2)
+                    bandIndiAceptar = true;
             }
 
-            int posIni = 0;
-
-
-
-
-            while (comp.ToString() != "-1" && char.IsLetterOrDigit(comp.ToString().ElementAt(0)))
+            if (bandIndiAceptar)
             {
 
-                IndicePrimario indP = new IndicePrimario();
-
-                entAct.archivoIndPri.Seek(posIni, SeekOrigin.Begin);
-                if (entAct.tipoCvePrima == 'C')
-                {
-                    indP.clv_prim = new string(br.ReadChars(entAct.longClvPrim));
-                }
-                else
-                {
-                    indP.clv_prim = br.ReadInt32();
-                }
-
-
-                indP.dir_reg = br.ReadInt32();
+                string al = entAct.archivoIndPri.Name;
                 r = 0;
-                listIndPri.Add(indP);
+                entAct.archivoIndPri.Close();
+                entAct.archivoIndPri = File.Open(entAct.archivoIndPri.Name, FileMode.Open);
+                BinaryReader br = new BinaryReader(entAct.archivoIndPri);
+                Object comp;
 
-                r = 0;
-                posIni = posIni + entAct.longRegIndPri;
+                entAct.archivoIndPri.Seek(0, SeekOrigin.Begin);
 
-                entAct.archivoIndPri.Seek(posIni, SeekOrigin.Begin);
-                r = 0;
                 if (entAct.tipoCvePrima == 'C')
                 {
                     comp = new string(br.ReadChars(entAct.longClvPrim));
@@ -838,14 +824,58 @@ namespace PruebaProyecto
                     comp = br.ReadInt32();
                 }
 
-                r = 0;
-            }
+                int posIni = 0;
 
-            entAct.archivoIndPri.Close();
-            vIP.asignaListInd(listIndPri);
-            vIP.ShowDialog();
-            vIP.dataGridIndPrim.Rows.Clear();
-            listIndPri.Clear();
+
+
+
+                while (comp.ToString() != "-1" && char.IsLetterOrDigit(comp.ToString().ElementAt(0)))
+                {
+
+                    IndicePrimario indP = new IndicePrimario();
+
+                    entAct.archivoIndPri.Seek(posIni, SeekOrigin.Begin);
+                    if (entAct.tipoCvePrima == 'C')
+                    {
+                        indP.clv_prim = new string(br.ReadChars(entAct.longClvPrim));
+                    }
+                    else
+                    {
+                        indP.clv_prim = br.ReadInt32();
+                    }
+
+
+                    indP.dir_reg = br.ReadInt32();
+                    r = 0;
+                    listIndPri.Add(indP);
+
+                    r = 0;
+                    posIni = posIni + entAct.longRegIndPri;
+
+                    entAct.archivoIndPri.Seek(posIni, SeekOrigin.Begin);
+                    r = 0;
+                    if (entAct.tipoCvePrima == 'C')
+                    {
+                        comp = new string(br.ReadChars(entAct.longClvPrim));
+                    }
+                    else
+                    {
+                        comp = br.ReadInt32();
+                    }
+
+                    r = 0;
+                }
+
+                entAct.archivoIndPri.Close();
+                vIP.asignaListInd(listIndPri);
+                vIP.ShowDialog();
+                vIP.dataGridIndPrim.Rows.Clear();
+                listIndPri.Clear();
+            }
+            else
+            {
+                MessageBox.Show("Tu entidad no posee atributo con este indice");
+            }
         }
 
 
@@ -2358,16 +2388,29 @@ namespace PruebaProyecto
         //Evento que manda llamar la ventana del arbol para verificar valores del arbol
         private void venArbolPri_Click(object sender, EventArgs e)
         {
-            vAR = new ventanaArbol();
-            if(entAct != null)
-            {
-                vAR.setListaNodo(arbol.lisNodo);
-                vAR.archArbol = arbol.archArb;
-                vAR.agregaValoresTabla();
-                
-                vAR.Show();
+            bool bandIndiAceptar = false;
 
+            foreach(Atributo a in entAct.listAtrib)
+            {
+                if (a.tipoIndi == 4)
+                    bandIndiAceptar = true;
             }
+
+            if (bandIndiAceptar)
+            {
+                vAR = new ventanaArbol();
+                if (entAct != null)
+                {
+                    vAR.setListaNodo(arbol.lisNodo);
+                    vAR.archArbol = arbol.archArb;
+                    vAR.agregaValoresTabla();
+
+                    vAR.Show();
+
+                }
+            }
+            else
+                MessageBox.Show("Tu entidad no posee este tipo de indice en sus atributos");
 
 
         }
@@ -2376,16 +2419,30 @@ namespace PruebaProyecto
         //Evento que manda llamar la ventana del hashEstatico para verificar valores de hash estatico
         private void HashEstatico_Click(object sender, EventArgs e)
         {
+            bool bandIndiAceptar = false;
 
-            vHE = new ventanaHashEsta();
-            if (entAct != null)
+            foreach (Atributo a in entAct.listAtrib)
             {
+                if (a.tipoIndi == 5)
+                    bandIndiAceptar = true;
+            }
 
-                r = 0;
-                vHE.setDirectorio(hash.DirectorioHash);
-                vHE.archHashEsta = hash.archivHash;
-                vHE.agregaValoresTabla();
-                vHE.Show();
+            if (bandIndiAceptar)
+            {
+                vHE = new ventanaHashEsta();
+                if (entAct != null)
+                {
+
+                    r = 0;
+                    vHE.setDirectorio(hash.DirectorioHash);
+                    vHE.archHashEsta = hash.archivHash;
+                    vHE.agregaValoresTabla();
+                    vHE.Show();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Tu entidad no posee atributos con este indice");
             }
         }
     }

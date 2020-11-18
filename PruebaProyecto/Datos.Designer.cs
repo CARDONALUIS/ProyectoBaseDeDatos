@@ -87,7 +87,7 @@
             this.RegisInserdataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.RegisInserdataGridView.Location = new System.Drawing.Point(35, 309);
             this.RegisInserdataGridView.Name = "RegisInserdataGridView";
-            this.RegisInserdataGridView.Size = new System.Drawing.Size(741, 170);
+            this.RegisInserdataGridView.Size = new System.Drawing.Size(741, 208);
             this.RegisInserdataGridView.TabIndex = 5;
             this.RegisInserdataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.RegisInserdataGridView_CellClick);
             this.RegisInserdataGridView.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.RegisInserdataGridView_ColumnHeaderMouseClick);
@@ -177,7 +177,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(801, 491);
+            this.ClientSize = new System.Drawing.Size(802, 529);
             this.Controls.Add(this.HashEstatico);
             this.Controls.Add(this.venArbolPri);
             this.Controls.Add(this.eventoIndiSec);
