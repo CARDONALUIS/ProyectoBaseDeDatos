@@ -1186,11 +1186,11 @@ namespace PruebaProyecto
             for(int i = 0; i < entAct.listAtrib.Count && bandInt;i++)
             {
                 if (char.IsDigit(RegistroRellDataGrid.Rows[0].Cells[i].Value.ToString().ElementAt(0)))
-                    if (entAct.listAtrib.ElementAt(i).tipo != 'E')
+                    if (entAct.listAtrib.ElementAt(i).tipo == 'C' )
                         bandInt = false;
 
                 if (char.IsLetter(RegistroRellDataGrid.Rows[0].Cells[i].Value.ToString().ElementAt(0)))
-                    if (entAct.listAtrib.ElementAt(i).tipo != 'C')
+                    if (entAct.listAtrib.ElementAt(i).tipo == 'E' || entAct.listAtrib.ElementAt(i).tipo == 'F')
                         bandInt = false;
             }
 
@@ -1342,7 +1342,14 @@ namespace PruebaProyecto
                         else
                         {
                             r = 0;
-                            bw.Write(Int32.Parse(valor));
+                            if (act.tipo == 'E')
+                                bw.Write(Int32.Parse(valor));
+                            else
+                            {
+                                float nuevoVal = Convert.ToSingle(valor);
+                                r = 0;
+                                bw.Write(nuevoVal);
+                            }
                             r = 0;
                         }
 
@@ -2050,6 +2057,13 @@ namespace PruebaProyecto
                             RegisInserdataGridView.Rows[conRen].Cells[i + 1].Value = valor;
                             r = 0;
                             break;
+                        case 'F':
+                            float valor2 = br.ReadSingle();
+                            
+                            RegisInserdataGridView.Rows[conRen].Cells[i + 1].Value = valor2;
+                            r = 0;
+                            break;
+
 
                     }
 

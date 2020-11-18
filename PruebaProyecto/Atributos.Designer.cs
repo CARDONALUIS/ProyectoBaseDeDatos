@@ -47,6 +47,7 @@
             this.comboBoxModAtri = new System.Windows.Forms.ComboBox();
             this.cambiaAtribu = new System.Windows.Forms.Button();
             this.buttonEliAtri = new System.Windows.Forms.Button();
+            this.comboBoxLlaveForanea = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.GridAtributos)).BeginInit();
             this.SuspendLayout();
             // 
@@ -81,7 +82,7 @@
             // 
             // textBoxNomAtri
             // 
-            this.textBoxNomAtri.Location = new System.Drawing.Point(87, 118);
+            this.textBoxNomAtri.Location = new System.Drawing.Point(81, 104);
             this.textBoxNomAtri.Name = "textBoxNomAtri";
             this.textBoxNomAtri.Size = new System.Drawing.Size(100, 20);
             this.textBoxNomAtri.TabIndex = 6;
@@ -90,7 +91,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(17, 118);
+            this.label3.Location = new System.Drawing.Point(14, 105);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(61, 17);
             this.label3.TabIndex = 5;
@@ -101,8 +102,9 @@
             this.comboBoxAtrTipo.FormattingEnabled = true;
             this.comboBoxAtrTipo.Items.AddRange(new object[] {
             "E",
-            "C"});
-            this.comboBoxAtrTipo.Location = new System.Drawing.Point(261, 118);
+            "C",
+            "F"});
+            this.comboBoxAtrTipo.Location = new System.Drawing.Point(60, 137);
             this.comboBoxAtrTipo.Name = "comboBoxAtrTipo";
             this.comboBoxAtrTipo.Size = new System.Drawing.Size(121, 21);
             this.comboBoxAtrTipo.TabIndex = 8;
@@ -111,7 +113,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(215, 119);
+            this.label4.Location = new System.Drawing.Point(14, 137);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(40, 17);
             this.label4.TabIndex = 7;
@@ -119,7 +121,7 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(477, 121);
+            this.textBox2.Location = new System.Drawing.Point(311, 107);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(100, 20);
             this.textBox2.TabIndex = 10;
@@ -128,7 +130,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(407, 121);
+            this.label5.Location = new System.Drawing.Point(238, 107);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(67, 17);
             this.label5.TabIndex = 9;
@@ -136,7 +138,7 @@
             // 
             // textBoxAtriLong
             // 
-            this.textBoxAtriLong.Location = new System.Drawing.Point(476, 121);
+            this.textBoxAtriLong.Location = new System.Drawing.Point(311, 107);
             this.textBoxAtriLong.Name = "textBoxAtriLong";
             this.textBoxAtriLong.Size = new System.Drawing.Size(100, 20);
             this.textBoxAtriLong.TabIndex = 11;
@@ -150,17 +152,19 @@
             "2-Llave Primaria",
             "3-Llave Secundaria",
             "4-Indice Primario Arbol B+",
-            "5-Indice Hash Estatico"});
-            this.comboBoxAtrTip_Ind.Location = new System.Drawing.Point(678, 122);
+            "5-Indice Hash Estatico",
+            "6-Llave Foranea"});
+            this.comboBoxAtrTip_Ind.Location = new System.Drawing.Point(311, 141);
             this.comboBoxAtrTip_Ind.Name = "comboBoxAtrTip_Ind";
             this.comboBoxAtrTip_Ind.Size = new System.Drawing.Size(144, 21);
             this.comboBoxAtrTip_Ind.TabIndex = 13;
+            this.comboBoxAtrTip_Ind.SelectedIndexChanged += new System.EventHandler(this.VerificarllaveEvento);
             // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(605, 122);
+            this.label6.Location = new System.Drawing.Point(238, 141);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(67, 17);
             this.label6.TabIndex = 12;
@@ -232,11 +236,20 @@
             this.buttonEliAtri.UseVisualStyleBackColor = true;
             this.buttonEliAtri.Click += new System.EventHandler(this.eliminaAtri);
             // 
+            // comboBoxLlaveForanea
+            // 
+            this.comboBoxLlaveForanea.FormattingEnabled = true;
+            this.comboBoxLlaveForanea.Location = new System.Drawing.Point(501, 120);
+            this.comboBoxLlaveForanea.Name = "comboBoxLlaveForanea";
+            this.comboBoxLlaveForanea.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxLlaveForanea.TabIndex = 21;
+            // 
             // Atributos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(928, 491);
+            this.Controls.Add(this.comboBoxLlaveForanea);
             this.Controls.Add(this.buttonEliAtri);
             this.Controls.Add(this.cambiaAtribu);
             this.Controls.Add(this.comboBoxModAtri);
@@ -286,5 +299,6 @@
         private System.Windows.Forms.ComboBox comboBoxModAtri;
         private System.Windows.Forms.Button cambiaAtribu;
         private System.Windows.Forms.Button buttonEliAtri;
+        private System.Windows.Forms.ComboBox comboBoxLlaveForanea;
     }
 }

@@ -30,6 +30,7 @@ namespace PruebaProyecto
             comboBoxModAtri.Visible = false;
             cambiaAtribu.Visible = false;
             buttonEliAtri.Visible = false;
+            comboBoxLlaveForanea.Visible = false;
         }
 
         //Este metodo asigna las diferentes entidades al combo
@@ -70,11 +71,13 @@ namespace PruebaProyecto
                     long dirAtri = dic.archivo.Length;
 
                     dic.archivo.Close();
+                             
+                    if(comboBoxAtrTipo.SelectedItem.ToString() == "C")
+                       longitud = Int32.Parse(textBoxAtriLong.Text);
+                    else                  
+                       longitud = 4;
 
-                    if (comboBoxAtrTipo.SelectedItem.ToString() == "E")
-                        longitud = 4;
-                    else
-                        longitud = Int32.Parse(textBoxAtriLong.Text);
+
 
                     r = 0;
                     ent.varSigAtri = ent.varSigAtri + dic.tamAtrib;
@@ -399,7 +402,7 @@ namespace PruebaProyecto
                     ent.listAtrib.Clear();
             }
             else
-                MessageBox.Show("Selecciona un atributos, si no los hay crealos");
+                MessageBox.Show("Selecciona un atributo, si no los hay crealos");
 
             buttonEliAtri.Visible = false;
             cambiaAtribu.Visible = false;
@@ -415,6 +418,29 @@ namespace PruebaProyecto
         private void CambioIndiceAtri(object sender, EventArgs e)
         {
             VerActualesAtri(this, null);
+        }
+
+        private void VerificarllaveEvento(object sender, EventArgs e)
+        {
+            r = 0;
+            int tipollav = comboBoxAtrTip_Ind.SelectedIndex;
+
+
+            if (tipollav == 6)
+            {
+                r = 0;
+                //comboBoxLlaveForanea.Items.Add("hola");
+                foreach(Entidad a in dic.listEntidad)
+                {
+                    if(a != ent)
+                    {
+                        comboBoxLlaveForanea.Items.Add(a.nombre);
+                    }
+                }
+                comboBoxLlaveForanea.Visible = true;
+                //ent = dic.listEntidad.ElementAt(entSel);
+
+            }
         }
     }
 }
