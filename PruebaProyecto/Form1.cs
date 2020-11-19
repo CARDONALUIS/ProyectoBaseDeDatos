@@ -22,7 +22,8 @@ namespace PruebaProyecto
         
         Entidades vEnti;
         Atributos vAtri;
-        Datos vDatos;   
+        Datos vDatos;
+        FormSMBD vSMBD;
         Diccionario dic;
         int r = 0;
         string nomArchivo;
@@ -159,7 +160,7 @@ namespace PruebaProyecto
                             dire += 8;
                             r = 0;
                             archivo.Seek(dire, SeekOrigin.Begin);
-                            tipoIndL = br.ReadInt32();
+                            tipoIndL = Int32.Parse(br.ReadInt32().ToString().Substring(0,1));
                             dire += 4;
                             r = 0;
                             archivo.Seek(dire, SeekOrigin.Begin);
@@ -228,6 +229,7 @@ namespace PruebaProyecto
             vEnti = new Entidades(dic);
             vAtri = new Atributos(dic);
             vDatos = new Datos();
+            vSMBD = new FormSMBD();
         }
 
 
@@ -334,6 +336,11 @@ namespace PruebaProyecto
             }
             dic.listEntidad.Clear();
             
+        }
+
+        private void botonVentanSMBD(object sender, EventArgs e)
+        {
+            vSMBD.Show();
         }
     }
 }

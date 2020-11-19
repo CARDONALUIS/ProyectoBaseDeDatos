@@ -39,6 +39,9 @@ namespace PruebaProyecto
         private long DIRSIGATRI;
         public long dirSigAtri { get { return DIRSIGATRI; } set { DIRSIGATRI = value; } }
 
+        private List<int> LLAVEFOR;
+        public List<int> llaveFor { get { return LLAVEFOR; } set { LLAVEFOR = value; } }
+
         //Constuctor que sirve para setear valores para la utilizacion de los objetos de creados de la clase
         public Atributo(Byte[] _idAtr, string _nom, char _tipoDa, int _long, int _dirAtr, int _tipIn, int _dirInd, int _dirSigAtr)
         {

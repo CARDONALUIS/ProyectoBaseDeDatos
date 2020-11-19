@@ -21,6 +21,7 @@ namespace PruebaProyecto
         int r = 0;
         public int contAtributo = 0;
         Entidad ent;
+        public List<int> LisAtrForAct;
 
         //Metodo constructor se utiliza para inicializar algunas tablas y poner no visibles algunos controles
         public Atributos(Diccionario dic)
@@ -31,6 +32,7 @@ namespace PruebaProyecto
             cambiaAtribu.Visible = false;
             buttonEliAtri.Visible = false;
             comboBoxLlaveForanea.Visible = false;
+            LisAtrForAct = new List<int>();
         }
 
         //Este metodo asigna las diferentes entidades al combo
@@ -86,13 +88,15 @@ namespace PruebaProyecto
 
                     
                     Atributo atributo = new Atributo(buffer, nomAtri, comboBoxAtrTipo.SelectedItem.ToString().ElementAt(0), longitud, /*(int)ent.dirAtri*/(int)dirAtri, Int32.Parse(comboBoxAtrTip_Ind.SelectedIndex.ToString()), -1, (int)dirAtri + dic.tamAtrib);
+                    atributo.llaveFor = LisAtrForAct;
                     ent.listAtrib.Add(atributo);
+
                     atriActual = atributo;
                     actualizaUltima(ent);
                     actualizaGridAtri(ent);
                     escribeAtrib(atributo, ent);
 
-                    r = 0; ;
+                    r = 0 ;
                 }
                 else
                     MessageBox.Show("Rellena todo los campos");
@@ -129,7 +133,8 @@ namespace PruebaProyecto
                 bw.Write(atr.tipo);
                 bw.Write(atr.longitud);
                 bw.Write(atr.dirAtri);
-                bw.Write(Int32.Parse(atr.tipoIndi.ToString().ElementAt(0).ToString()));
+                //bw.Write(Int32.Parse(atr.tipoIndi.ToString().ElementAt(0).ToString()));
+                escribeLlavFor(atr, bw);
                 bw.Write(atr.dirIndi);
                 bw.Write(atr.dirSigAtri);
                 if (ent.listAtrib.Count != 1)
@@ -196,6 +201,7 @@ namespace PruebaProyecto
             buttonEliAtri.Visible = false;
             cambiaAtribu.Visible = false;
             comboBoxModAtri.Text = "";
+            comboBoxLlaveForanea.Visible = false;
         }
 
         //Metodo que se utiliza para inicializar las columnas del dataGrid
@@ -424,7 +430,7 @@ namespace PruebaProyecto
         {
             r = 0;
             int tipollav = comboBoxAtrTip_Ind.SelectedIndex;
-
+            int atr = 1;
 
             if (tipollav == 6)
             {
@@ -435,12 +441,33 @@ namespace PruebaProyecto
                     if(a != ent)
                     {
                         comboBoxLlaveForanea.Items.Add(a.nombre);
+                        LisAtrForAct.Add(atr);
                     }
+                    atr++;
                 }
                 comboBoxLlaveForanea.Visible = true;
                 //ent = dic.listEntidad.ElementAt(entSel);
 
             }
+        }
+
+        public void escribeLlavFor(Atributo atr, BinaryWriter bw)
+        {
+            string llavesSec= atr.tipoIndi.ToString().ElementAt(0).ToString();
+            //bw.Write(Int32.Parse(atr.tipoIndi.ToString().ElementAt(0).ToString()));
+            foreach (int b in atr.llaveFor)
+            {
+               if(b<10)
+                {
+                    llavesSec += "0" + b.ToString();
+                }
+               else
+                {
+                    llavesSec += b.ToString();
+                }
+            }
+
+            bw.Write(Int32.Parse(llavesSec));
         }
     }
 }

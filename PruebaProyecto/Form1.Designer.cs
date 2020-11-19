@@ -39,6 +39,7 @@
             this.RegistroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.sMBDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -47,7 +48,8 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.archivoToolStripMenuItem,
             this.diccionarioToolStripMenuItem,
-            this.RegistroToolStripMenuItem});
+            this.RegistroToolStripMenuItem,
+            this.sMBDToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(807, 24);
@@ -133,6 +135,13 @@
             this.label2.Size = new System.Drawing.Size(0, 13);
             this.label2.TabIndex = 5;
             // 
+            // sMBDToolStripMenuItem
+            // 
+            this.sMBDToolStripMenuItem.Name = "sMBDToolStripMenuItem";
+            this.sMBDToolStripMenuItem.Size = new System.Drawing.Size(51, 20);
+            this.sMBDToolStripMenuItem.Text = "SMBD";
+            this.sMBDToolStripMenuItem.Click += new System.EventHandler(this.botonVentanSMBD);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -165,6 +174,7 @@
         private System.Windows.Forms.ToolStripMenuItem RegistroToolStripMenuItem;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ToolStripMenuItem cerrarDiccionarioToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sMBDToolStripMenuItem;
     }
 }
 
