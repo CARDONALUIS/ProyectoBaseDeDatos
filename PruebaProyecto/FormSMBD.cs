@@ -7,6 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Antlr4.Runtime;
+using Antlr4.Runtime.Tree;
+using System.IO;
+
+
 
 namespace PruebaProyecto
 {
@@ -15,6 +20,25 @@ namespace PruebaProyecto
         public FormSMBD()
         {
             InitializeComponent();
+        }
+
+        private void FormSMBD_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void botonEjecuta(object sender, EventArgs e)
+        {
+            string cadAnalisar = richTextBoxConsulta.Text;
+
+            AntlrInputStream input = new AntlrInputStream(cadAnalisar);
+            GramaticaSQLLexer lexer = new GramaticaSQLLexer(input);
+            CommonTokenStream token = new CommonTokenStream(lexer);
+            GramaticaSQLParser parser = new GramaticaSQLParser(token);
+
+            IParseTree tree = parser.consulta();
+            MessageBox.Show(tree.ToStringTree(parser));
+        
         }
     }
 }

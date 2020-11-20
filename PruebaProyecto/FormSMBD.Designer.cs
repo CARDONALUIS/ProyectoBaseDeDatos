@@ -36,9 +36,9 @@
             // 
             // richTextBoxConsulta
             // 
-            this.richTextBoxConsulta.Location = new System.Drawing.Point(12, 33);
+            this.richTextBoxConsulta.Location = new System.Drawing.Point(12, 42);
             this.richTextBoxConsulta.Name = "richTextBoxConsulta";
-            this.richTextBoxConsulta.Size = new System.Drawing.Size(723, 26);
+            this.richTextBoxConsulta.Size = new System.Drawing.Size(723, 33);
             this.richTextBoxConsulta.TabIndex = 0;
             this.richTextBoxConsulta.Text = "";
             // 
@@ -50,6 +50,7 @@
             this.button1.TabIndex = 1;
             this.button1.Text = "Ejecutar";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.botonEjecuta);
             // 
             // dataGridViewResConsulta
             // 
@@ -69,6 +70,7 @@
             this.Controls.Add(this.richTextBoxConsulta);
             this.Name = "FormSMBD";
             this.Text = "FormSMBD";
+            this.Load += new System.EventHandler(this.FormSMBD_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResConsulta)).EndInit();
             this.ResumeLayout(false);
 
