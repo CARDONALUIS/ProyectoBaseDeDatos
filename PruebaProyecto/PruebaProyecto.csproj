@@ -132,6 +132,7 @@
     <Compile Include="VentanaIndPrim.Designer.cs">
       <DependentUpon>VentanaIndPrim.cs</DependentUpon>
     </Compile>
+    <Compile Include="visitorSQL.cs" />
     <EmbeddedResource Include="Atributos.resx">
       <DependentUpon>Atributos.cs</DependentUpon>
     </EmbeddedResource>

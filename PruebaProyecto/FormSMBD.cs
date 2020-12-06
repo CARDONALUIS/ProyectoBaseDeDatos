@@ -17,6 +17,7 @@ namespace PruebaProyecto
 {
     public partial class FormSMBD : Form
     {
+        public Diccionario BD;
         public FormSMBD()
         {
             InitializeComponent();
@@ -24,7 +25,17 @@ namespace PruebaProyecto
 
         private void FormSMBD_Load(object sender, EventArgs e)
         {
+            iniColumna();
+            
+        }
 
+        public void iniColumna()
+        {
+            dataGridViewResConsulta.RowHeadersVisible = false;
+
+            DataGridViewTextBoxColumn Columna1 = new DataGridViewTextBoxColumn();
+            Columna1.HeaderText = " ";
+            dataGridViewResConsulta.Columns.Add(Columna1);
         }
 
         private void botonEjecuta(object sender, EventArgs e)
@@ -38,6 +49,9 @@ namespace PruebaProyecto
 
             IParseTree tree = parser.consulta();
             MessageBox.Show(tree.ToStringTree(parser));
+
+            visitorSQL visitor = new visitorSQL(BD);
+            visitor.Visit(tree);
         
         }
     }

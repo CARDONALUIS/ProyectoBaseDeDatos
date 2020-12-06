@@ -340,6 +340,8 @@ namespace PruebaProyecto
 
         private void botonVentanSMBD(object sender, EventArgs e)
         {
+            vSMBD.BD = dic;
+            r = 0;
             vSMBD.Show();
         }
     }

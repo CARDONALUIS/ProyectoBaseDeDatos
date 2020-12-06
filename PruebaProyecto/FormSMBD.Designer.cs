@@ -80,6 +80,6 @@
 
         private System.Windows.Forms.RichTextBox richTextBoxConsulta;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.DataGridView dataGridViewResConsulta;
+        public System.Windows.Forms.DataGridView dataGridViewResConsulta;
     }
 }

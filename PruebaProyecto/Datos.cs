@@ -919,7 +919,7 @@ namespace PruebaProyecto
             }
             else
             {
-                indP.clv_prim = br.ReadInt32();
+                indP.clv_prim = br.ReadInt32();//HAY DETALLE /////////////////////Recien creo la BD y agrego resgistros de segunda tabla
             }
             r = 0;
 

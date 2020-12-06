@@ -69,6 +69,11 @@ namespace PruebaProyecto
 
         }
 
+        public Entidad()
+        {
+
+        }
+
 
         //Metodo que no se utiliza porque era para fines de prueba
         public int leerDatoReg(int pos)
