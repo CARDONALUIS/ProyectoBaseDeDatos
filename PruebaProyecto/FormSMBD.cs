@@ -33,14 +33,14 @@ namespace PruebaProyecto
         {
             dataGridViewResConsulta.RowHeadersVisible = false;
 
-            DataGridViewTextBoxColumn Columna1 = new DataGridViewTextBoxColumn();
-            Columna1.HeaderText = " ";
-            dataGridViewResConsulta.Columns.Add(Columna1);
+            //DataGridViewTextBoxColumn Columna1 = new DataGridViewTextBoxColumn();
+            //Columna1.HeaderText = " ";
+            //dataGridViewResConsulta.Columns.Add(Columna1);
         }
 
         private void botonEjecuta(object sender, EventArgs e)
         {
-            string cadAnalisar = richTextBoxConsulta.Text;
+            string cadAnalisar = richTextBoxConsulta.Text.ToUpper();
 
             AntlrInputStream input = new AntlrInputStream(cadAnalisar);
             GramaticaSQLLexer lexer = new GramaticaSQLLexer(input);
@@ -52,7 +52,31 @@ namespace PruebaProyecto
 
             visitorSQL visitor = new visitorSQL(BD);
             visitor.Visit(tree);
-        
+
+            agregaInfoAGrid(visitor);
+            /*foreach(Entidad a in visitor.lisTabCons)
+            {
+                MessageBox.Show("Tabla: " + a.nombre+" Atributo: ");
+                foreach(Atributo b in a.listAtrib)
+                {
+                    MessageBox.Show(b.nombre);
+                }
+                    
+            }*/
+
+        }
+
+        public void agregaInfoAGrid(visitorSQL vis)
+        {
+            foreach(Entidad a in vis.lisTabCons)
+            {
+                foreach (Atributo b in a.listAtrib)
+                {
+                    DataGridViewTextBoxColumn Columna1 = new DataGridViewTextBoxColumn();
+                    Columna1.HeaderText = b.nombre;
+                    dataGridViewResConsulta.Columns.Add(Columna1);
+                }
+            }
         }
     }
 }

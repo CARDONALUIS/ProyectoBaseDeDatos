@@ -4,10 +4,10 @@ grammar GramaticaSQL;
  * Parser Rules
  */
 
-consulta: SELECT atributo ESP from ESP tabla postInfo fin ;
+consulta: SELECT atributo ESP from tabla postInfo fin ;
 
-atributo:ESP aste #atrAst
-		| ESP NOM atributo ?  #atrTab;
+atributo: ESP aste #atrAst
+		| ESP NOM'.'NOM atributo ?  #atrTab;
 		 
 postInfo: condicion | inner ;
 
@@ -17,6 +17,7 @@ SELECT: 'SELECT';
 
 NOM: [A-Z]+;
 
+
 NUM: [0-9]+;
 
 ESP: ' '; 
@@ -25,7 +26,8 @@ from: 'FROM';
 
 aste: '*';
 
-tabla: NOM  #nomTabla;
+tabla: ESP NOM tabla? #nomTabla
+	  /*|ESP NOM tabla ?  #recurTab*/;
 
 condicion: (ESP where ESP tabla'.'NOM ESP operador ESP comparador masCondi )?  #conCondicion;
 

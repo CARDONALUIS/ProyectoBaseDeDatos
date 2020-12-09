@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace PruebaProyecto
 {
     [Serializable]
-    public class Atributo
+    public class Atributo : ICloneable
     {
         private Byte[] ID_ATRI;
         public Byte[] id_atri { get { return ID_ATRI; } set { ID_ATRI = value; } }
@@ -55,5 +55,11 @@ namespace PruebaProyecto
             DIRSIGATRI = _dirSigAtr;
 
         }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
+
     }
 }

@@ -17,16 +17,41 @@ namespace PruebaProyecto
     {
         int r = 0;
         public Diccionario BD;
-        public List<string> lisatrCon;
+        public List<string> lisAtrCon;
+        public bool banRecDatoAtr = true;
+        public bool bandRecDatoEnt = true;
+        public List<Entidad> lisTabCons;
+        
+        
 
         
 
         public visitorSQL(Diccionario bd)
         {
             BD = bd;
-            lisatrCon = new List<string>();
+            lisAtrCon = new List<string>();
+            lisTabCons = new List<Entidad>();
+
+            //listEntRef = new List<Entidad>();
         }
 
+
+        public override int VisitFinConsulta([NotNull] GramaticaSQLParser.FinConsultaContext context)
+        {
+            r = 0;
+            agregaAtrSeleccionadosATab();
+
+            //agregaInfoGrid();
+
+
+
+            
+            //Entidad tablaSeleccionada = new Entidad();
+            //tablaSeleccionada = BD.listEntidad.Find(x => x.nombre.ToUpper() == nomTab);
+
+
+            return base.VisitFinConsulta(context);
+        }
 
         public override int VisitAste([NotNull] GramaticaSQLParser.AsteContext context)
         {
@@ -36,40 +61,64 @@ namespace PruebaProyecto
 
         public override int VisitAtrTab([NotNull] GramaticaSQLParser.AtrTabContext context)
         {
-            string algo = context.NOM().GetText();
+            if (banRecDatoAtr)
+            {
+                string cadAtr = context.GetText();
+                cadAtr = cadAtr.Substring(1, cadAtr.Length - 1);
 
-            lisatrCon.Add(algo);
+
+                string[] arAtr = cadAtr.Split(' ');
+
+                for (int i = 0; i < arAtr.Length; i++)
+                {
+                    lisAtrCon.Add(arAtr[i]);
+                }
+
+                banRecDatoAtr = false;
+            }
+
+           
             r = 0;
             return base.VisitAtrTab(context);
         }
 
-        public override int VisitNomTabla([NotNull] GramaticaSQLParser.NomTablaContext context)
+        /*public override int VisitRecurTab([NotNull] GramaticaSQLParser.RecurTabContext context)
         {
             string nomTab = context.GetText();
-
             r = 0;
-            /* List<Entidad> nueav = new List<Entidad>(BD.listEntidad);
-             r = 0;
-             nueav.ElementAt(0).nombre = "OTRA";*/
 
-            /*List<Entidad> nueav = (BD.listEntidad as IEnumerable<Entidad>).ToList();
-            r = 0;
-            nueav.ElementAt(0).nombre = "OTRA";
-            */
+            return base.VisitRecurTab(context);
+        }*/
 
-            /*
-            IFormatter f = new BinaryFormatter();
-            List<Entidad> nuevaLista = null;
-            using (Stream ms = new MemoryStream())
+        public override int VisitNomTabla([NotNull] GramaticaSQLParser.NomTablaContext context)
+        {
+            if (bandRecDatoEnt)
             {
-                f.Serialize(ms, BD.listEntidad);
-                //Ahora se des-serializa, creando una copia profunda y 100% independiente:
-                nuevaLista = f.Deserialize(ms) as List<Entidad>;
+                string cadTab = context.GetText();
+                cadTab = cadTab.Substring(1, cadTab.Length - 1);
+
+
+                string[] arEnt = cadTab.Split(' ');
+
+                for (int i = 0; i < arEnt.Length; i++)
+                {
+
+                    Entidad tablaSeleccionada = new Entidad();
+
+                    tablaSeleccionada.nombre = BD.listEntidad.Find(x => x.nombre.ToUpper() == arEnt[i].ToUpper()).nombre;
+                    //tablaSeleccionada = asignaAtributosTabSele(BD.listEntidad.Find(x => x.nombre.ToUpper() == arEnt[i].ToUpper()), tablaSeleccionada);
+                    lisTabCons.Add(tablaSeleccionada);
+                    
+                }
+
+                bandRecDatoEnt = false;
             }
 
-            nuevaLista.ElementAt(0).nombre = "OT";*/
 
+            
 
+            /*
+            ///
             Entidad tablaSeleccionada = new Entidad();
             tablaSeleccionada = BD.listEntidad.Find(x => x.nombre.ToUpper() == nomTab);
 
@@ -89,8 +138,7 @@ namespace PruebaProyecto
                     }
                 }
             }
-
-            
+            */
 
             r = 0;
 
@@ -100,6 +148,32 @@ namespace PruebaProyecto
         }
 
 
+        public void agregaAtrSeleccionadosATab()
+        {
+            foreach(string a in lisAtrCon)
+            {
+                Entidad enSe = lisTabCons.Find(x => x.nombre.ToUpper() == a.Split('.')[0]);
+                enSe.listAtrib = new List<Atributo>();
+                enSe.listAtrib.Add((Atributo)BD.listEntidad.Find(x => x.nombre == enSe.nombre).listAtrib.Find(x => x.nombre.ToUpper() == a.Split('.')[1]).Clone());
+                r = 0;     
+            }
 
-    }
+        }
+
+        public Entidad asignaAtributosTabSele(Entidad tabCon, Entidad tabNue)
+        {
+            tabNue.nombre = tabCon.nombre;
+            tabNue.listAtrib = new List<Atributo>();
+
+            foreach (Atributo a in tabCon.listAtrib)
+            {
+                Atributo nu = (Atributo)a.Clone();
+                tabNue.listAtrib.Add(nu);
+                r = 0;
+            }
+
+            return tabNue;
+        }       
+
+    }    
 }
