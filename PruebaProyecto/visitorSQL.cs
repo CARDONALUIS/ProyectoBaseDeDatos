@@ -21,16 +21,16 @@ namespace PruebaProyecto
         public bool banRecDatoAtr = true;
         public bool bandRecDatoEnt = true;
         public List<Entidad> lisTabCons;
-        
-        
 
-        
 
         public visitorSQL(Diccionario bd)
         {
             BD = bd;
+            direccionRealAtr();
+            abreArchivosDatosEntidades();
             lisAtrCon = new List<string>();
             lisTabCons = new List<Entidad>();
+            
 
             //listEntRef = new List<Entidad>();
         }
@@ -40,12 +40,13 @@ namespace PruebaProyecto
         {
             r = 0;
             agregaAtrSeleccionadosATab();
-
+            agregaRegSeleccionadosATab();
+            r = 0;
             //agregaInfoGrid();
 
 
 
-            
+
             //Entidad tablaSeleccionada = new Entidad();
             //tablaSeleccionada = BD.listEntidad.Find(x => x.nombre.ToUpper() == nomTab);
 
@@ -55,7 +56,7 @@ namespace PruebaProyecto
 
         public override int VisitAste([NotNull] GramaticaSQLParser.AsteContext context)
         {
-            r = 0;   
+            r = 0;
             return base.VisitAste(context);
         }
 
@@ -77,7 +78,7 @@ namespace PruebaProyecto
                 banRecDatoAtr = false;
             }
 
-           
+
             r = 0;
             return base.VisitAtrTab(context);
         }
@@ -103,19 +104,20 @@ namespace PruebaProyecto
                 for (int i = 0; i < arEnt.Length; i++)
                 {
 
-                    Entidad tablaSeleccionada = new Entidad();
+                    Entidad tablaSeleccionada;
 
-                    tablaSeleccionada.nombre = BD.listEntidad.Find(x => x.nombre.ToUpper() == arEnt[i].ToUpper()).nombre;
+                    tablaSeleccionada = (Entidad)BD.listEntidad.Find(x => x.nombre.ToUpper() == arEnt[i].ToUpper()).Clone();
+                    
                     //tablaSeleccionada = asignaAtributosTabSele(BD.listEntidad.Find(x => x.nombre.ToUpper() == arEnt[i].ToUpper()), tablaSeleccionada);
                     lisTabCons.Add(tablaSeleccionada);
-                    
+
                 }
 
                 bandRecDatoEnt = false;
             }
 
 
-            
+
 
             /*
             ///
@@ -150,12 +152,12 @@ namespace PruebaProyecto
 
         public void agregaAtrSeleccionadosATab()
         {
-            foreach(string a in lisAtrCon)
+            foreach (string a in lisAtrCon)
             {
                 Entidad enSe = lisTabCons.Find(x => x.nombre.ToUpper() == a.Split('.')[0]);
                 enSe.listAtrib = new List<Atributo>();
                 enSe.listAtrib.Add((Atributo)BD.listEntidad.Find(x => x.nombre == enSe.nombre).listAtrib.Find(x => x.nombre.ToUpper() == a.Split('.')[1]).Clone());
-                r = 0;     
+                r = 0;
             }
 
         }
@@ -173,7 +175,71 @@ namespace PruebaProyecto
             }
 
             return tabNue;
-        }       
+        }
+
+        public void agregaRegSeleccionadosATab()
+        {
+            List<string> algo = new List<string>();
+
+            foreach(Entidad a in lisTabCons)
+            {
+                
+                r = 0;
+                foreach (Atributo b in a.listAtrib)
+                {
+
+                    BinaryReader br = new BinaryReader(a.archivoDat);
+
+                    int i = 0;
+                    int tam = 12;
+                    while (i < 2)
+                    {
+                        a.archivoDat.Seek(tam, SeekOrigin.Begin);
+                        string algo2 = new string(br.ReadChars(20));
+                        algo.Add(algo2);
+                        tam += a.longAtributos;
+                        i++;
+                        
+
+                    }
+                }
+                r = 0;
+                //r = 0;
+                //a.archivoDat.Seek(0, SeekOrigin.Begin);
+
+
+            }                       
+        }
+
+        public void abreArchivosDatosEntidades()
+        {
+            foreach(Entidad a in BD.listEntidad)
+            {
+                a.archivoDat = File.Open(BitConverter.ToString(a.id_enti) + ".dat", FileMode.Open);
+                r = 0;
+                //entAct.archivoIndPri = File.Open(entAct.archivoIndPri.Name, FileMode.Open);
+            }
+        }
+
+        public void direccionRealAtr()
+        {
+            int tamDatAtr;
+            
+            foreach (Entidad a in BD.listEntidad)
+            {
+                tamDatAtr = 8;
+                foreach(Atributo b in a.listAtrib)
+                {
+                    b.dirArDat = tamDatAtr;
+                    r = 0;
+                    tamDatAtr = tamDatAtr + b.longitud;
+                    r = 0;
+                }
+                r = 0;
+                a.longAtributos = tamDatAtr + 8;
+            }
+            r = 0;
+        }
 
     }    
 }

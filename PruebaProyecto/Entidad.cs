@@ -11,7 +11,7 @@ namespace PruebaProyecto
       Clase que se encarga de contener variables para la manipulacion de objetos de esta clase con sus atributos 
      */
     [Serializable]
-    public class Entidad
+    public class Entidad : ICloneable
     {
         private Byte[] ID_ENTI;
         public Byte[] id_enti { get { return ID_ENTI; } set { ID_ENTI = value; } }
@@ -72,6 +72,11 @@ namespace PruebaProyecto
         public Entidad()
         {
 
+        }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
         }
 
 
