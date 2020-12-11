@@ -21,11 +21,13 @@ namespace PruebaProyecto
         public bool banRecDatoAtr = true;
         public bool bandRecDatoEnt = true;
         public List<Entidad> lisTabCons;
+        bool bandAst = false;
+        DataGridView gridTabla;
 
-
-        public visitorSQL(Diccionario bd)
+        public visitorSQL(Diccionario bd, DataGridView tab)
         {
             BD = bd;
+            gridTabla = tab;
             direccionRealAtr();
             abreArchivosDatosEntidades();
             lisAtrCon = new List<string>();
@@ -36,32 +38,41 @@ namespace PruebaProyecto
         }
 
 
+        public void limpiaGridAct()
+        {
+            gridTabla.Rows.Clear();
+            gridTabla.Columns.Clear();
+        }
+
+
         public override int VisitFinConsulta([NotNull] GramaticaSQLParser.FinConsultaContext context)
         {
             r = 0;
             agregaAtrSeleccionadosATab();
+            agregaColuAGrid();
             agregaRegSeleccionadosATab();
-            r = 0;
-            //agregaInfoGrid();
-
-
-
-
-            //Entidad tablaSeleccionada = new Entidad();
-            //tablaSeleccionada = BD.listEntidad.Find(x => x.nombre.ToUpper() == nomTab);
-
-
+            
+            
+            cierraArchivosDatosEntidades();
+           
             return base.VisitFinConsulta(context);
         }
+
+
 
         public override int VisitAste([NotNull] GramaticaSQLParser.AsteContext context)
         {
             r = 0;
+            limpiaGridAct();
+
+            bandAst = true;
             return base.VisitAste(context);
         }
 
         public override int VisitAtrTab([NotNull] GramaticaSQLParser.AtrTabContext context)
         {
+            limpiaGridAct();
+
             if (banRecDatoAtr)
             {
                 string cadAtr = context.GetText();
@@ -152,13 +163,35 @@ namespace PruebaProyecto
 
         public void agregaAtrSeleccionadosATab()
         {
-            foreach (string a in lisAtrCon)
+
+            
+
+            if (!bandAst)
             {
-                Entidad enSe = lisTabCons.Find(x => x.nombre.ToUpper() == a.Split('.')[0]);
-                enSe.listAtrib = new List<Atributo>();
-                enSe.listAtrib.Add((Atributo)BD.listEntidad.Find(x => x.nombre == enSe.nombre).listAtrib.Find(x => x.nombre.ToUpper() == a.Split('.')[1]).Clone());
-                r = 0;
+                foreach (string a in lisAtrCon)
+                {
+                    Entidad enSe = lisTabCons.Find(x => x.nombre.ToUpper() == a.Split('.')[0]);
+                    enSe.listAtrib = new List<Atributo>();
+                }
+
+                foreach (string a in lisAtrCon)
+                {
+                    Entidad enSe = lisTabCons.Find(x => x.nombre.ToUpper() == a.Split('.')[0]);
+                    enSe.listAtrib.Add((Atributo)BD.listEntidad.Find(x => x.nombre == enSe.nombre).listAtrib.Find(x => x.nombre.ToUpper() == a.Split('.')[1]).Clone());
+                    r = 0;
+                }
             }
+            else
+            {
+                //foreach ()
+                //{
+                //Entidad enSe = lisTabCons.Find(x => x.nombre.ToUpper() == a.Split('.')[0]);
+                //enSe.listAtrib = new List<Atributo>();
+                //}
+                bandAst = false;
+
+            }
+            
 
         }
 
@@ -180,41 +213,79 @@ namespace PruebaProyecto
         public void agregaRegSeleccionadosATab()
         {
             List<string> algo = new List<string>();
+            bool agregaRenCorre = true;
+            int ren = 0;
+            int col = 0;
+            
 
-            foreach(Entidad a in lisTabCons)
+            foreach (Entidad a in lisTabCons)
             {
                 
                 r = 0;
+                
                 foreach (Atributo b in a.listAtrib)
                 {
 
                     BinaryReader br = new BinaryReader(a.archivoDat);
+                    ren = 0;
+                   
+                    int tam = b.dirArDat;
+                    
+                    
+                    
 
-                    int i = 0;
-                    int tam = 12;
-                    while (i < 2)
+                    while (tam <= a.archivoDat.Length)
                     {
+                        if(agregaRenCorre)
+                        gridTabla.Rows.Add();
                         a.archivoDat.Seek(tam, SeekOrigin.Begin);
-                        string algo2 = new string(br.ReadChars(20));
-                        algo.Add(algo2);
+                        string dato="";
+
+                        switch (b.tipo)
+                        {
+                            case 'C':
+                                r = 0;
+                                dato = new string(br.ReadChars(b.longitud)).Trim('-');
+                                //algo.Add(dato);
+                                break;
+                            case 'E':
+                                dato = br.ReadInt32().ToString();
+                                r = 0;
+                                break;
+                            case 'F':
+                                dato = br.ReadSingle().ToString();
+                                r = 0;
+                                break;
+                        }
                         tam += a.longAtributos;
-                        i++;
+                        gridTabla.Rows[ren].Cells[col].Value = dato;
                         
-
+                        r = 0;
+                        ren++;
+                        
                     }
+                    agregaRenCorre = false;
+                    col++;
+
                 }
+                //agregaRenCorre = false;
+                col++;
                 r = 0;
-                //r = 0;
-                //a.archivoDat.Seek(0, SeekOrigin.Begin);
-
-
             }                       
+        }
+
+        public void cierraArchivosDatosEntidades()
+        {
+            foreach (Entidad a in BD.listEntidad)
+            {
+                a.archivoDat.Close();
+            }
         }
 
         public void abreArchivosDatosEntidades()
         {
             foreach(Entidad a in BD.listEntidad)
-            {
+            {                
                 a.archivoDat = File.Open(BitConverter.ToString(a.id_enti) + ".dat", FileMode.Open);
                 r = 0;
                 //entAct.archivoIndPri = File.Open(entAct.archivoIndPri.Name, FileMode.Open);
@@ -239,6 +310,19 @@ namespace PruebaProyecto
                 a.longAtributos = tamDatAtr + 8;
             }
             r = 0;
+        }
+
+        public void agregaColuAGrid()
+        {
+            foreach (Entidad a in lisTabCons)
+            {
+                foreach (Atributo b in a.listAtrib)
+                {
+                    DataGridViewTextBoxColumn Columna1 = new DataGridViewTextBoxColumn();
+                    Columna1.HeaderText = b.nombre;
+                    gridTabla.Columns.Add(Columna1);
+                }
+            }
         }
 
     }    

@@ -50,10 +50,10 @@ namespace PruebaProyecto
             IParseTree tree = parser.consulta();
             MessageBox.Show(tree.ToStringTree(parser));
 
-            visitorSQL visitor = new visitorSQL(BD);
+            visitorSQL visitor = new visitorSQL(BD, dataGridViewResConsulta);
             visitor.Visit(tree);
 
-            agregaInfoAGrid(visitor);
+            //agregaInfoAGrid(visitor);
             /*foreach(Entidad a in visitor.lisTabCons)
             {
                 MessageBox.Show("Tabla: " + a.nombre+" Atributo: ");
@@ -66,17 +66,6 @@ namespace PruebaProyecto
 
         }
 
-        public void agregaInfoAGrid(visitorSQL vis)
-        {
-            foreach(Entidad a in vis.lisTabCons)
-            {
-                foreach (Atributo b in a.listAtrib)
-                {
-                    DataGridViewTextBoxColumn Columna1 = new DataGridViewTextBoxColumn();
-                    Columna1.HeaderText = b.nombre;
-                    dataGridViewResConsulta.Columns.Add(Columna1);
-                }
-            }
-        }
+        
     }
 }
