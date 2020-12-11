@@ -48,9 +48,10 @@ namespace PruebaProyecto
         public override int VisitFinConsulta([NotNull] GramaticaSQLParser.FinConsultaContext context)
         {
             r = 0;
-            agregaAtrSeleccionadosATab();
-            agregaColuAGrid();
-            agregaRegSeleccionadosATab();
+            //agregaAtrSeleccionadosATab();
+            //agregaColuAGrid();
+            //agregaRegSeleccionadosATab();
+            
             
             
             cierraArchivosDatosEntidades();
@@ -58,6 +59,48 @@ namespace PruebaProyecto
             return base.VisitFinConsulta(context);
         }
 
+        public override int VisitConCondicion([NotNull] GramaticaSQLParser.ConCondicionContext context)
+        {
+            //string algo = 
+            string cadeCondi = context.GetText();
+
+            if (cadeCondi != "")
+            {
+                string parTab = cadeCondi.Split(context.operador().GetText()[0])[0];
+                parTab = parTab.Substring(1, parTab.Length - 1);
+                string refTab = parTab.Split(' ')[1];
+
+                string aComparar = cadeCondi.Split(context.operador().GetText()[0])[1];
+                aComparar = aComparar.Substring(1, aComparar.Length - 1);
+
+                int ren = 0;
+                int col = 0;
+                List<string> lisRegSele = new List<string>();
+                foreach (Entidad a in lisTabCons)
+                {
+                    foreach (Atributo b in a.listAtrib)
+                    {
+                        if (a.nombre.ToUpper() + "." + b.nombre.ToUpper() == refTab)
+                        {
+                            foreach(string c in b.regAtr)
+                            {
+                                if(c.ToUpper() == aComparar)
+                                {
+                                    r = 0;
+                                    //////////////////////////////////
+                                    lisRegSele.Add(c);
+                                }
+                            }
+                        }
+                        col++;
+                    }
+                    col++;
+                }
+            }
+
+            r = 0;
+            return base.VisitConCondicion(context);
+        }
 
 
         public override int VisitAste([NotNull] GramaticaSQLParser.AsteContext context)
@@ -68,6 +111,8 @@ namespace PruebaProyecto
             bandAst = true;
             return base.VisitAste(context);
         }
+
+
 
         public override int VisitAtrTab([NotNull] GramaticaSQLParser.AtrTabContext context)
         {
@@ -124,6 +169,9 @@ namespace PruebaProyecto
 
                 }
 
+                agregaAtrSeleccionadosATab();
+                agregaColuAGrid();
+                agregaRegSeleccionadosATab();
                 bandRecDatoEnt = false;
             }
 
@@ -212,8 +260,6 @@ namespace PruebaProyecto
 
         public void agregaRegSeleccionadosATab()
         {
-            List<string> algo = new List<string>();
-            bool agregaRenCorre = true;
             int ren = 0;
             int col = 0;
             
@@ -228,6 +274,7 @@ namespace PruebaProyecto
 
                     BinaryReader br = new BinaryReader(a.archivoDat);
                     ren = 0;
+                    b.regAtr = new List<string>(); 
                    
                     int tam = b.dirArDat;
                     
@@ -236,8 +283,6 @@ namespace PruebaProyecto
 
                     while (tam <= a.archivoDat.Length)
                     {
-                        if(agregaRenCorre)
-                        gridTabla.Rows.Add();
                         a.archivoDat.Seek(tam, SeekOrigin.Begin);
                         string dato="";
 
@@ -258,17 +303,16 @@ namespace PruebaProyecto
                                 break;
                         }
                         tam += a.longAtributos;
-                        gridTabla.Rows[ren].Cells[col].Value = dato;
+                        //gridTabla.Rows[ren].Cells[col].Value = dato;
+                        b.regAtr.Add(dato);
                         
                         r = 0;
                         ren++;
                         
                     }
-                    agregaRenCorre = false;
                     col++;
 
                 }
-                //agregaRenCorre = false;
                 col++;
                 r = 0;
             }                       
@@ -319,7 +363,7 @@ namespace PruebaProyecto
                 foreach (Atributo b in a.listAtrib)
                 {
                     DataGridViewTextBoxColumn Columna1 = new DataGridViewTextBoxColumn();
-                    Columna1.HeaderText = b.nombre;
+                    Columna1.HeaderText = a.nombre+"."+b.nombre;
                     gridTabla.Columns.Add(Columna1);
                 }
             }

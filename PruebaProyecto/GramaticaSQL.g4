@@ -11,7 +11,29 @@ atributo: ESP aste #atrAst
 		 
 postInfo: condicion | inner ;
 
-inner: (ESP 'INNER JOIN' ESP tabla ESP 'ON' ESP tabla'.'NOM ESP operador ESP tabla'.'NOM)? ;
+inner: (ESP 'INNER JOIN' ESP NOM ESP 'ON' ESP NOM'.'NOM ESP operador ESP NOM'.'NOM)? ;
+
+from: 'FROM';
+
+aste: '*';
+
+tabla: ESP NOM tabla? #nomTabla
+	  /*|ESP NOM tabla ?  #recurTab*/;
+
+condicion: (ESP WHERE ESP NOM'.'NOM ESP operador ESP comparador masCondi )?  #conCondicion;
+
+operador: '=' | '<>' | '>' | '>=' | '<' | '<=';
+
+comparador: NOM | NUM;
+
+masCondi: (ESP 'AND'ESP NOM'.'NOM ESP operador ESP comparador masCondi) ? #condicionUnica
+		  ;
+
+fin:EOF   #finConsulta;
+
+
+WHERE: 'WHERE';
+
 
 SELECT: 'SELECT';
 
@@ -21,27 +43,6 @@ NOM: [A-Z]+;
 NUM: [0-9]+;
 
 ESP: ' '; 
-
-from: 'FROM';
-
-aste: '*';
-
-tabla: ESP NOM tabla? #nomTabla
-	  /*|ESP NOM tabla ?  #recurTab*/;
-
-condicion: (ESP where ESP tabla'.'NOM ESP operador ESP comparador masCondi )?  #conCondicion;
-
-where: 'WHERE';
-
-operador: '=' | '<>' | '>' | '>=' | '<' | '<=';
-
-comparador: NOM | NUM;
-
-masCondi: (ESP 'AND'ESP tabla'.'NOM ESP operador ESP comparador masCondi) ? #condicionUnica
-		  ;
-
-fin:EOF   #finConsulta;
-
 
 
 //: 'Int' | 'Double' | 'Float';
