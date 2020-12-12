@@ -51,6 +51,7 @@ namespace PruebaProyecto
             //agregaAtrSeleccionadosATab();
             //agregaColuAGrid();
             //agregaRegSeleccionadosATab();
+            muestraGridCon();
             
             
             
@@ -59,10 +60,45 @@ namespace PruebaProyecto
             return base.VisitFinConsulta(context);
         }
 
+        public void muestraGridCon()
+        {
+            int ren = 0;
+            int col = 0;
+            bool bandRengAg = true;
+
+            foreach(Entidad a in lisTabCons)
+            {
+                
+                foreach(Atributo b in a.listAtrib)
+                {
+                    
+
+                    
+                    foreach(string c in b.regAtr)
+                    {
+                        if (bandRengAg)
+                            gridTabla.Rows.Add();
+
+                        gridTabla.Rows[ren].Cells[col].Value = c;
+                        ren++;
+                    }
+
+                    if (bandRengAg)
+                        bandRengAg = false;
+
+                    ren = 0;
+                    col++;
+                }
+                col++;
+            }
+        }
+
+
         public override int VisitConCondicion([NotNull] GramaticaSQLParser.ConCondicionContext context)
         {
             //string algo = 
             string cadeCondi = context.GetText();
+           
 
             if (cadeCondi != "")
             {
@@ -73,33 +109,171 @@ namespace PruebaProyecto
                 string aComparar = cadeCondi.Split(context.operador().GetText()[0])[1];
                 aComparar = aComparar.Substring(1, aComparar.Length - 1);
 
-                int ren = 0;
-                int col = 0;
-                List<string> lisRegSele = new List<string>();
+                string operador = context.operador().GetText();
+
+                bool bandAtrEncon = false;
+                List<int> indSele = new List<int>(); ;
+                int i = 0;
+
                 foreach (Entidad a in lisTabCons)
                 {
                     foreach (Atributo b in a.listAtrib)
                     {
+                        //List<string> nuevReg = new List<string>();                        
+                        i = 0;
+
                         if (a.nombre.ToUpper() + "." + b.nombre.ToUpper() == refTab)
                         {
-                            foreach(string c in b.regAtr)
+                            foreach (string c in b.regAtr)
                             {
-                                if(c.ToUpper() == aComparar)
-                                {
+                                //if (c.ToUpper() == aComparar)
+                                //{
                                     r = 0;
                                     //////////////////////////////////
-                                    lisRegSele.Add(c);
-                                }
+
+
+                                    bool valAc = hazComparacion(operador, c.ToUpper(), aComparar, b.tipo);
+                                    if (valAc)
+                                    {
+                                        //nuevReg.Add(c);
+                                        indSele.Add(i);
+                                    }
+                                    
+                                //}                                
+                                i++;
                             }
+                            bandAtrEncon = true;
+
                         }
-                        col++;
+                        if(bandAtrEncon)
+                            break;
                     }
-                    col++;
+                    if(bandAtrEncon)
+                        break;
                 }
+                actualizaRegCons(indSele);
             }
 
             r = 0;
             return base.VisitConCondicion(context);
+        }
+
+        public void actualizaRegCons(List<int> indSele)
+        {
+            int i = 0;
+            List<string> nuevCadReg = new List<string>();
+
+            foreach (Entidad a in lisTabCons)
+            {
+                i = 0;
+                foreach(Atributo b in a.listAtrib)
+                {
+                    i = 0;
+                    nuevCadReg = new List<string>();
+                    foreach(string c in b.regAtr)
+                    {
+                        int ind = indSele.FindIndex(x => x == i);
+                        if (ind != -1)
+                        {
+                            nuevCadReg.Add(c);
+                        }
+                        i++;
+                    }
+                    b.regAtr = nuevCadReg;
+                    
+
+                    i++;
+
+                }
+            }
+        }
+
+
+        public bool hazComparacion(string op, string datoACom, string comparador, char tipoDato)
+        {
+            bool band = false;
+
+            switch (op)
+            {
+                case "=":                                                         
+                    if(datoACom == comparador)
+                    {
+                        band = true;
+                    }
+                    break;
+                case "<>":
+                    if (datoACom != comparador.Trim(' '))
+                    {
+                        band = true;
+                    }
+                    break;
+                case ">":
+                    if(tipoDato == 'C')
+                    {
+                        MessageBox.Show("No puedes saber si un cadena es mayor que otra");
+                    }
+                    else
+                    {
+                        int dCom = Convert.ToInt32(datoACom);
+                        int comp = Convert.ToInt32(comparador);
+
+                        if(dCom > comp)
+                        {
+                            band = true;
+                        }
+                    }
+                    break;
+                case "<":
+                    if (tipoDato == 'C')
+                    {
+                        MessageBox.Show("No puedes saber si un cadena es mayor que otra");
+                    }
+                    else
+                    {
+                        int dCom = Convert.ToInt32(datoACom);
+                        int comp = Convert.ToInt32(comparador);
+
+                        if (dCom < comp)
+                        {
+                            band = true;
+                        }
+                    }
+                    break;
+                case ">=":
+                    if (tipoDato == 'C')
+                    {
+                        MessageBox.Show("No puedes saber si un cadena es mayor igual que otra");
+                    }
+                    else
+                    {
+                        int dCom = Convert.ToInt32(datoACom);
+                        int comp = Convert.ToInt32(comparador);
+
+                        if (dCom >= comp)
+                        {
+                            band = true;
+                        }
+                    }
+                    break;
+                case "<=":
+                    if (tipoDato == 'C')
+                    {
+                        MessageBox.Show("No puedes saber si un cadena es mayor que otra");
+                    }
+                    else
+                    {
+                        int dCom = Convert.ToInt32(datoACom);
+                        int comp = Convert.ToInt32(comparador);
+
+                        if (dCom <= comp)
+                        {
+                            band = true;
+                        }
+                    }
+                    break;
+            }
+
+            return band;
         }
 
 
