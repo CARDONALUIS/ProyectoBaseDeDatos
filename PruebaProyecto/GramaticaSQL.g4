@@ -11,7 +11,7 @@ atributo: ESP aste #atrAst
 		 
 postInfo: condicion | inner ;
 
-inner: (ESP 'INNER JOIN' ESP NOM ESP 'ON' ESP NOM'.'NOM ESP operador ESP NOM'.'NOM)? ;
+inner: (ESP 'INNER JOIN' ESP NOM ESP 'ON' ESP NOM'.'NOM ESP '=' ESP NOM'.'NOM)? #conInnerJoin;
 
 from: 'FROM';
 

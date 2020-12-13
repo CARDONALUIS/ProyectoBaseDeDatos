@@ -20,9 +20,10 @@ namespace PruebaProyecto
         public List<string> lisAtrCon;
         public bool banRecDatoAtr = true;
         public bool bandRecDatoEnt = true;
-        public List<Entidad> lisTabCons;
+        public Entidad TabCons;
         bool bandAst = false;
         DataGridView gridTabla;
+        string tabConPrin;
 
         public visitorSQL(Diccionario bd, DataGridView tab)
         {
@@ -30,11 +31,11 @@ namespace PruebaProyecto
             gridTabla = tab;
             direccionRealAtr();
             abreArchivosDatosEntidades();
+            vinculaLlavesForaneas();
+            agregRegBD();
             lisAtrCon = new List<string>();
-            lisTabCons = new List<Entidad>();
+            TabCons = new Entidad();
             
-
-            //listEntRef = new List<Entidad>();
         }
 
 
@@ -48,9 +49,6 @@ namespace PruebaProyecto
         public override int VisitFinConsulta([NotNull] GramaticaSQLParser.FinConsultaContext context)
         {
             r = 0;
-            //agregaAtrSeleccionadosATab();
-            //agregaColuAGrid();
-            //agregaRegSeleccionadosATab();
             muestraGridCon();
             
             
@@ -66,33 +64,167 @@ namespace PruebaProyecto
             int col = 0;
             bool bandRengAg = true;
 
-            foreach(Entidad a in lisTabCons)
+
+            foreach(Atributo b in TabCons.listAtrib)
             {
-                
-                foreach(Atributo b in a.listAtrib)
+ 
+                foreach(string c in b.regAtr)
                 {
-                    
-
-                    
-                    foreach(string c in b.regAtr)
-                    {
-                        if (bandRengAg)
-                            gridTabla.Rows.Add();
-
-                        gridTabla.Rows[ren].Cells[col].Value = c;
-                        ren++;
-                    }
-
                     if (bandRengAg)
-                        bandRengAg = false;
+                        gridTabla.Rows.Add();
 
-                    ren = 0;
-                    col++;
+                    gridTabla.Rows[ren].Cells[col].Value = c;
+                    ren++;
                 }
+
+                if (bandRengAg)
+                    bandRengAg = false;
+
+                ren = 0;
                 col++;
             }
+              
         }
 
+
+        public override int VisitConInnerJoin([NotNull] GramaticaSQLParser.ConInnerJoinContext context)
+        {
+            string tab2 = context.NOM(0).GetText();
+            hazCombinacionReg(tab2);
+            
+            
+            r = 0;
+
+
+            return base.VisitConInnerJoin(context);
+        }
+
+        public void hazCombinacionReg(string tabla2)
+        {
+            //ValidarLlaveForanea
+            Entidad tab1 = BD.listEntidad.Find(x => x.nombre.ToUpper() == tabConPrin);
+            Entidad tab2 = BD.listEntidad.Find(x => x.nombre.ToUpper() == tabla2);
+            
+
+            Entidad entCom = new Entidad();
+            entCom.listAtrib = new List<Atributo>();
+
+            foreach(Atributo a in tab1.listAtrib)
+            {
+                Atributo nu = (Atributo)a.Clone();
+                nu.regAtr = new List<string>();
+
+                entCom.listAtrib.Add(nu);
+            }
+            foreach (Atributo a in tab2.listAtrib)
+            {
+                Atributo nu = (Atributo)a.Clone();
+                nu.regAtr = new List<string>();
+
+                entCom.listAtrib.Add(nu);
+            }
+
+            int ren = 0;
+            int col = 0;
+            int ren2 = 0;
+            int col2 = 0;
+
+            
+            
+            
+            /*
+            foreach (Atributo b in tab1.listAtrib)
+            {
+                List<string> cad = new List<string>();
+                foreach (string c in b.regAtr)
+                {
+                    cad.Add(c);
+                    
+                }
+                listD.Add(cad);
+            }*/
+
+            string[,] arrayCombinacionT2 = new string[40,20];
+
+            for(int i =0; i < tab2.listAtrib.Count;i++)
+            {
+                for(int j =0; j<tab2.listAtrib.ElementAt(i).regAtr.Count;j++)
+                {
+                    arrayCombinacionT2[j,i] = tab2.listAtrib.ElementAt(i).regAtr.ElementAt(j);        
+                }
+            }
+
+            List<List<string>> listD = new List<List<string>>();
+            for (int i = 0; i < tab2.listAtrib.ElementAt(i).regAtr.Count ; i++)
+            {
+                List<string> cad = new List<string>();
+                for (int j = 0; j < tab2.listAtrib.Count ; j++)
+                {
+                    if(arrayCombinacionT2[i, j] != null)
+                      cad.Add(arrayCombinacionT2[i, j]);
+                }
+                listD.Add(cad);
+            }
+
+
+            r = 0;
+
+            string[,] arrayCombinacionT1 = new string[40, 20];
+
+            for (int i = 0; i < tab1.listAtrib.Count; i++)
+            {
+                for (int j = 0; j < tab1.listAtrib.ElementAt(i).regAtr.Count; j++)
+                {
+                    arrayCombinacionT1[j, i] = tab1.listAtrib.ElementAt(i).regAtr.ElementAt(j);
+                }
+            }
+
+            List<List<string>> listD2 = new List<List<string>>();
+            for (int i = 0; i < 6; i++)//////////////PENDIENTE
+            {
+                List<string> cad = new List<string>();
+                for (int j = 0; j < tab1.listAtrib.Count; j++)
+                {
+                    if (arrayCombinacionT1[i, j] != null)
+                        cad.Add(arrayCombinacionT1[i, j]);
+                }
+                listD2.Add(cad);
+            }
+
+            r = 0;
+
+            formaCombinacion(listD, listD2);
+
+
+        }
+
+        public void formaCombinacion(List<List<string>> lis1, List<List<string>> lis2)
+        {
+            List<List<string>> lisFinCom = new List<List<string>>();
+            int con = 0;
+
+            string[,] arrayCombinacionFin = new string[lis2.ElementAt(0).Count+ lis1.ElementAt(0).Count , lis1.Count * lis2.Count];
+
+            for (int j = 0; j < lis1.Count * lis2.Count; j++)
+            {
+
+                //arrayCombinacionFin[j,j] = lis2.ElementAt(0)
+                for (int i = 0; i < lis2.ElementAt(0).Count + lis1.ElementAt(0).Count; i++)
+                {
+                    if (lis2.ElementAt(0).Count < i)
+                    {
+
+                    }
+                    else
+                    {
+
+                    }
+
+                }
+            }
+
+            r = 0;
+        }
 
         public override int VisitConCondicion([NotNull] GramaticaSQLParser.ConCondicionContext context)
         {
@@ -115,42 +247,32 @@ namespace PruebaProyecto
                 List<int> indSele = new List<int>(); ;
                 int i = 0;
 
-                foreach (Entidad a in lisTabCons)
-                {
-                    foreach (Atributo b in a.listAtrib)
+                   
+                foreach (Atributo b in BD.listEntidad.Find(x=>x.nombre == TabCons.nombre).listAtrib)
+                {                     
+                    i = 0;
+
+                    if (TabCons.nombre.ToUpper() + "." + b.nombre.ToUpper() == refTab)
                     {
-                        //List<string> nuevReg = new List<string>();                        
-                        i = 0;
-
-                        if (a.nombre.ToUpper() + "." + b.nombre.ToUpper() == refTab)
+                        foreach (string c in b.regAtr)
                         {
-                            foreach (string c in b.regAtr)
+
+                            bool valAc = hazComparacion(operador, c.ToUpper(), aComparar, b.tipo);
+                            if (valAc)
                             {
-                                //if (c.ToUpper() == aComparar)
-                                //{
-                                    r = 0;
-                                    //////////////////////////////////
-
-
-                                    bool valAc = hazComparacion(operador, c.ToUpper(), aComparar, b.tipo);
-                                    if (valAc)
-                                    {
-                                        //nuevReg.Add(c);
-                                        indSele.Add(i);
-                                    }
-                                    
-                                //}                                
-                                i++;
+                                       
+                                indSele.Add(i);
                             }
-                            bandAtrEncon = true;
-
+                              
+                            i++;
                         }
-                        if(bandAtrEncon)
-                            break;
+                        bandAtrEncon = true;
+
                     }
                     if(bandAtrEncon)
                         break;
                 }
+                    
                 actualizaRegCons(indSele);
             }
 
@@ -163,29 +285,27 @@ namespace PruebaProyecto
             int i = 0;
             List<string> nuevCadReg = new List<string>();
 
-            foreach (Entidad a in lisTabCons)
+            
+            foreach(Atributo b in TabCons.listAtrib)
             {
                 i = 0;
-                foreach(Atributo b in a.listAtrib)
+                nuevCadReg = new List<string>();
+                foreach(string c in b.regAtr)
                 {
-                    i = 0;
-                    nuevCadReg = new List<string>();
-                    foreach(string c in b.regAtr)
+                    int ind = indSele.FindIndex(x => x == i);
+                    if (ind != -1)
                     {
-                        int ind = indSele.FindIndex(x => x == i);
-                        if (ind != -1)
-                        {
-                            nuevCadReg.Add(c);
-                        }
-                        i++;
+                        nuevCadReg.Add(c);
                     }
-                    b.regAtr = nuevCadReg;
+                    i++;
+                }
+                b.regAtr = nuevCadReg;
                     
 
-                    i++;
+                i++;
 
-                }
             }
+            
         }
 
 
@@ -313,14 +433,6 @@ namespace PruebaProyecto
             return base.VisitAtrTab(context);
         }
 
-        /*public override int VisitRecurTab([NotNull] GramaticaSQLParser.RecurTabContext context)
-        {
-            string nomTab = context.GetText();
-            r = 0;
-
-            return base.VisitRecurTab(context);
-        }*/
-
         public override int VisitNomTabla([NotNull] GramaticaSQLParser.NomTablaContext context)
         {
             if (bandRecDatoEnt)
@@ -331,85 +443,43 @@ namespace PruebaProyecto
 
                 string[] arEnt = cadTab.Split(' ');
 
+                tabConPrin = arEnt[0];////////AQUI ME QUEDE
+
                 for (int i = 0; i < arEnt.Length; i++)
-                {
-
-                    Entidad tablaSeleccionada;
-
-                    tablaSeleccionada = (Entidad)BD.listEntidad.Find(x => x.nombre.ToUpper() == arEnt[i].ToUpper()).Clone();
-                    
-                    //tablaSeleccionada = asignaAtributosTabSele(BD.listEntidad.Find(x => x.nombre.ToUpper() == arEnt[i].ToUpper()), tablaSeleccionada);
-                    lisTabCons.Add(tablaSeleccionada);
+                {                    
+                    TabCons = (Entidad)BD.listEntidad.Find(x => x.nombre.ToUpper() == arEnt[i].ToUpper()).Clone();
 
                 }
 
                 agregaAtrSeleccionadosATab();
                 agregaColuAGrid();
-                agregaRegSeleccionadosATab();
                 bandRecDatoEnt = false;
             }
-
-
-
-
-            /*
-            ///
-            Entidad tablaSeleccionada = new Entidad();
-            tablaSeleccionada = BD.listEntidad.Find(x => x.nombre.ToUpper() == nomTab);
-
-
-            MessageBox.Show("Tabla Seleccionada "+tablaSeleccionada.nombre);
-
-
-            for (int i = 0; i < lisatrCon.Count; i++)
-            {
-                foreach (Atributo a in tablaSeleccionada.listAtrib)
-                {
-                    if(a.nombre.ToUpper() == lisatrCon[i])
-                    {
-                        MessageBox.Show("Atributo seleccionado " + a.nombre);
-                        r = 0;
-                        //VOY ABRIR EL ARCHIVO DE RESGISTROS CON a.INDI  ME QUEDE AQUI
-                    }
-                }
-            }
-            */
-
             r = 0;
-
-
-
             return base.VisitNomTabla(context);
         }
 
 
         public void agregaAtrSeleccionadosATab()
         {
-
-            
-
             if (!bandAst)
             {
-                foreach (string a in lisAtrCon)
-                {
-                    Entidad enSe = lisTabCons.Find(x => x.nombre.ToUpper() == a.Split('.')[0]);
-                    enSe.listAtrib = new List<Atributo>();
-                }
+                TabCons.listAtrib = new List<Atributo>();
 
                 foreach (string a in lisAtrCon)
                 {
-                    Entidad enSe = lisTabCons.Find(x => x.nombre.ToUpper() == a.Split('.')[0]);
-                    enSe.listAtrib.Add((Atributo)BD.listEntidad.Find(x => x.nombre == enSe.nombre).listAtrib.Find(x => x.nombre.ToUpper() == a.Split('.')[1]).Clone());
+                    //TabCons.listAtrib.Add((Atributo)BD.listEntidad.Find(x => x.nombre == TabCons.nombre).listAtrib.Find(x => x.nombre.ToUpper() == a.Split('.')[1]).Clone());
+                    //TabCons.listAtrib.Add((Atributo)BD.listEntidad.Find(x => x.nombre == TabCons.nombre).listAtrib.Find(x => x.nombre.ToUpper() == a.Split('.')[1]).Clone());
+                    Entidad act = BD.listEntidad.Find(x => x.nombre.ToUpper() == a.Split('.')[0]);
+                    
+                    TabCons.listAtrib.Add((Atributo)act.listAtrib.Find(x => x.nombre.ToUpper() == a.Split('.')[1]).Clone());
+                    
                     r = 0;
                 }
+
             }
             else
             {
-                //foreach ()
-                //{
-                //Entidad enSe = lisTabCons.Find(x => x.nombre.ToUpper() == a.Split('.')[0]);
-                //enSe.listAtrib = new List<Atributo>();
-                //}
                 bandAst = false;
 
             }
@@ -417,48 +487,32 @@ namespace PruebaProyecto
 
         }
 
-        public Entidad asignaAtributosTabSele(Entidad tabCon, Entidad tabNue)
-        {
-            tabNue.nombre = tabCon.nombre;
-            tabNue.listAtrib = new List<Atributo>();
-
-            foreach (Atributo a in tabCon.listAtrib)
-            {
-                Atributo nu = (Atributo)a.Clone();
-                tabNue.listAtrib.Add(nu);
-                r = 0;
-            }
-
-            return tabNue;
-        }
-
-        public void agregaRegSeleccionadosATab()
+        public void agregRegBD()
         {
             int ren = 0;
             int col = 0;
-            
 
-            foreach (Entidad a in lisTabCons)
+            foreach (Entidad a in BD.listEntidad)
             {
-                
+
                 r = 0;
-                
+
                 foreach (Atributo b in a.listAtrib)
                 {
 
                     BinaryReader br = new BinaryReader(a.archivoDat);
                     ren = 0;
-                    b.regAtr = new List<string>(); 
-                   
+                    b.regAtr = new List<string>();
+
                     int tam = b.dirArDat;
-                    
-                    
-                    
+
+
+
 
                     while (tam <= a.archivoDat.Length)
                     {
                         a.archivoDat.Seek(tam, SeekOrigin.Begin);
-                        string dato="";
+                        string dato = "";
 
                         switch (b.tipo)
                         {
@@ -479,18 +533,19 @@ namespace PruebaProyecto
                         tam += a.longAtributos;
                         //gridTabla.Rows[ren].Cells[col].Value = dato;
                         b.regAtr.Add(dato);
-                        
+
                         r = 0;
                         ren++;
-                        
+
                     }
                     col++;
 
                 }
                 col++;
                 r = 0;
-            }                       
+            }
         }
+
 
         public void cierraArchivosDatosEntidades()
         {
@@ -532,15 +587,41 @@ namespace PruebaProyecto
 
         public void agregaColuAGrid()
         {
-            foreach (Entidad a in lisTabCons)
+            foreach (Atributo b in TabCons.listAtrib)
             {
-                foreach (Atributo b in a.listAtrib)
+                DataGridViewTextBoxColumn Columna1 = new DataGridViewTextBoxColumn();
+                Columna1.HeaderText = TabCons.nombre+"."+b.nombre;
+                gridTabla.Columns.Add(Columna1);
+            }
+        }
+
+        public void vinculaLlavesForaneas()
+        {
+            foreach(Entidad a in BD.listEntidad)
+            {
+                foreach(Atributo b in a.listAtrib)
                 {
-                    DataGridViewTextBoxColumn Columna1 = new DataGridViewTextBoxColumn();
-                    Columna1.HeaderText = a.nombre+"."+b.nombre;
-                    gridTabla.Columns.Add(Columna1);
+                    if(b.tipoIndi == 6)
+                    {
+                        r = 0;
+                        BD.archivo.Close();
+                        
+                        BD.archivo = File.Open(BD.nomArchivo, FileMode.Open);
+                        BinaryReader br = new BinaryReader(BD.archivo);
+
+                        BD.archivo.Seek(b.dirAtri+48, SeekOrigin.Begin);
+                        string dirCom = br.ReadInt32().ToString();
+                        int dirEntiForanea = Convert.ToInt32(dirCom.Substring(1, dirCom.Length - 1));
+                        r = 0;
+                        b.enForanea = new Entidad();
+                        Entidad entFo = BD.listEntidad.Find(x => x.dirEnti == dirEntiForanea);
+                        b.enForanea = (Entidad)entFo.Clone();
+                        r = 0;
+
+                    }
                 }
             }
+
         }
 
     }    

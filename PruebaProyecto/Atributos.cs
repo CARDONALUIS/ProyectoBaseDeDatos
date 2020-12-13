@@ -424,6 +424,8 @@ namespace PruebaProyecto
         private void CambioIndiceAtri(object sender, EventArgs e)
         {
             VerActualesAtri(this, null);
+            comboBoxLlaveForanea.Items.Clear();
+            comboBoxLlaveForanea.Visible = false;
         }
 
         private void VerificarllaveEvento(object sender, EventArgs e)
@@ -455,18 +457,16 @@ namespace PruebaProyecto
         {
             string llavesSec= atr.tipoIndi.ToString().ElementAt(0).ToString();
             //bw.Write(Int32.Parse(atr.tipoIndi.ToString().ElementAt(0).ToString()));
-            foreach (int b in atr.llaveFor)
+            r = 0;
+            if(llavesSec == "6")
             {
-               if(b<10)
-                {
-                    llavesSec += "0" + b.ToString();
-                }
-               else
-                {
-                    llavesSec += b.ToString();
-                }
+                string itemSe = comboBoxLlaveForanea.SelectedItem.ToString();
+                r = 0;
+                Entidad itemtab = dic.listEntidad.Find(x => x.nombre == itemSe);
+                r = 0;
+                llavesSec += itemtab.dirEnti;
             }
-
+            
             bw.Write(Int32.Parse(llavesSec));
         }
     }

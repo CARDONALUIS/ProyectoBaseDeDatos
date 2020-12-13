@@ -46,6 +46,8 @@ namespace PruebaProyecto
 
         public List<string> regAtr;
 
+        public Entidad enForanea;
+
         //Constuctor que sirve para setear valores para la utilizacion de los objetos de creados de la clase
         public Atributo(Byte[] _idAtr, string _nom, char _tipoDa, int _long, int _dirAtr, int _tipIn, int _dirInd, int _dirSigAtr)
         {
@@ -57,6 +59,7 @@ namespace PruebaProyecto
             TIPOINDI = _tipIn;
             DIRINDI = _dirInd;
             DIRSIGATRI = _dirSigAtr;
+            
 
         }
 

@@ -45,7 +45,11 @@ namespace PruebaProyecto
         {
             string nomArchivo;
             
-            OpenFileDialog abrir = new OpenFileDialog();
+            OpenFileDialog abrir = new OpenFileDialog()
+            {
+                InitialDirectory = Directory.GetCurrentDirectory(),
+                Filter = "BD Files (*.dd)|*.dd;"
+            };
 
             if(abrir.ShowDialog() ==  DialogResult.OK)
             {

@@ -12,7 +12,7 @@ namespace PruebaProyecto
      * Clase utilizada para tener variables de tipo diccionario para la mejor manipuacion de datos
      */
     [Serializable]
-    public class Diccionario
+    public class Diccionario : ICloneable
     {
         public long cab = -1;
         public int tamEntidad = 67;
@@ -197,8 +197,13 @@ namespace PruebaProyecto
             r = 0;
             this.archivo.Close();
         }
-        
-       
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
+
+
 
     }
 }
