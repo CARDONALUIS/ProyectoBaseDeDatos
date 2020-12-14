@@ -297,24 +297,26 @@ namespace PruebaProyecto
             int con = 0;
 
             string[,] arrayCombinacionFin = new string[lis1.Count * lis2.Count, lis2.ElementAt(0).Count+ lis1.ElementAt(0).Count];
+            int conRe = 0;
 
             for (int j = 0; j < lis2.Count; j++)
             {
-
-                for(int i  = 0; i <lis1.Count;i++)
+                conRe = (lis1.Count()-1) * j;
+                for (int i  = 0; i <lis1.Count;i++)
                 {
                     for(int k = 0; k < lis2.ElementAt(j).Count;k++)
                     {
-                        arrayCombinacionFin[(i+j)+j, k] = lis2.ElementAt(j).ElementAt(k);
+                        arrayCombinacionFin[conRe+(j+i), k] = lis2.ElementAt(j).ElementAt(k);
                     }
 
                     for (int m = lis2.ElementAt(j).Count; m < lis2.ElementAt(0).Count + lis1.ElementAt(0).Count ; m++)
                     {
-                        arrayCombinacionFin[(i+j)+j, m] = lis1.ElementAt(i).ElementAt(m - lis1.ElementAt(0).Count);
+                        arrayCombinacionFin[conRe+(j + i), m] = lis1.ElementAt(i).ElementAt(m - lis2.ElementAt(0).Count);
                     }
+                    
                     r = 0;
                 }
-                
+                r = 0;
             }
 
             return arrayCombinacionFin;
