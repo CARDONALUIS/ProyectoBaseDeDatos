@@ -90,17 +90,6 @@ namespace PruebaProyecto
                 }
             }
 
-            /*
-            foreach (Atrib a in t1.listAtrib)
-            {
-                //lisAtrCon.Find(x => x == t1.nombre.ToUpper() + "." + a.nombre.ToUpper());
-                if (lisAtrCon.FindIndex(x => x == t1.nombre.ToUpper() + "." + a.nombre.ToUpper()) != -1)
-                {
-                    DataGridViewTextBoxColumn Columna1 = new DataGridViewTextBoxColumn();
-                    Columna1.HeaderText = t1.nombre + "." + a.nombre;
-                    gridTabla.Columns.Add(Columna1);
-                }
-            }*/
 
         }
 
@@ -136,11 +125,6 @@ namespace PruebaProyecto
                     ListIndRef.Add(i);
                 }
                 i++;
-                /*
-                DataGridViewTextBoxColumn Columna1 = new DataGridViewTextBoxColumn();
-                Columna1.HeaderText = t1.nombre + "." + a.nombre;
-                gridTabla.Columns.Add(Columna1);
-                */
             }
             r = 0;
 
@@ -258,7 +242,7 @@ namespace PruebaProyecto
             }
 
             List<List<string>> listD = new List<List<string>>();
-            for (int i = 0; i < tab2.listAtrib.ElementAt(i).regAtr.Count ; i++)
+            for (int i = 0; i < tab2.listAtrib.ElementAt(0).regAtr.Count ; i++)
             {
                 List<string> cad = new List<string>();
                 for (int j = 0; j < tab2.listAtrib.Count ; j++)
@@ -274,16 +258,21 @@ namespace PruebaProyecto
 
             string[,] arrayCombinacionT1 = new string[40, 20];
 
+
+            
             for (int i = 0; i < tab1.listAtrib.Count; i++)
             {
-                for (int j = 0; j < tab1.listAtrib.ElementAt(i).regAtr.Count; j++)
+                for (int j = 0; j < tab1.listAtrib.ElementAt(0).regAtr.Count; j++)
                 {
                     arrayCombinacionT1[j, i] = tab1.listAtrib.ElementAt(i).regAtr.ElementAt(j);
                 }
             }
 
             List<List<string>> listD2 = new List<List<string>>();
-            for (int i = 0; i < 6; i++)//////////////PENDIENTE
+
+            
+
+            for (int i = 0; i < tab1.listAtrib.ElementAt(0).regAtr.Count; i++)
             {
                 List<string> cad = new List<string>();
                 for (int j = 0; j < tab1.listAtrib.Count; j++)
