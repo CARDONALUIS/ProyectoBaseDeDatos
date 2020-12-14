@@ -24,6 +24,9 @@ namespace PruebaProyecto
         bool bandAst = false;
         DataGridView gridTabla;
         string tabConPrin;
+        string tabConSec;
+        bool bandInnerJoin = false;
+        List<List<string>> ListInnerJoin;
 
         public visitorSQL(Diccionario bd, DataGridView tab)
         {
@@ -49,13 +52,99 @@ namespace PruebaProyecto
         public override int VisitFinConsulta([NotNull] GramaticaSQLParser.FinConsultaContext context)
         {
             r = 0;
-            muestraGridCon();
-            
-            
+            if(!bandInnerJoin)
+                muestraGridCon();
+            else
+            {
+                muestraGridConInnerJoin();
+            }
+
             
             cierraArchivosDatosEntidades();
            
             return base.VisitFinConsulta(context);
+        }
+
+        public void muestraGridConInnerJoin()
+        {
+            int ren = 0;
+            int col = 0;
+            int ind = 0;
+            limpiaGridAct();
+
+            List<int> refIn = agregColInner();
+
+            for (ren = 0; ren <ListInnerJoin.Count;ren++)
+            {
+                gridTabla.Rows.Add();
+                ind = 0;
+                for(col = 0; col <ListInnerJoin.ElementAt(ren).Count;col++)
+                {
+                    if (refIn.FindIndex(x => x == col) != -1)
+                    {
+                        gridTabla.Rows[ren].Cells[ind].Value = ListInnerJoin.ElementAt(ren).ElementAt(col);
+                        ind++;
+                    }
+
+                    
+                }
+            }
+
+            /*
+            foreach (Atrib a in t1.listAtrib)
+            {
+                //lisAtrCon.Find(x => x == t1.nombre.ToUpper() + "." + a.nombre.ToUpper());
+                if (lisAtrCon.FindIndex(x => x == t1.nombre.ToUpper() + "." + a.nombre.ToUpper()) != -1)
+                {
+                    DataGridViewTextBoxColumn Columna1 = new DataGridViewTextBoxColumn();
+                    Columna1.HeaderText = t1.nombre + "." + a.nombre;
+                    gridTabla.Columns.Add(Columna1);
+                }
+            }*/
+
+        }
+
+        public List<int> agregColInner()
+        {
+            Entidad t1 = BD.listEntidad.Find(x => x.nombre.ToUpper() == tabConPrin);
+            Entidad t2 = BD.listEntidad.Find(x => x.nombre.ToUpper() == tabConSec);
+            List<int> ListIndRef = new List<int>();
+            int i =0 , j = 0;
+
+            foreach (Atributo a in t1.listAtrib)
+            {
+                //lisAtrCon.Find(x => x == t1.nombre.ToUpper() + "." + a.nombre.ToUpper());
+                if (lisAtrCon.FindIndex(x => x == t1.nombre.ToUpper() + "." + a.nombre.ToUpper()) != -1)
+                {
+                    DataGridViewTextBoxColumn Columna1 = new DataGridViewTextBoxColumn();
+                    Columna1.HeaderText = t1.nombre + "." + a.nombre;
+                    gridTabla.Columns.Add(Columna1);
+
+                    ListIndRef.Add(i);
+                   
+                }
+                i++;
+            }
+
+            foreach (Atributo a in t2.listAtrib)
+            {
+                if (lisAtrCon.FindIndex(x => x == t2.nombre.ToUpper() + "." + a.nombre.ToUpper()) != -1)
+                {
+                    DataGridViewTextBoxColumn Columna1 = new DataGridViewTextBoxColumn();
+                    Columna1.HeaderText = t2.nombre + "." + a.nombre;
+                    gridTabla.Columns.Add(Columna1);
+                    ListIndRef.Add(i);
+                }
+                i++;
+                /*
+                DataGridViewTextBoxColumn Columna1 = new DataGridViewTextBoxColumn();
+                Columna1.HeaderText = t1.nombre + "." + a.nombre;
+                gridTabla.Columns.Add(Columna1);
+                */
+            }
+            r = 0;
+
+            return ListIndRef;
         }
 
         public void muestraGridCon()
@@ -89,17 +178,49 @@ namespace PruebaProyecto
 
         public override int VisitConInnerJoin([NotNull] GramaticaSQLParser.ConInnerJoinContext context)
         {
+            bandInnerJoin = true;
+            ListInnerJoin = new List<List<string>>();
+
             string tab2 = context.NOM(0).GetText();
-            hazCombinacionReg(tab2);
+            string [,] combTablas  = hazCombinacionReg(tab2);
+            //List<List<string>> tablaFinal = new List<List<string>>();
             
-            
+            string tab1A = context.NOM(1).GetText();
+            string tab2A = context.NOM(3).GetText();
+            tabConSec = tab2A;
+            string atr = context.NOM(2).GetText();
+
+            Entidad t1 = BD.listEntidad.Find(x => x.nombre.ToUpper() == tab1A);
+            Entidad t2 = BD.listEntidad.Find(x => x.nombre.ToUpper() == tab2A);
+
+            int IndAtr1 = t1.listAtrib.FindIndex(x => x.nombre.ToUpper() == atr);
+            int IndAtr2 = t2.listAtrib.FindIndex(x => x.nombre.ToUpper() == atr);
+
+
+            int indReg = 0;
+            for(int i = 0; i< combTablas.GetLength(0);i++)
+            {
+
+                if (combTablas[i, IndAtr1] == combTablas[i, t1.listAtrib.Count+IndAtr2])
+                {
+                    List<string> liSt = new List<string>();
+                    for (int j = 0; j < combTablas.GetLength(1); j++)
+                    {
+                        liSt.Add(combTablas[i, j]);
+                    }
+                    //tablaFinal.Add(liSt);
+                    ListInnerJoin.Add(liSt);
+
+                }
+
+            }
             r = 0;
 
 
             return base.VisitConInnerJoin(context);
         }
 
-        public void hazCombinacionReg(string tabla2)
+        public string[,] hazCombinacionReg(string tabla2)
         {
             //ValidarLlaveForanea
             Entidad tab1 = BD.listEntidad.Find(x => x.nombre.ToUpper() == tabConPrin);
@@ -124,25 +245,7 @@ namespace PruebaProyecto
                 entCom.listAtrib.Add(nu);
             }
 
-            int ren = 0;
-            int col = 0;
-            int ren2 = 0;
-            int col2 = 0;
-
             
-            
-            
-            /*
-            foreach (Atributo b in tab1.listAtrib)
-            {
-                List<string> cad = new List<string>();
-                foreach (string c in b.regAtr)
-                {
-                    cad.Add(c);
-                    
-                }
-                listD.Add(cad);
-            }*/
 
             string[,] arrayCombinacionT2 = new string[40,20];
 
@@ -193,36 +296,39 @@ namespace PruebaProyecto
 
             r = 0;
 
-            formaCombinacion(listD, listD2);
+            string[,] combFinales = formaCombinacion(listD, listD2);
 
-
+            r = 0;
+            return combFinales;
         }
 
-        public void formaCombinacion(List<List<string>> lis1, List<List<string>> lis2)
+        public string[,] formaCombinacion(List<List<string>> lis1, List<List<string>> lis2)
         {
             List<List<string>> lisFinCom = new List<List<string>>();
             int con = 0;
 
-            string[,] arrayCombinacionFin = new string[lis2.ElementAt(0).Count+ lis1.ElementAt(0).Count , lis1.Count * lis2.Count];
+            string[,] arrayCombinacionFin = new string[lis1.Count * lis2.Count, lis2.ElementAt(0).Count+ lis1.ElementAt(0).Count];
 
-            for (int j = 0; j < lis1.Count * lis2.Count; j++)
+            for (int j = 0; j < lis2.Count; j++)
             {
 
-                //arrayCombinacionFin[j,j] = lis2.ElementAt(0)
-                for (int i = 0; i < lis2.ElementAt(0).Count + lis1.ElementAt(0).Count; i++)
+                for(int i  = 0; i <lis1.Count;i++)
                 {
-                    if (lis2.ElementAt(0).Count < i)
+                    for(int k = 0; k < lis2.ElementAt(j).Count;k++)
                     {
-
-                    }
-                    else
-                    {
-
+                        arrayCombinacionFin[(i+j)+j, k] = lis2.ElementAt(j).ElementAt(k);
                     }
 
+                    for (int m = lis2.ElementAt(j).Count; m < lis2.ElementAt(0).Count + lis1.ElementAt(0).Count ; m++)
+                    {
+                        arrayCombinacionFin[(i+j)+j, m] = lis1.ElementAt(i).ElementAt(m - lis1.ElementAt(0).Count);
+                    }
+                    r = 0;
                 }
+                
             }
 
+            return arrayCombinacionFin;
             r = 0;
         }
 
@@ -401,6 +507,7 @@ namespace PruebaProyecto
         {
             r = 0;
             limpiaGridAct();
+            bandInnerJoin = false;
 
             bandAst = true;
             return base.VisitAste(context);
@@ -411,6 +518,7 @@ namespace PruebaProyecto
         public override int VisitAtrTab([NotNull] GramaticaSQLParser.AtrTabContext context)
         {
             limpiaGridAct();
+            bandInnerJoin = false;
 
             if (banRecDatoAtr)
             {
