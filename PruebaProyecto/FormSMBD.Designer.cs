@@ -70,6 +70,7 @@
             this.Controls.Add(this.richTextBoxConsulta);
             this.Name = "FormSMBD";
             this.Text = "FormSMBD";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormSMBD_FormClosing);
             this.Load += new System.EventHandler(this.FormSMBD_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResConsulta)).EndInit();
             this.ResumeLayout(false);

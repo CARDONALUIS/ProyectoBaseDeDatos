@@ -56,8 +56,38 @@ namespace PruebaProyecto
             InitializeComponent();
             listEntDat = new List<FileStream>();
             AplicaCambio.Visible = false;
+            
         }
 
+
+        public void vinculaLlavesForaneas()
+        {
+            foreach (Entidad a in dic.listEntidad)
+            {
+                foreach (Atributo b in a.listAtrib)
+                {
+                    if (b.tipoIndi == 6)
+                    {
+                        r = 0;
+                        dic.archivo.Close();
+
+                        dic.archivo = File.Open(dic.nomArchivo, FileMode.Open);
+                        BinaryReader br = new BinaryReader(dic.archivo);
+
+                        dic.archivo.Seek(b.dirAtri + 48, SeekOrigin.Begin);
+                        string dirCom = br.ReadInt32().ToString();
+                        int dirEntiForanea = Convert.ToInt32(dirCom.Substring(1, dirCom.Length - 1));
+                        r = 0;
+                        b.enForanea = new Entidad();
+                        Entidad entFo = dic.listEntidad.Find(x => x.dirEnti == dirEntiForanea);
+                        b.enForanea = (Entidad)entFo.Clone();
+                        r = 0;
+
+                    }
+                }
+            }
+
+        }
 
         //Este metodo permite que el comboBox se atualize con las diferentes entidades que cuenta el diccionario
         public void actualizaDicc(Diccionario d)
@@ -1191,11 +1221,74 @@ namespace PruebaProyecto
 
                 if (char.IsLetter(RegistroRellDataGrid.Rows[0].Cells[i].Value.ToString().ElementAt(0)))
                     if (entAct.listAtrib.ElementAt(i).tipo == 'E' || entAct.listAtrib.ElementAt(i).tipo == 'F')
-                        bandInt = false;
+                        bandInt = false;              
             }
+
+            bandInt = compruebaIntegridadReferencial();
+                
+
+            
 
             return bandInt;
             
+        }
+
+        public bool compruebaIntegridadReferencial()
+        {
+            bool bandPermiteIntegridad = true;
+            
+            for(int i = 0; i < entAct.listAtrib.Count; i++)
+            {
+                if(entAct.listAtrib.ElementAt(i).tipoIndi == 6)
+                {
+                    string indRef = RegistroRellDataGrid.Rows[0].Cells[i].Value.ToString();
+                    bandPermiteIntegridad =indicePermitido(indRef,entAct.listAtrib.ElementAt(i));
+                }
+            }
+            
+
+            return bandPermiteIntegridad;
+        }
+
+        public bool indicePermitido(string indice, Atributo atrAct)
+        {
+            bool bandPer = false;
+
+            vinculaLlavesForaneas();
+
+            int tam = 8;
+            bool band = true;
+
+
+            atrAct.enForanea.archivoDat = File.Open(BitConverter.ToString(atrAct.enForanea.id_enti) + ".dat", FileMode.Open);
+            BinaryReader br = new BinaryReader(atrAct.enForanea.archivoDat);
+
+            int longReg = 16;
+
+            foreach(Atributo a in atrAct.enForanea.listAtrib)
+            {
+                longReg += a.longitud;
+            }
+
+            while(tam < atrAct.enForanea.archivoDat.Length && band)
+            {
+
+                atrAct.enForanea.archivoDat.Seek(tam, SeekOrigin.Begin);
+                int dato = br.ReadInt32();
+
+                if(dato.ToString() == indice)
+                {
+                    band = false;
+                    bandPer = true;
+                }
+
+                tam +=longReg;               
+
+            }
+
+            atrAct.enForanea.archivoDat.Close();
+
+            return bandPer;
         }
 
         //Metodo para verificar que no haya claves primarias repetidas tanto de arbol como de hasEstatico
@@ -1275,7 +1368,7 @@ namespace PruebaProyecto
             {
                 r = 0;
                 if(!bandSigue)
-                MessageBox.Show("Hay datos que no concuerdan");
+                MessageBox.Show("Hay datos que no concuerdan o incumples con la integridad referencial");
                 else
                     MessageBox.Show("Estas ingresando un registro con valor primario repetido");
             }
@@ -2101,7 +2194,6 @@ namespace PruebaProyecto
         //Este metodo se encarga de poner los datos de un registro a modificar dentro del grid de rellenado para actualizar sus valores
         private void RegisInserdataGridView_SelectionChanged(object sender, EventArgs e)
         {
-            //PROBAR
             if (bandModi)
             {
                 for (int i = 0; i < entAct.listAtrib.Count; i++)
@@ -2121,14 +2213,52 @@ namespace PruebaProyecto
             MessageBox.Show("Selecciona una celda del registro a eliminar");
         }
 
+        public bool verificaEliminacionConIntegridad(int filaElimi, string valorllaveAEliminar)
+        {
+            int i = 0;
+            bool siHayIntegridad = false;
+
+            foreach (Entidad a in dic.listEntidad)
+            {
+                foreach (Atributo b in a.listAtrib)
+                {
+
+                    if (b.nombre == entAct.listAtrib.Find(x=>x.tipoIndi == 2).nombre && a.id_enti != entAct.id_enti)
+                    {
+                        //siHayIntegridad = true;
+                        siHayIntegridad = hayRegRefer(a, b, valorllaveAEliminar);
+                        if (siHayIntegridad == true)
+                            break;
+                    }
+
+
+                }
+                if (siHayIntegridad)
+                    break;
+            }
+
+            // int valorInt = Convert.ToInt32(RegisInserdataGridView.Rows[filaElimi].Cells[i+1].Value);
+
+            return siHayIntegridad;
+        }
 
 
         //Metodo que elimina un registo y manda llamar sus pertinetes metodo para actualizar en los diferentes tipos de indices
         private void RegisInserdataGridView_CellClick(object sender, DataGridViewCellEventArgs e)//Elimina Registro
         {
             int indFilEli;
+            bool haybandInt = false;
 
-            if (bandElim == true)
+            
+            if (bandElim)
+            {
+                vinculaLlavesForaneas();
+                direccionRealAtr();
+                haybandInt = verificaEliminacionConIntegridad(RegisInserdataGridView.CurrentRow.Index, RegisInserdataGridView.CurrentRow.Cells[1].Value.ToString());
+            }
+
+
+            if (bandElim == true && !haybandInt)
             {
 
                 indFilEli = RegisInserdataGridView.CurrentRow.Index;
@@ -2215,6 +2345,11 @@ namespace PruebaProyecto
 
                 bandElim = false;
             }
+            else
+            if(haybandInt)
+            {
+                MessageBox.Show("Su llave primaria hace referencia en otros registros,\npor lo tanto causa problemas de integridad de datos");
+            }
 
 
             r = 0;
@@ -2241,6 +2376,114 @@ namespace PruebaProyecto
 
         }
 
+        public bool hayRegRefer(Entidad enRef, Atributo atrRef, string datoAcomp)
+        {
+            bool bandRef = false;
+            enRef.archivoDat = File.Open(BitConverter.ToString(enRef.id_enti) + ".dat", FileMode.Open);
+            BinaryReader br = new BinaryReader(enRef.archivoDat);
+
+            int tam = atrRef.dirArDat;
+            int dato;
+
+            while(tam < enRef.archivoDat.Length)
+            {
+                enRef.archivoDat.Seek(tam, SeekOrigin.Begin);
+                dato = br.ReadInt32();
+
+                if(dato.ToString() == datoAcomp)
+                {
+                    bandRef = true;
+                    break;
+                }
+                tam += enRef.longAtributos;
+                r = 0;
+            }
+
+
+            enRef.archivoDat.Close();
+
+            return bandRef;
+        }
+
+
+        public bool verifcaCambioIntegridad()
+        {
+            bool siHayIntegridad = false;
+            bool cambio = true;
+
+            string datoSinMod = RegisInserdataGridView.CurrentRow.Cells[1].Value.ToString();
+            string datoModi = RegistroRellDataGrid.Rows[0].Cells[0].Value.ToString();
+
+            List<Atributo> atr = new List<Atributo>();
+
+            foreach(Atributo a in entAct.listAtrib)
+            {
+                if (a.tipoIndi == 2)
+                {
+                    atr.Add(a);
+
+                }
+            }
+
+            foreach(Atributo c in atr)
+            {
+                foreach (Entidad a in dic.listEntidad)
+                {
+                    foreach (Atributo b in a.listAtrib)
+                    {
+                        /*if (b.enForanea != null && b.enForanea.nombre == entAct.nombre )
+                        {
+                            //siHayIntegridad = true;
+                            siHayIntegridad = hayRegRefer(b.enForanea, b, datoSinMod);
+                            break;
+                        }*/
+                        if (b.nombre == c.nombre && a.id_enti != entAct.id_enti)
+                        {
+                            //siHayIntegridad = true;
+                            siHayIntegridad = hayRegRefer(a, b, datoSinMod);
+                            if(siHayIntegridad== true)
+                                break;
+                        }
+
+
+                    }
+                    if (siHayIntegridad)
+                        break;
+                }
+            }
+            
+            if (siHayIntegridad)
+            {
+               
+
+                if (datoSinMod != datoModi)
+                    cambio = false;
+            }
+
+            return cambio;
+
+        }
+
+        public void direccionRealAtr()
+        {
+            int tamDatAtr;
+
+            foreach (Entidad a in dic.listEntidad)
+            {
+                tamDatAtr = 8;
+                foreach (Atributo b in a.listAtrib)
+                {
+                    b.dirArDat = tamDatAtr;
+                    r = 0;
+                    tamDatAtr = tamDatAtr + b.longitud;
+                    r = 0;
+                }
+                r = 0;
+                a.longAtributos = tamDatAtr + 8;
+            }
+            r = 0;
+        }
+
 
         //Evento que aplica los cambios que realizo el usuario a un registro llamando los metodo pertinentes para la accion 
         private void AplicaCambio_Click(object sender, EventArgs e)
@@ -2249,7 +2492,14 @@ namespace PruebaProyecto
             int posI = 0;
             int contChar = 0;
 
-            if (!verifcaValorPrim())
+            vinculaLlavesForaneas();
+            direccionRealAtr();
+
+            
+            bool bandInt = verifcaCambioIntegridad();
+
+
+            if (!verifcaValorPrim() && bandInt)
             {
                 r = 0;
                 using (BinaryWriter bw = new BinaryWriter(File.Open(BitConverter.ToString(entAct.id_enti) + ".dat", FileMode.Open)))
@@ -2281,6 +2531,7 @@ namespace PruebaProyecto
                             longAcumReg += entAct.listAtrib.ElementAt(i).longitud;
                         }
                         else
+                        if (entAct.listAtrib.ElementAt(i).tipo == 'E')
                         {
                             bw.Seek(longAcumReg, SeekOrigin.Begin);
 
@@ -2292,6 +2543,17 @@ namespace PruebaProyecto
                             r = 0;
 
                         }
+                        else
+                        {
+                            bw.Seek(longAcumReg, SeekOrigin.Begin);
+
+                            //posI = Int32.Parse(RegistroRellDataGrid.Rows[0].Cells[i].Value.ToString());
+                            r = 0;
+                            bw.Write(Convert.ToSingle(RegistroRellDataGrid.Rows[0].Cells[i].Value.ToString()));
+
+                            longAcumReg += 4;
+                        }
+
 
                         r = 0;
 
@@ -2326,11 +2588,13 @@ namespace PruebaProyecto
                     dirAuxElimReg = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[0].Value.ToString());
                     dirSigAuxElimReg = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[entAct.listAtrib.Count + 1].Value.ToString());
 
+                    /*//Desactivado por error en llave primaria para SMBD
                     if (bandAtrPri)
                     {
                         eliminaRegClvPrim((int)dirAuxElimReg);
                         guardaArchivosIndPri();
-                    }
+                    }*/
+                    
 
                     if (bandAtrSec)
                     {
@@ -2385,10 +2649,15 @@ namespace PruebaProyecto
 
                 }
 
-                AplicaCambio.Visible = false;
+                
             }
             else
+                if (!bandInt)
+                MessageBox.Show("Error de actualiza con la integridad referencial");
+                else
                 MessageBox.Show("Tu valor a modificar esta repetido\nVuelve a intentar");
+
+            AplicaCambio.Visible = false;
         }
 
 

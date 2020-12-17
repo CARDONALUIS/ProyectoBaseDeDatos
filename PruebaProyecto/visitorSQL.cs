@@ -588,19 +588,16 @@ namespace PruebaProyecto
 
         public void agregRegBD()
         {
-            int ren = 0;
-            int col = 0;
+            bool bandFinal = false;
 
             foreach (Entidad a in BD.listEntidad)
             {
 
-                r = 0;
 
                 foreach (Atributo b in a.listAtrib)
                 {
 
                     BinaryReader br = new BinaryReader(a.archivoDat);
-                    ren = 0;
                     b.regAtr = new List<string>();
 
                     int tam = b.dirArDat;
@@ -634,13 +631,12 @@ namespace PruebaProyecto
                         b.regAtr.Add(dato);
 
                         r = 0;
-                        ren++;
+                      
 
                     }
-                    col++;
+                    
 
                 }
-                col++;
                 r = 0;
             }
         }

@@ -66,6 +66,11 @@ namespace PruebaProyecto
 
         }
 
-        
+        private void FormSMBD_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            richTextBoxConsulta.Text = "";
+            dataGridViewResConsulta.Rows.Clear();
+            dataGridViewResConsulta.Columns.Clear();
+        }
     }
 }

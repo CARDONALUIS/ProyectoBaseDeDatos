@@ -346,7 +346,7 @@ namespace PruebaProyecto
         {
             vSMBD.BD = dic;
             r = 0;
-            vSMBD.Show();
+            vSMBD.ShowDialog();
         }
     }
 }

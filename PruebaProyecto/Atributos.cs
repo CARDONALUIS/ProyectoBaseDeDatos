@@ -360,52 +360,56 @@ namespace PruebaProyecto
 
             if (inAM != -1)
             {
+                Atributo a = ent.listAtrib.Find(x => x.nombre == comboBoxModAtri.SelectedItem.ToString());
 
-                using (BinaryWriter bw = new BinaryWriter(File.Open(dic.nomArchivo, FileMode.Open)))
+                if (a.tipoIndi != 6)
                 {
-                    if (ent.listAtrib.Count != 1)
+                    using (BinaryWriter bw = new BinaryWriter(File.Open(dic.nomArchivo, FileMode.Open)))
                     {
-                        if (inAM - 1 != -1 && inAM + 1 < ent.listAtrib.Count())
+                        if (ent.listAtrib.Count != 1)
                         {
-                            bw.Seek((int)ent.listAtrib.ElementAt(inAM - 1).dirAtri + 60, SeekOrigin.Begin);
-                            bw.Write(ent.listAtrib.ElementAt(inAM + 1).dirAtri);
-                            r = 0;
-                        }
-                        else
-                        {
-                            if (inAM + 1 == ent.listAtrib.Count())
+                            if (inAM - 1 != -1 && inAM + 1 < ent.listAtrib.Count())
                             {
                                 bw.Seek((int)ent.listAtrib.ElementAt(inAM - 1).dirAtri + 60, SeekOrigin.Begin);
-                                bw.Write(-1);
+                                bw.Write(ent.listAtrib.ElementAt(inAM + 1).dirAtri);
                                 r = 0;
                             }
                             else
                             {
-                                bw.Seek((int)ent.dirEnti + 43, SeekOrigin.Begin);
-                                bw.Write(ent.listAtrib.ElementAt(1).dirAtri);
-                                r = 0;
+                                if (inAM + 1 == ent.listAtrib.Count())
+                                {
+                                    bw.Seek((int)ent.listAtrib.ElementAt(inAM - 1).dirAtri + 60, SeekOrigin.Begin);
+                                    bw.Write(-1);
+                                    r = 0;
+                                }
+                                else
+                                {
+                                    bw.Seek((int)ent.dirEnti + 43, SeekOrigin.Begin);
+                                    bw.Write(ent.listAtrib.ElementAt(1).dirAtri);
+                                    r = 0;
+                                }
                             }
-                        }
 
+                        }
+                        else
+                        {
+                            r = 0;
+                            bw.Seek((int)ent.dirEnti + 43, SeekOrigin.Begin);
+                            bw.Write(-1);
+                            ent.dirAtri = -1;
+                        }
                     }
-                    else
+
+                    if (ent.listAtrib.Count != 1)
                     {
                         r = 0;
-                        bw.Seek((int)ent.dirEnti + 43, SeekOrigin.Begin);
-                        bw.Write(-1);
-                        ent.dirAtri = -1;
-
-
+                        dic.actualizaDiccionario(dic.archivo);
                     }
-                }
-
-                if (ent.listAtrib.Count != 1)
-                {
-                    r = 0;
-                    dic.actualizaDiccionario(dic.archivo);
+                    else
+                        ent.listAtrib.Clear();
                 }
                 else
-                    ent.listAtrib.Clear();
+                    MessageBox.Show("No puedes eliminar atributos de tipo llave foranea");
             }
             else
                 MessageBox.Show("Selecciona un atributo, si no los hay crealos");
