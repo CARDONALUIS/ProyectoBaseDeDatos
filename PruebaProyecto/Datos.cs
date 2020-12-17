@@ -2494,12 +2494,16 @@ namespace PruebaProyecto
 
             vinculaLlavesForaneas();
             direccionRealAtr();
+            bool bandIntAtr= true;
 
-            
+
+
             bool bandInt = verifcaCambioIntegridad();
 
+            bandIntAtr = compruebaIntegridadReferencial();
 
-            if (!verifcaValorPrim() && bandInt)
+
+            if (!verifcaValorPrim() && bandInt && bandIntAtr)
             {
                 r = 0;
                 using (BinaryWriter bw = new BinaryWriter(File.Open(BitConverter.ToString(entAct.id_enti) + ".dat", FileMode.Open)))
@@ -2588,13 +2592,14 @@ namespace PruebaProyecto
                     dirAuxElimReg = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[0].Value.ToString());
                     dirSigAuxElimReg = Int32.Parse(RegisInserdataGridView.CurrentRow.Cells[entAct.listAtrib.Count + 1].Value.ToString());
 
-                    /*//Desactivado por error en llave primaria para SMBD
+                    /*
+                    //Desactivado por error en llave primaria para SMBD
                     if (bandAtrPri)
                     {
                         eliminaRegClvPrim((int)dirAuxElimReg);
                         guardaArchivosIndPri();
-                    }*/
-                    
+                    }
+                    */
 
                     if (bandAtrSec)
                     {
@@ -2652,8 +2657,8 @@ namespace PruebaProyecto
                 
             }
             else
-                if (!bandInt)
-                MessageBox.Show("Error de actualiza con la integridad referencial");
+                if (!bandInt || !bandIntAtr)
+                MessageBox.Show("Error de valores que incumplen con la integridad referencial");
                 else
                 MessageBox.Show("Tu valor a modificar esta repetido\nVuelve a intentar");
 
