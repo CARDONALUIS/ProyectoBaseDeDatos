@@ -2273,7 +2273,8 @@ namespace PruebaProyecto
                     {
                         r = 0;
                         entAct.dirDat = (int)RegisInserdataGridView.Rows[indFilEli + 1].Cells[0].Value;
-                        using (BinaryWriter bwD = new BinaryWriter(File.Open(dic.nomArchivo, FileMode.Open)))
+                        dic.archivo.Close();
+                        using (BinaryWriter bwD = new BinaryWriter(File.Open(dic.nomArchivo, FileMode.Open)))//CHECAR
                         {
                             bwD.Seek((int)entAct.dirEnti + 51, SeekOrigin.Begin);
                             bwD.Write(entAct.dirDat);
@@ -2303,7 +2304,7 @@ namespace PruebaProyecto
 
                 if (bandAtrPri)
                 {
-                    eliminaRegClvPrim((int)RegisInserdataGridView.Rows[indFilEli].Cells[0].Value);
+                    //eliminaRegClvPrim((int)RegisInserdataGridView.Rows[indFilEli].Cells[0].Value);//CAMBIO SMBD
                 }
 
                 if(bandAtrSec)
